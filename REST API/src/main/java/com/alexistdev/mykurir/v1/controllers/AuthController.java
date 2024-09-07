@@ -2,6 +2,7 @@ package com.alexistdev.mykurir.v1.controllers;
 
 import com.alexistdev.mykurir.v1.dto.ResponseData;
 import com.alexistdev.mykurir.v1.models.entity.User;
+import com.alexistdev.mykurir.v1.request.LoginRequest;
 import com.alexistdev.mykurir.v1.request.RegisterRequest;
 import com.alexistdev.mykurir.v1.service.UserService;
 import jakarta.validation.Valid;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/api/users")
+@RequestMapping("/v1/api/auth")
 public class AuthController {
 
     @Autowired
@@ -48,5 +49,26 @@ public class AuthController {
             responseData.getMessages().add(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResponseData<User>> login(@Valid @RequestBody LoginRequest loginRequest, Errors errors) {
+        ResponseData<User> responseData = new ResponseData<>();
+        responseData.setPayload(null);
+        responseData.setStatus(false);
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                responseData.getMessages().add(error.getDefaultMessage());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+        User user = userService.authenticate(loginRequest);
+        if (user != null) {
+            responseData.setPayload(user);
+            responseData.setStatus(true);
+            return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        }
+        responseData.getMessages().add("Invalid username or password");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
     }
 }

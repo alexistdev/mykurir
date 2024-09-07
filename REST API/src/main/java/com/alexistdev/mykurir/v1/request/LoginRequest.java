@@ -1,20 +1,10 @@
 package com.alexistdev.mykurir.v1.request;
 
-import com.alexistdev.mykurir.v1.models.entity.Role;
+public class LoginRequest {
 
-public class RegisterRequest {
-    private String fullName;
     private String email;
+
     private String password;
-
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
 
     public String getEmail() {
         return email;
@@ -31,5 +21,4 @@ public class RegisterRequest {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

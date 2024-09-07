@@ -38,9 +38,10 @@ public class WebSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(HttpMethod.POST,"/v1/api/users/register")
+        return (web) -> web.ignoring().requestMatchers(HttpMethod.POST,"/v1/api/auth/login")
+                .requestMatchers(HttpMethod.POST,"/v1/api/auth/register")
                 .requestMatchers(HttpMethod.GET,"/swagger-ui/index.html")
-                .requestMatchers(HttpMethod.GET,"/v2/api-docs");
+                .requestMatchers(HttpMethod.GET,"/v3/api-docs/**");
     }
 
     private DaoAuthenticationProvider daoAuthenticationProvider() {
