@@ -32,9 +32,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers(HttpMethod.GET,
                                 "/v1/api/users/get_all_users",
-                                "/v1/api/region/province",
-                                "/v1/api/region/regency",
-                                "/v1/api/region/district").hasAuthority("ADMIN")
+                                "/v1/api/region/*").hasAuthority(Role.ADMIN.toString())
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
