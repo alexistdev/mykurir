@@ -33,7 +33,8 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/v1/api/users/get_all_users",
                                 "/v1/api/region/province",
-                                "/v1/api/region/regency").hasAuthority("ADMIN")
+                                "/v1/api/region/regency",
+                                "/v1/api/region/district").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
