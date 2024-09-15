@@ -1,5 +1,6 @@
 package com.alexistdev.mykurir.v1.utils;
 
+import com.alexistdev.mykurir.v1.models.entity.Role;
 import com.alexistdev.mykurir.v1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,7 @@ public class WebSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http    .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authz) -> authz
+                        .requestMatchers(HttpMethod.GET,"/v1/api/users/get_all_users").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())

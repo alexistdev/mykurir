@@ -2,6 +2,7 @@ package com.alexistdev.mykurir.v1.controllers;
 
 
 import com.alexistdev.mykurir.v1.dto.ResponseData;
+import com.alexistdev.mykurir.v1.models.entity.Role;
 import com.alexistdev.mykurir.v1.models.entity.User;
 import com.alexistdev.mykurir.v1.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -24,6 +25,8 @@ public class UserDataController {
     @Autowired
     private ModelMapper modelMapper;
 
+    private Enum<Role> roleEnum;
+
     @GetMapping("/get_all_users")
     public ResponseEntity<ResponseData<List<User>>> getAllUserData() {
         ResponseData<List<User>> responseData = new ResponseData<>();
@@ -36,6 +39,11 @@ public class UserDataController {
         responseData.setPayload(users);
         responseData.setStatus(true);
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
+    }
+
+    @GetMapping("/testing")
+    public String testing() {
+        return roleEnum.name();
     }
 
 }
