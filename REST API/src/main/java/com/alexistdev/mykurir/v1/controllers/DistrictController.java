@@ -2,9 +2,7 @@ package com.alexistdev.mykurir.v1.controllers;
 
 import com.alexistdev.mykurir.v1.dto.ResponseData;
 import com.alexistdev.mykurir.v1.models.entity.District;
-import com.alexistdev.mykurir.v1.models.entity.Province;
 import com.alexistdev.mykurir.v1.service.DistrictService;
-import com.alexistdev.mykurir.v1.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

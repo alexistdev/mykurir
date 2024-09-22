@@ -2,10 +2,8 @@ package com.alexistdev.mykurir.v1.controllers;
 
 
 import com.alexistdev.mykurir.v1.dto.ResponseData;
-import com.alexistdev.mykurir.v1.models.entity.Role;
 import com.alexistdev.mykurir.v1.models.entity.User;
 import com.alexistdev.mykurir.v1.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/v1/api/users")
@@ -22,13 +21,8 @@ public class UserDataController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    private Enum<Role> roleEnum;
-
     @GetMapping("/get_all_users")
-    public ResponseEntity<ResponseData<List<User>>> getAllUserData() {
+    public ResponseEntity<ResponseData<List<User>>> getAllUserData() throws ExecutionException, InterruptedException {
         ResponseData<List<User>> responseData = new ResponseData<>();
         List<User> users = userService.getAllUsers();
         responseData.getMessages().add("No users found");
@@ -39,11 +33,6 @@ public class UserDataController {
         responseData.setPayload(users);
         responseData.setStatus(true);
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
-    }
-
-    @GetMapping("/testing")
-    public String testing() {
-        return roleEnum.name();
     }
 
 }

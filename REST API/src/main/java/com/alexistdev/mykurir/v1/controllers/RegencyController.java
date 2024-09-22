@@ -1,7 +1,6 @@
 package com.alexistdev.mykurir.v1.controllers;
 
 import com.alexistdev.mykurir.v1.dto.ResponseData;
-import com.alexistdev.mykurir.v1.models.entity.Province;
 import com.alexistdev.mykurir.v1.models.entity.Regency;
 import com.alexistdev.mykurir.v1.service.RegencyService;
 import org.springframework.beans.factory.annotation.Autowired;
