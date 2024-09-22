@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="tb_provinces")
-public class Province implements Serializable {
+public class Province extends BaseEntity<String> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
