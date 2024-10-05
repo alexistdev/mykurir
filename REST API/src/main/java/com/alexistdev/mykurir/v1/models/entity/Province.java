@@ -30,6 +30,9 @@ public class Province extends BaseEntity<String> implements Serializable {
     }
 
     public void setName(String name) {
+        if(name == null || name.trim().isEmpty()){
+            throw new NullPointerException("Name cannot be null or empty");
+        }
         this.name = name;
     }
 }
