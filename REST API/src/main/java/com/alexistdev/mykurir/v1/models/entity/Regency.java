@@ -13,8 +13,10 @@ public class Regency extends BaseEntity<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(length = 150, nullable = false)
     private String name;
+
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "province_id", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
