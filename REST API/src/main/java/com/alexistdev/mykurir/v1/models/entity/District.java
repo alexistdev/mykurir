@@ -41,6 +41,9 @@ public class District {
     }
 
     public void setRegency(Regency regency) {
+        if(regency == null){
+            throw new NullPointerException("Regency cannot be null");
+        }
         this.regency = regency;
     }
 }
