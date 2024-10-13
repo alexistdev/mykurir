@@ -14,14 +14,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import static java.lang.Thread.currentThread;
-
-import java.util.concurrent.Executor;
 
 @Service
 @Transactional
@@ -32,6 +30,7 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -63,22 +62,14 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    public List<User> getAllUsers() throws ExecutionException, InterruptedException {
+    public List<User> getAllUsers() {
         ExecutorService executor = Executors.newFixedThreadPool(10);
-        List<User> result = executor.submit(() -> {
-             List<User> users = userRepo.findAll()
-                    .stream()
+        return CompletableFuture.supplyAsync(() -> {
+            List<User> users = userRepo.findAll();
+            System.out.printf("Thread: %s; bean instance: %s%n", currentThread().getName(), this);
+            return users.parallelStream()
                     .filter(c -> c.getRole() != Role.ADMIN)
                     .collect(Collectors.toList());
-                System.out.printf("Thread: %s; bean instance: %s%n", currentThread().getName(), this);
-             return users;
-        }).get();
-        return result;
-//        List<User> users = userRepo.findAll()
-//                .stream()
-//                .filter(c -> c.getRole() != Role.ADMIN)
-//                .collect(Collectors.toList());
-//        System.out.printf("Thread: %s; bean instance: %s%n", currentThread().getName(), this);
-//        return users;
+        }, executor).join();
     }
 }
