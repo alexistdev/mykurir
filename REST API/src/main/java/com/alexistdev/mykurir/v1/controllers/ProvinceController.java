@@ -20,21 +20,26 @@ import java.util.List;
 @RequestMapping("/v1/api/region/province")
 public class ProvinceController {
 
-    @Autowired
-    private ProvinceService provinceService;
+    private final ProvinceService provinceService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
+    public ProvinceController(ProvinceService provinceService, ModelMapper modelMapper) {
+        this.provinceService = provinceService;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     public ResponseEntity<ResponseData<List<Province>>> getAllProvinces() {
         ResponseData<List<Province>> responseData = new ResponseData<>();
         List<Province> provinces = provinceService.getAllProvinces();
-        responseData.getMessages().add("No provincy found");
-        if(provinces != null && !provinces.isEmpty()) {
+        responseData.getMessages().add("No province found");
+
+        if (provinces != null && !provinces.isEmpty()) {
             responseData.getMessages().removeFirst();
             responseData.getMessages().add("get all provincies returned " + provinces.size());
         }
+
         responseData.setPayload(provinces);
         responseData.setStatus(true);
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
@@ -45,22 +50,22 @@ public class ProvinceController {
     public ResponseEntity<ResponseData<Province>> addProvince(@Valid @RequestBody ProvinceRequest request, Errors errors) {
         ResponseData<Province> responseData = new ResponseData<>();
         responseData.setStatus(false);
-        try{
-            if (errors.hasErrors()) {
-                for (ObjectError error : errors.getAllErrors()) {
-                    responseData.getMessages().add(error.getDefaultMessage());
-                }
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-            }
-            Province result = provinceService.addProvince(modelMapper.map(request, Province.class));
-            responseData.setPayload(result);
-            responseData.getMessages().add(Validation.success("province"));
-            responseData.setStatus(true);
-            return ResponseEntity.status(HttpStatus.OK).body(responseData);
-        }catch (Exception e){
-            e.printStackTrace();
-            responseData.getMessages().add(e.getMessage());
+
+        if (errors.hasErrors()) {
+            processErrors(errors, responseData);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+
+        Province result = provinceService.addProvince(modelMapper.map(request, Province.class));
+        responseData.setPayload(result);
+        responseData.getMessages().add(Validation.success("province"));
+        responseData.setStatus(true);
+        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+    }
+
+    private void processErrors(Errors errors, ResponseData<?> responseData) {
+        for (ObjectError error : errors.getAllErrors()) {
+            responseData.getMessages().add(error.getDefaultMessage());
         }
     }
 }
