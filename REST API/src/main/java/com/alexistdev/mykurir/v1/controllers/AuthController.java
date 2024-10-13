@@ -30,15 +30,12 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ResponseData<User>> register(@Valid  @RequestBody RegisterRequest userRequest, Errors errors) {
         ResponseData<User> responseData = new ResponseData<>();
-        responseData.setPayload(null);
-        responseData.setStatus(false);
-        if (errors.hasErrors()) {
-            for (ObjectError error : errors.getAllErrors()) {
-                responseData.getMessages().add(error.getDefaultMessage());
-            }
+        handleErrors(errors, responseData);
 
+        if(!responseData.isStatus()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
+
         try {
             User user = modelMapper.map(userRequest, User.class);
             responseData.setPayload(userService.registerUser(user));
@@ -54,15 +51,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ResponseData<User>> login(@Valid @RequestBody LoginRequest loginRequest, Errors errors) {
         ResponseData<User> responseData = new ResponseData<>();
-        responseData.setPayload(null);
-        responseData.setStatus(false);
-        if (errors.hasErrors()) {
-            for (ObjectError error : errors.getAllErrors()) {
-                responseData.getMessages().add(error.getDefaultMessage());
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-        }
+        handleErrors(errors, responseData);
+
         User user = userService.authenticate(loginRequest);
+
         if (user != null) {
             responseData.setPayload(user);
             responseData.setStatus(true);
@@ -70,5 +62,16 @@ public class AuthController {
         }
         responseData.getMessages().add("Invalid username or password");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+    }
+
+    private void handleErrors(Errors errors, ResponseData<?> responseData){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                responseData.getMessages().add(error.getDefaultMessage());
+            }
+            responseData.setStatus(false);
+        } else {
+            responseData.setStatus(true);
+        }
     }
 }
