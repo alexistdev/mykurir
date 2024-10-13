@@ -22,8 +22,9 @@
      }
      
    </pre>
-- Basic auth di postman/insomnia dengan email dan password yang sudah berhasil didaftarkan
-
+- Cek Database dan ubah role dari akun yang dibuat menjadi ADMIN
+- Setup Auth di Imnsomnia atau Postman menjadi Basic Auth, dan masukkan email dan password dari akun yang didaftarkan sebelumnya
+  
 #### LIST API:
 <br />
 <img src="https://github.com/alexistdev/mykurir/blob/main/IMAGES/gambar1.png?raw=true" width="1200px">
