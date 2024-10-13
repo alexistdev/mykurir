@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -20,7 +21,12 @@ public class ProvinceService {
         return provinceRepo.findAll();
     };
 
-    public Province addProvince(Province province) {
+    public Province saveProvince(Province province) {
+        Province existProvince = provinceRepo.findByName(province.getName());
+        if(existProvince != null){
+            throw new RuntimeException(Validation.nameExist("Province"));
+        }
+
         if(province.getId() != null){
             Province currentProvince = provinceRepo.findById(province.getId()).orElse(null);
             if(currentProvince != null){
@@ -29,10 +35,11 @@ public class ProvinceService {
             }
         }
 
-        Province existProvince = provinceRepo.findByName(province.getName());
-        if(existProvince != null){
-            throw new RuntimeException(Validation.nameExist("Province"));
-        }
         return provinceRepo.save(province);
+    }
+
+    public Province findProvinceById(Long id) {
+        Optional<Province> result = provinceRepo.findById(id);
+        return result.orElse(null);
     }
 }

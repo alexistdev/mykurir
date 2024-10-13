@@ -56,11 +56,39 @@ public class ProvinceController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
 
-        Province result = provinceService.addProvince(modelMapper.map(request, Province.class));
+        Province result = provinceService.saveProvince(modelMapper.map(request, Province.class));
         responseData.setPayload(result);
         responseData.getMessages().add(Validation.success("province"));
         responseData.setStatus(true);
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
+    }
+
+    @PatchMapping
+    public ResponseEntity<ResponseData<Province>> updateProvince(@Valid @RequestBody ProvinceRequest request, Errors errors) {
+        ResponseData<Province> responseData = new ResponseData<>();
+        responseData.setStatus(false);
+
+        if (errors.hasErrors()) {
+            processErrors(errors, responseData);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+
+        Province provinceFound = provinceService.findProvinceById(request.getId());
+        if(provinceFound == null) {
+            responseData.getMessages().add("Province Not Found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+
+        try{
+            Province updatedProvince = provinceService.saveProvince(modelMapper.map(request, Province.class));
+            responseData.setPayload(updatedProvince);
+            responseData.getMessages().add(Validation.success("province"));
+            responseData.setStatus(true);
+            return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        } catch (Exception e){
+            responseData.getMessages().add(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
     }
 
     private void processErrors(Errors errors, ResponseData<?> responseData) {

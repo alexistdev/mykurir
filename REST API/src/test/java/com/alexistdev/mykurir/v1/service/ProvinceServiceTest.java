@@ -58,7 +58,7 @@ public class ProvinceServiceTest {
         when(provinceRepo.findByName("Lampung")).thenReturn(null);
         when(provinceRepo.save(any(Province.class))).thenReturn(newProvince);
 
-        Province result = provinceService.addProvince(newProvince);
+        Province result = provinceService.saveProvince(newProvince);
 
         assertNotNull(result);
         assertEquals("Lampung",result.getName());
@@ -79,7 +79,7 @@ public class ProvinceServiceTest {
         when(provinceRepo.findByName("Jakarta")).thenReturn(null);
         when(provinceRepo.save(any(Province.class))).thenReturn(updatedProvince);
 
-        Province result = provinceService.addProvince(updatedProvince);
+        Province result = provinceService.saveProvince(updatedProvince);
         assertNotNull(result);
         assertEquals("Jakarta",result.getName());
         verify(provinceRepo,times(1)).save(any(Province.class));
@@ -92,11 +92,35 @@ public class ProvinceServiceTest {
 
         when(provinceRepo.findByName("Lampung")).thenReturn(newProvince);
         Exception exception = assertThrows(RuntimeException.class,() ->{
-            provinceService.addProvince(newProvince);
+            provinceService.saveProvince(newProvince);
         });
         String expectedMessage = Validation.nameExist("Province");
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testFindProvinceById_ExistingId() {
+        Province province1 = new Province();
+        province1.setId(1L);
+        province1.setName("Lampung");
+
+        when(provinceRepo.findById(1L)).thenReturn(Optional.of(province1));
+
+        Province returnedProvince = provinceService.findProvinceById(1L);
+
+        assertNotNull(returnedProvince);
+        assertEquals(province1.getId(), returnedProvince.getId());
+        assertEquals(province1.getName(), returnedProvince.getName());
+    }
+
+    @Test
+    void testFindProvinceById_NonExistingId() {
+        when(provinceRepo.findById(1L)).thenReturn(Optional.empty());
+
+        Province returnedProvince = provinceService.findProvinceById(1L);
+
+        assertNull(returnedProvince);
     }
 }
