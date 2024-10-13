@@ -16,6 +16,8 @@ import java.util.List;
 @RequestMapping("/v1/api/region/district")
 public class DistrictController {
 
+    private static final String NO_DISTRICT_FOUND_MESSAGE = "No district found";
+
     @Autowired
     private DistrictService districtService;
 
@@ -23,13 +25,16 @@ public class DistrictController {
     public ResponseEntity<ResponseData<List<District>>> getAllDistricts() {
         ResponseData<List<District>> responseData = new ResponseData<>();
         List<District> districts = districtService.getAllDistricts();
-        responseData.getMessages().add("No district found");
-        if(districts != null && !districts.isEmpty()) {
-            responseData.getMessages().removeFirst();
-            responseData.getMessages().add("get all districts returned " + districts.size());
-        }
+        responseData.getMessages().add(generateMessage(districts));
         responseData.setPayload(districts);
         responseData.setStatus(true);
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
+    }
+
+    private String generateMessage(List<District> districts){
+        if (districts != null && !districts.isEmpty()) {
+            return "get all districts returned " + districts.size();
+        }
+        return NO_DISTRICT_FOUND_MESSAGE;
     }
 }
