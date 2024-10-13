@@ -23,3 +23,8 @@
      
    </pre>
 - Basic auth di postman/insomnia dengan email dan password yang sudah berhasil didaftarkan
+
+#### LIST API:
+<br />
+<img src="https://github.com/alexistdev/mykurir/blob/main/IMAGES/gambar1.png?raw=true" width="1200px">
+<br />
