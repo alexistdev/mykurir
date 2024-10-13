@@ -31,8 +31,7 @@ public class WebSecurityConfig {
         http    .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers(HttpMethod.GET,
-                                "/v1/api/users/get_all_users",
-                                "/v1/api/region/*").hasAuthority(Role.ADMIN.toString())
+                                "/v1/api/users/get_all_users").hasAuthority(Role.ADMIN.toString())
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
