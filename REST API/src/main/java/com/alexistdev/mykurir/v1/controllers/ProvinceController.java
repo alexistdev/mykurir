@@ -49,9 +49,9 @@ public class ProvinceController {
     @PostMapping
     public ResponseEntity<ResponseData<Province>> addProvince(@Valid @RequestBody ProvinceRequest request, Errors errors) {
         ResponseData<Province> responseData = new ResponseData<>();
-        responseData.setStatus(false);
 
         if (errors.hasErrors()) {
+            responseData.setStatus(false);
             processErrors(errors, responseData);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }

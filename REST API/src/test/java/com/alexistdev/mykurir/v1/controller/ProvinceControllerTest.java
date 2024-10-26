@@ -118,10 +118,12 @@ public class ProvinceControllerTest {
 
         Errors errors = new BeanPropertyBindingResult(request, "request");
 
+        errors.rejectValue("name", "Size", "The length of the name must be between 1 and 150 characters");
+
         ResponseEntity<ResponseData<Province>> response = provinceController.addProvince(request, errors);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertTrue(Objects.requireNonNull(response.getBody()).getMessages().getFirst().contains("Size"));
+        assertTrue(Objects.requireNonNull(response.getBody()).getMessages().getFirst().contains("The length of the name must be between 1 and 150 characters"));
         assertFalse(response.getBody().isStatus());
     }
 }
