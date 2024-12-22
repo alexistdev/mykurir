@@ -49,18 +49,22 @@ public class ProvinceController {
     @PostMapping
     public ResponseEntity<ResponseData<Province>> addProvince(@Valid @RequestBody ProvinceRequest request, Errors errors) {
         ResponseData<Province> responseData = new ResponseData<>();
-
+        responseData.setStatus(false);
         if (errors.hasErrors()) {
-            responseData.setStatus(false);
             processErrors(errors, responseData);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
 
-        Province result = provinceService.saveProvince(modelMapper.map(request, Province.class));
-        responseData.setPayload(result);
-        responseData.getMessages().add(Validation.success("province"));
-        responseData.setStatus(true);
-        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        try {
+            Province result = provinceService.saveProvince(modelMapper.map(request, Province.class));
+            responseData.setPayload(result);
+            responseData.getMessages().add(Validation.success("province"));
+            responseData.setStatus(true);
+            return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        } catch (Exception e){
+            responseData.getMessages().add(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
     }
 
     @PatchMapping

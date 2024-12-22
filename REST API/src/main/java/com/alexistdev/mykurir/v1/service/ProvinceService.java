@@ -1,6 +1,5 @@
 package com.alexistdev.mykurir.v1.service;
 
-import com.alexistdev.mykurir.v1.masterconstant.Validation;
 import com.alexistdev.mykurir.v1.models.entity.Province;
 import com.alexistdev.mykurir.v1.models.repository.ProvinceRepo;
 import jakarta.transaction.Transactional;
@@ -22,9 +21,9 @@ public class ProvinceService {
     };
 
     public Province saveProvince(Province province) {
-        Province existProvince = provinceRepo.findByName(province.getName());
-        if(existProvince != null){
-            throw new RuntimeException(Validation.nameExist("Province"));
+
+        if(isDuplicateProvinceName(province.getName())){
+            throw new RuntimeException("Province name already exist");
         }
 
         if(province.getId() != null){
@@ -41,5 +40,10 @@ public class ProvinceService {
     public Province findProvinceById(Long id) {
         Optional<Province> result = provinceRepo.findById(id);
         return result.orElse(null);
+    }
+
+    private boolean isDuplicateProvinceName(String name){
+        Province existProvince = provinceRepo.findByName(name);
+        return existProvince != null;
     }
 }
