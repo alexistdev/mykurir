@@ -8,7 +8,7 @@ public class Validation {
 
     public static String nameExist(String name)
     {
-        return String.format("Name %s already exists", name);
+        return String.format("%s name already exist", name);
     }
 
     public static String success(String name)

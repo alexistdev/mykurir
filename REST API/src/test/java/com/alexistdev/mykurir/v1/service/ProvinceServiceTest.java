@@ -91,6 +91,7 @@ public class ProvinceServiceTest {
         newProvince.setName("Lampung");
 
         when(provinceRepo.findByName("Lampung")).thenReturn(newProvince);
+
         Exception exception = assertThrows(RuntimeException.class,() ->{
             provinceService.saveProvince(newProvince);
         });
@@ -122,5 +123,32 @@ public class ProvinceServiceTest {
         Province returnedProvince = provinceService.findProvinceById(1L);
 
         assertNull(returnedProvince);
+    }
+
+    @Test
+    void testDeleteProvinceByID_ExistingId() {
+        Long provinceId = 1L;
+
+        when(provinceRepo.existsById(provinceId)).thenReturn(true);
+        doNothing().when(provinceRepo).deleteById(provinceId);
+
+        provinceService.deleteProvinceById(provinceId);
+
+        verify(provinceRepo,times(1)).deleteById(provinceId);
+    }
+
+    @Test
+    void testDeleteProvinceById_NonExistingId() {
+        Long nonExistingId =  2L;
+        when(provinceRepo.existsById(nonExistingId)).thenReturn(false);
+
+        Exception exception = assertThrows(RuntimeException.class,()->{
+            provinceService.deleteProvinceById(nonExistingId);
+        });
+
+        String expectedMessage = "Province not found" + nonExistingId;
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 }

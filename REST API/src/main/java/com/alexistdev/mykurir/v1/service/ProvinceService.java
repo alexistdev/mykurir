@@ -42,6 +42,13 @@ public class ProvinceService {
         return result.orElse(null);
     }
 
+    public void deleteProvinceById(Long id){
+        if(!provinceRepo.existsById(id)){
+            throw new RuntimeException("Province not found" + id);
+        }
+        provinceRepo.deleteById(id);
+    }
+
     private boolean isDuplicateProvinceName(String name){
         Province existProvince = provinceRepo.findByName(name);
         return existProvince != null;

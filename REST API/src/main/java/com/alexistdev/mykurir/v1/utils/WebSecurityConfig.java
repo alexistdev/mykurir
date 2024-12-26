@@ -32,8 +32,8 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers(HttpMethod.GET,
                                 "/v1/api/users/get_all_users").hasAuthority(Role.ADMIN.toString())
-                        .requestMatchers(HttpMethod.GET,
-                                "/v1/api/region/province").hasAuthority(Role.ADMIN.toString())
+                        .requestMatchers(HttpMethod.POST,
+                                "/v1/api/region/*").hasAuthority(Role.ADMIN.toString())
                         .requestMatchers(HttpMethod.GET,
                                 "/v1/api/region/*").hasAnyAuthority(Role.ADMIN.toString(),Role.USER.toString())
 
