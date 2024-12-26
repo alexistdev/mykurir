@@ -7,6 +7,7 @@ import jakarta.persistence.TemporalType;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
@@ -25,9 +26,11 @@ public class BaseEntity<T> {
     @Temporal(TemporalType.TIMESTAMP)
     protected Date createdDate;
 
-    @CreatedDate
+    @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     protected Date modifiedDate;
+
+    protected Boolean isDeleted;
 
     public T getCreatedBy() {
         return createdBy;
@@ -59,5 +62,13 @@ public class BaseEntity<T> {
 
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

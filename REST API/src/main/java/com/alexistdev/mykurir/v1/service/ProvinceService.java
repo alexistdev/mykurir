@@ -17,7 +17,7 @@ public class ProvinceService {
     private ProvinceRepo provinceRepo;
 
     public List<Province> getAllProvinces() {
-        return provinceRepo.findAll();
+        return provinceRepo.findAll().stream().filter(p -> !p.getDeleted()).toList();
     };
 
     public Province saveProvince(Province province) {
@@ -43,10 +43,12 @@ public class ProvinceService {
     }
 
     public void deleteProvinceById(Long id){
-        if(!provinceRepo.existsById(id)){
+        Province province = findProvinceById(id);
+        if(province == null){
             throw new RuntimeException("Province not found" + id);
         }
-        provinceRepo.deleteById(id);
+        province.setDeleted(true);
+        provinceRepo.save(province);
     }
 
     private boolean isDuplicateProvinceName(String name){

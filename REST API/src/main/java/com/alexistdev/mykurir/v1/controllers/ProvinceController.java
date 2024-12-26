@@ -71,7 +71,10 @@ public class ProvinceController {
     public ResponseEntity<ResponseData<Province>> updateProvince(@Valid @RequestBody ProvinceRequest request, Errors errors) {
         ResponseData<Province> responseData = new ResponseData<>();
         responseData.setStatus(false);
-
+        if(request.getId() == null){
+            responseData.getMessages().add("Id cannot be null");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
         if (errors.hasErrors()) {
             processErrors(errors, responseData);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
@@ -91,6 +94,21 @@ public class ProvinceController {
             return ResponseEntity.status(HttpStatus.OK).body(responseData);
         } catch (Exception e){
             responseData.getMessages().add(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseData<Void>> deleteProvince(@PathVariable("id") Long id) {
+        ResponseData<Void> responseData = new ResponseData<>();
+        try{
+            provinceService.deleteProvinceById(id);
+            responseData.getMessages().add(Validation.success("province"));
+            responseData.setStatus(true);
+            return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        } catch (Exception e){
+            responseData.getMessages().add(e.getMessage());
+            responseData.setStatus(false);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
     }
