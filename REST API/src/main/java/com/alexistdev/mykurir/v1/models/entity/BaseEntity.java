@@ -30,7 +30,7 @@ public class BaseEntity<T> {
     @Temporal(TemporalType.TIMESTAMP)
     protected Date modifiedDate;
 
-    protected Boolean isDeleted;
+    protected Boolean isDeleted = Boolean.FALSE;
 
     public T getCreatedBy() {
         return createdBy;

@@ -21,14 +21,23 @@ public class ProvinceService {
     };
 
     public Province saveProvince(Province province) {
+        Province existProvince = provinceRepo.findByName(province.getName());
 
-        if(isDuplicateProvinceName(province.getName())){
+        if(existProvince != null){
+            if(existProvince.getDeleted()){
+                Province currentProvince = new Province();
+                currentProvince.setDeleted(false);
+                currentProvince.setId(existProvince.getId());
+                currentProvince.setName(existProvince.getName());
+                return provinceRepo.save(currentProvince);
+            }
             throw new RuntimeException("Province name already exist");
         }
 
         if(province.getId() != null){
             Province currentProvince = provinceRepo.findById(province.getId()).orElse(null);
             if(currentProvince != null){
+                currentProvince.setDeleted(false);
                 currentProvince.setName(province.getName());
                 province=currentProvince;
             }
@@ -49,10 +58,5 @@ public class ProvinceService {
         }
         province.setDeleted(true);
         provinceRepo.save(province);
-    }
-
-    private boolean isDuplicateProvinceName(String name){
-        Province existProvince = provinceRepo.findByName(name);
-        return existProvince != null;
     }
 }
