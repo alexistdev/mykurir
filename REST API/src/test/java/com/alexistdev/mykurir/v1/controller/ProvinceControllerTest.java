@@ -1,5 +1,6 @@
 package com.alexistdev.mykurir.v1.controller;
 
+import com.alexistdev.mykurir.v1.dto.ProvinceDTO;
 import com.alexistdev.mykurir.v1.dto.ResponseData;
 import com.alexistdev.mykurir.v1.models.entity.Province;
 import com.alexistdev.mykurir.v1.request.ProvinceRequest;
@@ -47,7 +48,7 @@ public class ProvinceControllerTest {
 
         when(provinceService.getAllProvinces()).thenReturn(provinces);
 
-        ResponseEntity<ResponseData<List<Province>>> response = provinceController.getAllProvinces();
+        ResponseEntity<ResponseData<List<ProvinceDTO>>> response = provinceController.getAllProvinces();
 
         assertEquals(HttpStatus.OK,response.getStatusCode());
         assertEquals(2, Objects.requireNonNull(response.getBody()).getPayload().size());

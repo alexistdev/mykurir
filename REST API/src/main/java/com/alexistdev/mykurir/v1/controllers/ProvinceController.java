@@ -1,5 +1,6 @@
 package com.alexistdev.mykurir.v1.controllers;
 
+import com.alexistdev.mykurir.v1.dto.ProvinceDTO;
 import com.alexistdev.mykurir.v1.dto.ResponseData;
 import com.alexistdev.mykurir.v1.masterconstant.Validation;
 import com.alexistdev.mykurir.v1.models.entity.Province;
@@ -30,17 +31,19 @@ public class ProvinceController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseData<List<Province>>> getAllProvinces() {
-        ResponseData<List<Province>> responseData = new ResponseData<>();
+    public ResponseEntity<ResponseData<List<ProvinceDTO>>> getAllProvinces() {
+        ResponseData<List<ProvinceDTO>> responseData = new ResponseData<>();
         List<Province> provinces = provinceService.getAllProvinces();
         responseData.getMessages().add("No province found");
 
         if (provinces != null && !provinces.isEmpty()) {
             responseData.getMessages().removeFirst();
             responseData.getMessages().add("get all provincies returned " + provinces.size());
+            List<ProvinceDTO> provinceDTOS = provinces.stream()
+                    .map(province-> modelMapper.map(province,ProvinceDTO.class)).toList();
+            responseData.setPayload(provinceDTOS);
         }
 
-        responseData.setPayload(provinces);
         responseData.setStatus(true);
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
     }
