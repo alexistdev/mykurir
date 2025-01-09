@@ -16,7 +16,11 @@ public class RegencyService {
     private RegencyRepo regencyRepo;
 
     public List<Regency> getAllRegencies() {
-        return regencyRepo.findAll();
+        return regencyRepo.findAll().stream().filter(r -> !r.getDeleted()).toList();
+    }
+
+    public List<Regency> getAllRegenciesByProvinceId(Long provinceId) {
+        return regencyRepo.findAllByProvinceId(provinceId).stream().filter(r -> !r.getDeleted()).toList();
     }
 
 }

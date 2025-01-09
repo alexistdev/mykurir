@@ -3,6 +3,7 @@ package com.alexistdev.mykurir.v1.repository;
 import com.alexistdev.mykurir.v1.models.entity.Province;
 import com.alexistdev.mykurir.v1.models.entity.User;
 import com.alexistdev.mykurir.v1.models.repository.ProvinceRepo;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,11 @@ public class ProvinceRepoTest {
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(testUser, null, new ArrayList<>());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    @AfterEach
+    void tearDown() {
+        entityManager.clear();
     }
 
     @Test
@@ -90,7 +96,7 @@ public class ProvinceRepoTest {
     void testFindByName() {
         Province province = new Province();
         province.setName("Jakarta");
-        entityManager.persist(province);
+        entityManager.persistAndFlush(province);
 
         Province foundProvince = provinceRepo.findByName("Jakarta");
         Assertions.assertNotNull(foundProvince);
