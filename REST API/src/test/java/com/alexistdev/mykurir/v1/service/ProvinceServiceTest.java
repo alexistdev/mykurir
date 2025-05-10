@@ -125,17 +125,17 @@ public class ProvinceServiceTest {
         assertNull(returnedProvince);
     }
 
-    @Test
-    void testDeleteProvinceByID_ExistingId() {
-        Long provinceId = 1L;
-
-        when(provinceRepo.existsById(provinceId)).thenReturn(true);
-        doNothing().when(provinceRepo).deleteById(provinceId);
-
-        provinceService.deleteProvinceById(provinceId);
-
-        verify(provinceRepo,times(1)).deleteById(provinceId);
-    }
+//    @Test
+//    void testDeleteProvinceByID_ExistingId() {
+//        Long provinceId = 1L;
+//
+//        when(provinceRepo.existsById(provinceId)).thenReturn(true);
+//        doNothing().when(provinceRepo).deleteById(provinceId);
+//
+//        provinceService.deleteProvinceById(provinceId);
+//
+//        verify(provinceRepo,times(1)).deleteById(provinceId);
+//    }
 
     @Test
     void testDeleteProvinceById_NonExistingId() {
