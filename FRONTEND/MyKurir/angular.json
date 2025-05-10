@@ -25,9 +25,30 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/vendor/bootstrap/css/bootstrap.css",
+              "src/assets/vendor/animate/animate.compat.css",
+              "src/assets/vendor/font-awesome/css/all.min.css",
+              "src/assets/vendor/boxicons/css/boxicons.min.css",
+              "src/assets/vendor/magnific-popup/magnific-popup.css",
+              "src/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css",
+              "src/assets/css/theme.css",
+              "src/assets/css/skins/default.css",
+              "src/assets/css/custom.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/vendor/modernizr/modernizr.js",
+              "src/assets/vendor/jquery/jquery.js",
+              "src/assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js",
+              "src/assets/vendor/bootstrap/js/bootstrap.bundle.min.js",
+              "src/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js",
+              "src/assets/vendor/common/common.js",
+              "src/assets/vendor/nanoscroller/nanoscroller.js",
+              "src/assets/vendor/magnific-popup/jquery.magnific-popup.js",
+              "src/assets/js/theme.js",
+              "src/assets/js/custom.js",
+              "src/assets/js/theme.init.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -85,9 +106,12 @@
             "assets": [
               "src/favicon.ico",
               "src/assets"
+
+
             ],
             "styles": [
               "src/styles.css"
+
             ],
             "scripts": []
           }
