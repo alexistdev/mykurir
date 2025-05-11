@@ -32,11 +32,12 @@
               "src/assets/vendor/boxicons/css/boxicons.min.css",
               "src/assets/vendor/magnific-popup/magnific-popup.css",
               "src/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css",
-              "src/assets/css/theme.css",
-              "src/assets/css/skins/default.css",
-              "src/assets/css/custom.css"
+              "src/assets/css2/theme.css",
+              "src/assets/css2/skins/default.css",
+              "src/assets/css2/custom.css"
             ],
             "scripts": [
+              "src/assets/js/layout.js",
               "src/assets/vendor/modernizr/modernizr.js",
               "src/assets/vendor/jquery/jquery.js",
               "src/assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js",
@@ -45,9 +46,10 @@
               "src/assets/vendor/common/common.js",
               "src/assets/vendor/nanoscroller/nanoscroller.js",
               "src/assets/vendor/magnific-popup/jquery.magnific-popup.js",
-              "src/assets/js/theme.js",
-              "src/assets/js/custom.js",
-              "src/assets/js/theme.init.js"
+              "src/assets/vendor/jquery-placeholder/jquery.placeholder.js",
+              "src/assets/js2/theme.js",
+              "src/assets/js2/custom.js",
+              "src/assets/js2/theme.init.js"
             ]
           },
           "configurations": {
@@ -106,12 +108,9 @@
             "assets": [
               "src/favicon.ico",
               "src/assets"
-
-
             ],
             "styles": [
               "src/styles.css"
-
             ],
             "scripts": []
           }
