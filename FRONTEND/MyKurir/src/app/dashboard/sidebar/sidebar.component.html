@@ -1,0 +1,59 @@
+<nav id="menu" class="nav-main" role="navigation">
+
+  <ul class="nav nav-main">
+    <li>
+      <a class="nav-link" routerLink="/dashboard">
+        <i class="bx bx-home-alt" aria-hidden="true"></i>
+        <span>Dashboard</span>
+      </a>
+    </li>
+    <li class="nav-parent" [class.expanded]="isEcommerceOpen">
+      <a class="nav-link" href="#" (click)="toggleEcommerce($event)">
+        <i class="bx bx-cart-alt" aria-hidden="true"></i>
+        <span>eCommerce</span>
+      </a>
+      <ul class="nav nav-children" [style.display]="isEcommerceOpen ? 'block' : 'none'">
+        <li>
+          <a routerLink="/dashboard" class="nav-link">
+            Dashboarda
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="ecommerce-orders-list.html">
+            Orders Listaa
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="ecommerce-orders-detail.html">
+            Orders Detail
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="ecommerce-customers-list.html">
+            Customers List
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="ecommerce-customers-form.html">
+            Customers Form
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a class="nav-link" href="mailbox-folder.html">
+        <span class="float-end badge badge-primary">182</span>
+        <i class="bx bx-envelope" aria-hidden="true"></i>
+        <span>Mailbox</span>
+      </a>
+    </li>
+
+
+    <li>
+      <a class="nav-link" href="http://themeforest.net/item/porto-responsive-html5-template/4106987?ref=Okler">
+        <i class="bx bx-window-alt" aria-hidden="true"></i>
+        <span>Front-End <em class="not-included">(Not Included)</em></span>
+      </a>
+    </li>
+  </ul>
+</nav>
