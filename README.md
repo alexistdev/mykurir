@@ -2,7 +2,12 @@
 #### Aplikasi untuk mencatat basic pengiriman barang , dilengkapi dengan tracking number .
 
 ### Frontend
-===== Not Started ======
+#### Fitur
+- Angular 15
+- Template: Porto
+#### Installasi
+- Jalankan di terminal: npm i
+- Jalankan perintah: ng serve
 
 ### Backend
 #### Fitur
@@ -29,3 +34,4 @@
 <br />
 <img src="https://github.com/alexistdev/mykurir/blob/main/IMAGES/gambar1.png?raw=true" width="1200px">
 <br />
+<img src="https://github.com/alexistdev/mykurir/blob/main/IMAGES/gambar2.png?raw=true" />
