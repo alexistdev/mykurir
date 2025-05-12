@@ -30,6 +30,10 @@ public class WebSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http    .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authz) -> authz
+                        .requestMatchers(HttpMethod.POST,
+                                "/v1/api/auth/register",
+                                "/v1/api/auth/login").permitAll()
+
                         .requestMatchers(HttpMethod.GET,
                                 "/v1/api/users/get_all_users").hasAuthority(Role.ADMIN.toString())
                         .requestMatchers(HttpMethod.POST,

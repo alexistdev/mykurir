@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -44,9 +46,14 @@ public class UserService implements UserDetailsService {
                     String.format("User %s already exists", user.getEmail())
             );
         }
+        Date now = new Date();
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setRole(Role.USER);
         user.setPassword(encodedPassword);
+//        user.setCreatedBy("System");
+//        user.setModifiedBy("System");
+//        user.setCreatedDate(now);
+//        user.setModifiedDate(now);
         return userRepo.save(user);
     }
 
