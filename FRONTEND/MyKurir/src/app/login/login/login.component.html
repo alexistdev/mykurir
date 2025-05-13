@@ -1,7 +1,7 @@
 <section class="body-sign">
   <div class="center-sign">
-    <a href="/" class="logo float-start">
-      <img src="assets/img/logo.png" height="70" alt="Porto Admin" />
+    <a href="/" class="logo float-start mb-5">
+      <img src="assets/img/MyKurir.png" height="80" alt="MyKurir" />
     </a>
 
     <div class="panel card-sign">
@@ -9,11 +9,11 @@
         <h2 class="title text-uppercase font-weight-bold m-0"><i class="bx bx-user-circle me-1 text-6 position-relative top-5"></i> Sign In</h2>
       </div>
       <div class="card-body">
-        <form action="index.html" method="post">
+        <form [formGroup]="loginForm" autocomplete="off">
           <div class="form-group mb-3">
             <label>Username</label>
             <div class="input-group">
-              <input name="username" type="text" class="form-control form-control-lg" />
+              <input name="emailUsername" type="text" class="form-control form-control-lg" formControlName="emailUsername" />
               <span class="input-group-text">
 										<i class="bx bx-user text-4"></i>
 									</span>
@@ -26,7 +26,7 @@
               <a href="pages-recover-password.html" class="float-end">Lost Password?</a>
             </div>
             <div class="input-group">
-              <input name="pwd" type="password" class="form-control form-control-lg" />
+              <input name="password" type="password" class="form-control form-control-lg" formControlName="password" />
               <span class="input-group-text">
 										<i class="bx bx-lock text-4"></i>
 									</span>
@@ -41,7 +41,7 @@
               </div>
             </div>
             <div class="col-sm-4 text-end">
-              <button type="submit" class="btn btn-primary mt-2">Sign In</button>
+              <button type="submit" (click)="doLogin()" class="btn btn-primary mt-2">Sign In</button>
             </div>
           </div>
 
@@ -49,16 +49,12 @@
 								<span>or</span>
 							</span>
 
-          <div class="mb-1 text-center">
-            <a class="btn btn-facebook mb-3 ms-1 me-1" href="#">Connect with <i class="fab fa-facebook-f"></i></a>
-          </div>
-
           <p class="text-center">Don't have an account yet? <a href="pages-signup.html">Sign Up!</a></p>
 
         </form>
       </div>
     </div>
 
-    <p class="text-center text-muted mt-3 mb-3">&copy; Copyright 2023. All Rights Reserved.</p>
+    <p class="text-center text-muted mt-3 mb-3">&copy; Copyright 2025. All Rights Reserved.</p>
   </div>
 </section>
