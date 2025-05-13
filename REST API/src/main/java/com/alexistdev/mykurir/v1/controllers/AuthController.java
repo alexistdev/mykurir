@@ -12,11 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:4200/login")
 @RestController
 @RequestMapping("/v1/api/auth")
 public class AuthController {
@@ -26,6 +24,14 @@ public class AuthController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @PostMapping("/testing")
+    public ResponseEntity<ResponseData<String>> testing(){
+        ResponseData<String> responseData = new ResponseData<>();
+        responseData.setStatus(true);
+        responseData.setPayload("okay ini keren");
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseData);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<ResponseData<User>> register(@Valid  @RequestBody RegisterRequest userRequest, Errors errors) {
@@ -48,6 +54,7 @@ public class AuthController {
         }
     }
 
+
     @PostMapping("/login")
     public ResponseEntity<ResponseData<User>> login(@Valid @RequestBody LoginRequest loginRequest, Errors errors) {
         ResponseData<User> responseData = new ResponseData<>();
@@ -57,9 +64,11 @@ public class AuthController {
 
         if (user != null) {
             responseData.setPayload(user);
+            responseData.getMessages().add("User is valid");
             responseData.setStatus(true);
             return ResponseEntity.status(HttpStatus.OK).body(responseData);
         }
+
         responseData.getMessages().add("Invalid username or password");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
     }

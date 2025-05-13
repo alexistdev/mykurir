@@ -86,7 +86,8 @@
               "browserTarget": "MyKurir:build:production"
             },
             "development": {
-              "browserTarget": "MyKurir:build:development"
+              "browserTarget": "MyKurir:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
