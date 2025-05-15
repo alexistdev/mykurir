@@ -17,6 +17,10 @@
 #### Installasi
 - Buat database kosong dengan nama mykurir
 - Lakukan pengaturan di : src/main/resources/application.properties
+  <pre>
+      spring.datasource.username=[username-db]
+      spring.datasource.password=[password-db]
+  </pre>
 - Registrasi di URL : [POST] http://localhost:8082/v1/api/auth/register
    <pre>
      
