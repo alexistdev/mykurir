@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
 export class LoginComponent implements OnInit {
   loginForm: FormGroup = this.formBuilder.group({});
 
-  error:boolean = false;
+  loginError:boolean = false;
 
   constructor(
               private router: Router,
@@ -33,23 +33,22 @@ export class LoginComponent implements OnInit {
       this.loginForm.disable();
       this.loginService.AuthLogin(this.loginForm.controls['emailUsername'].value,this.loginForm.controls['password'].value).subscribe({
         next: (res) => {
-          console.log(res);
           if(res){
-            this.error = false;
+            this.loginError = false;
             this.router.navigate(['/dashboard']);
           }
-          this.error = true;
+          this.loginError = true;
         },
         error: (err) => {
-          this.error = true;
+          this.loginError = true;
           this.loginForm.enable();
           this.doReset();
         },
       });
-      this.error = false;
+      this.loginError = false;
     } else {
       this.doReset();
-      this.error = true;
+      this.loginError = true;
     }
 
 
@@ -57,6 +56,8 @@ export class LoginComponent implements OnInit {
 
   doReset(){
     this.loginForm.reset();
+    this.loginError=false;
+    this.loginForm.enable();
   }
 
 }

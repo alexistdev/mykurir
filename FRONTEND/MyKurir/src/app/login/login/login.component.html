@@ -9,11 +9,18 @@
         <h2 class="title text-uppercase font-weight-bold m-0"><i class="bx bx-user-circle me-1 text-6 position-relative top-5"></i> Sign In</h2>
       </div>
       <div class="card-body">
-        <form [formGroup]="loginForm" autocomplete="off">
-          <div class="form-group mb-3">
-            <label>Username</label>
+        <div *ngIf="loginError"
+              class="alert alert-danger alert-dismissible fade show" role="alert">
+          Invalid Email or Password !
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true" aria-label="Close"
+                  (click)="doReset()"
+          ></button>
+        </div>
+        <form [formGroup]="loginForm" >
+
+          <div class="form-group mb-3 mt-5">
             <div class="input-group">
-              <input name="emailUsername" type="text" class="form-control form-control-lg" formControlName="emailUsername" />
+              <input name="emailUsername" type="text" class="form-control form-control-lg" formControlName="emailUsername" placeholder="Email" />
               <span class="input-group-text">
 										<i class="bx bx-user text-4"></i>
 									</span>
@@ -22,11 +29,10 @@
 
           <div class="form-group mb-3">
             <div class="clearfix">
-              <label class="float-start">Password</label>
               <a href="pages-recover-password.html" class="float-end">Lost Password?</a>
             </div>
             <div class="input-group">
-              <input name="password" type="password" class="form-control form-control-lg" formControlName="password" />
+              <input name="password" type="password" class="form-control form-control-lg" formControlName="password" placeholder="Password" />
               <span class="input-group-text">
 										<i class="bx bx-lock text-4"></i>
 									</span>
