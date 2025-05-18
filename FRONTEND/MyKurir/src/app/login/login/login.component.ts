@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
         next: (res) => {
           if(res){
             this.loginError = false;
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/admin']);
           }
           this.loginError = true;
         },

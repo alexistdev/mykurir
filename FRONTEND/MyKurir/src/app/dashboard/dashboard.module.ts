@@ -5,9 +5,11 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import {RouterModule, Routes} from "@angular/router";
 import { NotificationComponent } from './notification/notification.component';
 import { HeaderComponent } from './header/header.component';
+import { MasteruserComponent } from './masteruser/masteruser.component';
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent }
+  { path: '', component: DashboardComponent },
+  { path: 'data-user', component: MasteruserComponent },
 ]
 
 @NgModule({
@@ -15,7 +17,8 @@ const routes: Routes = [
     DashboardComponent,
     SidebarComponent,
     NotificationComponent,
-    HeaderComponent
+    HeaderComponent,
+    MasteruserComponent
   ],
   imports: [
     CommonModule,
