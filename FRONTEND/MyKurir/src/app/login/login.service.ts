@@ -29,7 +29,11 @@ export class LoginService {
             let stringifiedData = JSON.stringify(res);
             let parsedJson = JSON.parse(stringifiedData);
             let data = parsedJson.payload;
+            let encodedPass = this.localStorageService.encode(userPw);
             this.localStorageService.setItem("userId",data.id);
+            this.localStorageService.setItem("role",data.role);
+            this.localStorageService.setItem("email",data.email);
+            this.localStorageService.setItem("keyPs", encodedPass);
             observer.next(true);
           },
           error: (e) => {
