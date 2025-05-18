@@ -9,12 +9,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -132,10 +137,20 @@ public class UserServiceTest {
         Admin.setRole(Role.ADMIN);
 
         List<User> allUsers = List.of(user1,user2,user3,Admin);
-        when(userRepo.findAll()).thenReturn(allUsers);
 
-        List<User> nonAdminUsers = userService.getAllUsers();
-        assertEquals(3,nonAdminUsers.size());
-        assertTrue(nonAdminUsers.stream().noneMatch(user -> user.getRole() == Role.ADMIN));
+        //Mock
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<User> userPage =  new PageImpl<>(allUsers.stream()
+                .filter(user -> user.getRole() != Role.ADMIN)
+                .collect(Collectors.toList()));
+
+
+        when(userRepo.findByRoleNot(Role.ADMIN,pageable)).thenReturn(userPage);
+
+        Page<User> nonAdminUsers = userService.getAllUsers(pageable);
+
+        assertEquals(3, nonAdminUsers.getContent().size());
+        assertTrue(nonAdminUsers.getContent().stream()
+                .noneMatch(user -> user.getRole() == Role.ADMIN));
     }
 }

@@ -6,6 +6,8 @@ import com.alexistdev.mykurir.v1.models.repository.UserRepo;
 import com.alexistdev.mykurir.v1.request.LoginRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -69,14 +71,7 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    public List<User> getAllUsers() {
-        ExecutorService executor = Executors.newFixedThreadPool(10);
-        return CompletableFuture.supplyAsync(() -> {
-            List<User> users = userRepo.findAll();
-            System.out.printf("Thread: %s; bean instance: %s%n", currentThread().getName(), this);
-            return users.parallelStream()
-                    .filter(c -> c.getRole() != Role.ADMIN)
-                    .collect(Collectors.toList());
-        }, executor).join();
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepo.findByRoleNot(Role.ADMIN,pageable);
     }
 }
