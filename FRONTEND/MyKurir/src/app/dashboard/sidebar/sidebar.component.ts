@@ -34,7 +34,6 @@ export class SidebarComponent implements AfterViewInit, OnInit {
           this.isMasterDataOpen = false;
         }
       });
-    console.log(this.isMasterDataOpen);
   }
 
   toggleLargeSidebar() {

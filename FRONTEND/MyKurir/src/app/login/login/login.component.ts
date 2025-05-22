@@ -41,8 +41,7 @@ export class LoginComponent implements OnInit {
         },
         error: (err) => {
           this.loginError = true;
-          this.loginForm.enable();
-          this.doReset();
+          this.loginForm.disable();
         },
       });
       this.loginError = false;
