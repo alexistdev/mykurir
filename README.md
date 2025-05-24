@@ -8,7 +8,7 @@
 #### Installasi
 - Jalankan di terminal: npm i
 - Jalankan perintah: ng serve
-
+<hr/>
 ### Backend
 #### Fitur
 - Java Springboot 3
@@ -33,7 +33,8 @@
    </pre>
 - Cek Database dan ubah role dari akun yang dibuat menjadi ADMIN
 - Setup Auth di Imnsomnia atau Postman menjadi Basic Auth, dan masukkan email dan password dari akun yang didaftarkan sebelumnya
-  
+
+<hr />
 #### LIST API:
 <br />
 <img src="https://github.com/alexistdev/mykurir/blob/main/IMAGES/gambar1.png?raw=true" width="1200px">
