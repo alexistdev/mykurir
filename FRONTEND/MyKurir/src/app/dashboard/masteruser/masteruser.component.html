@@ -7,7 +7,7 @@
   <div class="inner-wrapper">
     <!-- start: sidebar -->
     <aside id="sidebar-left" class="sidebar-left">
-      <app-sidebar />
+      <app-sidebar/>
       <!-- end: sidebar -->
     </aside>
 
@@ -43,7 +43,7 @@
               <h2 class="card-title">Bootstrap Responsive</h2>
               <div class="row">
                 <div class="col-lg-4">
-                  <select  class="form-control" >
+                  <select class="form-control">
                     <option value="10">10</option>
                     <option value="20">50</option>
                     <option value="20">100</option>
@@ -66,9 +66,9 @@
                   </thead>
                   <tbody>
                   <tr *ngFor="let user of users; let i = index">
-                    <td class="text-center">{{ ((pageNumber)*pageSize)+(i + 1) }}</td>
+                    <td class="text-center">{{ ((pageNumber) * pageSize) + (i + 1) }}</td>
                     <td>{{ user.fullName }}</td>
-                    <td >{{ user.email }}</td>
+                    <td>{{ user.email }}</td>
                     <td class="text-center">{{ user.role }}</td>
                     <td class="text-center">
                       <button class="btn btn-sm btn-primary mx-1">Edit</button>
@@ -79,17 +79,31 @@
                   <tfoot>
                   <tr>
                     <td colspan="2" class="text-start text-color-grey" style="font-size: 0.75rem;margin-left: 10px;"
-                    > Total Data : {{totalData}} row. </td>
+                    > Total Data : {{ totalData }} row.
+                    </td>
                     <td colspan="4" class="text-end">
                       <nav>
                         <ul class="pagination justify-content-end mt-3">
                           <li class="page-item" [class.disabled]="pageNumber === 0">
-                            <a class="page-link" (click)="pageNumber > 0 && loadData(pageNumber - 1)" style="cursor:pointer">Previous</a>
+                            <a class="page-link" (click)="pageNumber > 0 && loadData(pageNumber-1)"
+                               style="cursor:pointer">Previous</a>
                           </li>
-                          <li *ngFor="let p of [].constructor(totalPages); let i = index"
-                              class="page-item" [class.active]="i === pageNumber"><a class="page-link" (click)="loadData(i)" style="cursor:pointer">{{i + 1}}</a></li>
+                          <li *ngFor="let p of getDisplayedPages(); let i = index"
+                              class="page-item"
+                              [class.active]="(isNumber(p) ? Number(p)-1 : null) === pageNumber">
+                            <a class="page-link"
+                               *ngIf="p !== '...'; else ellipsisTpl"
+                               href="#"
+                               (click)="isNumber(p) ? loadData(Number(p)-1) : null; $event.preventDefault()"
+                               style="cursor:pointer">{{ p }}</a>
+                            <ng-template #ellipsisTpl>
+                              <span class="page-link">…</span>
+                            </ng-template>
+                          </li>
+
                           <li class="page-item" [class.disabled]="pageNumber === totalPages - 1">
-                            <a class="page-link" (click)="pageNumber < totalPages - 1 && loadData(pageNumber + 1)" style="cursor:pointer">Next</a>
+                            <a class="page-link" (click)="pageNumber < totalPages - 1 && loadData(pageNumber + 1)"
+                               style="cursor:pointer">Next</a>
                           </li>
                         </ul>
                       </nav>
