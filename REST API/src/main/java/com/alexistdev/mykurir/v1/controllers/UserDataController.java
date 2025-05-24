@@ -31,6 +31,37 @@ public class UserDataController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @GetMapping("/get_user_by_filter")
+    public ResponseEntity<ResponseData<Page<UserDTO>>> getUserByFilter(
+            @RequestParam(defaultValue = "") String filter,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+
+        ResponseData<Page<UserDTO>> responseData = new ResponseData<>();
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ?
+                Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page,size, Sort.by(sortDirection, sortBy));
+
+        Page<User> usersPage = userService.getUserByFilter(pageable,filter);
+
+        responseData.getMessages().add("No users found");
+        responseData.setStatus(false);
+        if(!usersPage.isEmpty()){
+            responseData.setStatus(true);
+            responseData.getMessages().removeFirst();
+            responseData.getMessages().add("Retrieved page " + page + " of users"
+            );
+        }
+
+        Page<UserDTO> userDTOS = usersPage
+                .map(user -> modelMapper.map(user, UserDTO.class));
+
+        responseData.setPayload(userDTOS);
+        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+    }
 
     @GetMapping("/get_all_users")
     public ResponseEntity<ResponseData<Page<UserDTO>>> getAllUserData(

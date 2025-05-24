@@ -28,19 +28,23 @@ public class WebSecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http    .csrf(AbstractHttpConfigurer::disable)
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/v1/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,
-                                "/v1/api/auth/testing").permitAll()
-                        .requestMatchers(HttpMethod.GET,
-                                "/v1/api/users/get_all_users").hasAuthority(Role.ADMIN.toString())
-                        .requestMatchers(HttpMethod.POST,
-                                "/v1/api/region/*").hasAuthority(Role.ADMIN.toString())
-                        .requestMatchers(HttpMethod.GET,
-                                "/v1/api/region/*").hasAnyAuthority(Role.ADMIN.toString(),Role.USER.toString())
+                                .requestMatchers("/v1/api/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.POST,
+                                        "/v1/api/auth/testing").permitAll()
+//                        .requestMatchers(HttpMethod.GET,
+//                                "/v1/api/users/get_all_users").hasAuthority(Role.ADMIN.toString())
+                                .requestMatchers(HttpMethod.GET,
+                                        "/v1/api/users/get_all_users").permitAll()
+                                .requestMatchers(HttpMethod.GET,
+                                        "/v1/api/users/get_user_by_filter").permitAll()
+                                .requestMatchers(HttpMethod.POST,
+                                        "/v1/api/region/*").hasAuthority(Role.ADMIN.toString())
+                                .requestMatchers(HttpMethod.GET,
+                                        "/v1/api/region/*").hasAnyAuthority(Role.ADMIN.toString(), Role.USER.toString())
 
-                        .anyRequest().authenticated()
+                                .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
                 .authenticationProvider(this.daoAuthenticationProvider());
@@ -49,10 +53,10 @@ public class WebSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(HttpMethod.POST,"/v1/api/auth/login")
-                .requestMatchers(HttpMethod.POST,"/v1/api/auth/register")
-                .requestMatchers(HttpMethod.GET,"/swagger-ui/index.html")
-                .requestMatchers(HttpMethod.GET,"/v3/api-docs/**");
+        return (web) -> web.ignoring().requestMatchers(HttpMethod.POST, "/v1/api/auth/login")
+                .requestMatchers(HttpMethod.POST, "/v1/api/auth/register")
+                .requestMatchers(HttpMethod.GET, "/swagger-ui/index.html")
+                .requestMatchers(HttpMethod.GET, "/v3/api-docs/**");
     }
 
     private DaoAuthenticationProvider daoAuthenticationProvider() {

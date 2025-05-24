@@ -5,6 +5,8 @@ import com.alexistdev.mykurir.v1.models.entity.User;
 import com.alexistdev.mykurir.v1.models.repository.UserRepo;
 import com.alexistdev.mykurir.v1.request.LoginRequest;
 import jakarta.transaction.Transactional;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,18 +15,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
-import static java.lang.Thread.currentThread;
 
+
+@Slf4j
 @Service
 @Transactional
 public class UserService implements UserDetailsService {
@@ -73,5 +69,9 @@ public class UserService implements UserDetailsService {
 
     public Page<User> getAllUsers(Pageable pageable) {
         return userRepo.findByRoleNot(Role.ADMIN,pageable);
+    }
+
+    public Page<User> getUserByFilter(Pageable pageable, String keyword){
+        return userRepo.findByFilter(Role.ADMIN,keyword,pageable);
     }
 }
