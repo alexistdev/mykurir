@@ -39,17 +39,24 @@
         <div class="col">
           <section class="card card-primary">
             <header class="card-header">
-
-              <h2 class="card-title">Bootstrap Responsive</h2>
-              <div class="row">
-                <div class="col-lg-4">
-                  <select class="form-control">
+              <div class="row align-items-center">
+                <div class="col-lg-1 text-start">
+                  <select class="form-control"
+                          [(ngModel)]="pageSize"
+                          (change)="onPageSizeChange()">
                     <option value="10">10</option>
-                    <option value="20">50</option>
-                    <option value="20">100</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
                   </select>
                 </div>
+                <div class="col-lg-2 d-flex align-items-center mt-3">
+                  <p class="text-light">entries per page</p>
+                </div>
+                <div class="col-lg-6 offset-lg-3 text-end">
+                  <input type="text" class="form-control" placeholder="Search"/>
+                </div>
               </div>
+
 
             </header>
             <div class="card-body">
@@ -85,7 +92,7 @@
                       <nav>
                         <ul class="pagination justify-content-end mt-3">
                           <li class="page-item" [class.disabled]="pageNumber === 0">
-                            <a class="page-link" (click)="pageNumber > 0 && loadData(pageNumber-1)"
+                            <a class="page-link" (click)="pageNumber > 0 && loadData(pageNumber-1,pageSize)"
                                style="cursor:pointer">Previous</a>
                           </li>
                           <li *ngFor="let p of getDisplayedPages(); let i = index"
@@ -94,7 +101,7 @@
                             <a class="page-link"
                                *ngIf="p !== '...'; else ellipsisTpl"
                                href="#"
-                               (click)="isNumber(p) ? loadData(Number(p)-1) : null; $event.preventDefault()"
+                               (click)="isNumber(p) ? loadData(Number(p)-1,pageSize) : null; $event.preventDefault()"
                                style="cursor:pointer">{{ p }}</a>
                             <ng-template #ellipsisTpl>
                               <span class="page-link">…</span>
@@ -102,7 +109,7 @@
                           </li>
 
                           <li class="page-item" [class.disabled]="pageNumber === totalPages - 1">
-                            <a class="page-link" (click)="pageNumber < totalPages - 1 && loadData(pageNumber + 1)"
+                            <a class="page-link" (click)="pageNumber < totalPages - 1 && loadData(pageNumber + 1,pageSize)"
                                style="cursor:pointer">Next</a>
                           </li>
                         </ul>

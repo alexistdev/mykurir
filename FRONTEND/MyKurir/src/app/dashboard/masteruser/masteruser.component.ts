@@ -23,10 +23,10 @@ export class MasteruserComponent implements OnInit{
     this.loadData(this.pageNumber);
   }
 
-  loadData(page: number){
+  loadData(page: number, size: number = 10){
     this.pageNumber = page;
-    console.log(this.pageNumber);
-    this.userService.getUsers(this.pageNumber,1,'id','desc').subscribe({
+    this.pageSize = size;
+    this.userService.getUsers(this.pageNumber,this.pageSize ,'id','desc').subscribe({
       next: (data) => {
         this.payload = data.payload;
         this.pageNumber = this.payload.pageable.pageNumber;
@@ -72,6 +72,10 @@ export class MasteruserComponent implements OnInit{
 
   isNumber(value: any): boolean {
     return typeof value === 'number';
+  }
+
+  onPageSizeChange() {
+    this.loadData(0, this.pageSize);
   }
 
 
