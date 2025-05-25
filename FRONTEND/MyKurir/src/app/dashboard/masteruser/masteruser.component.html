@@ -77,18 +77,25 @@
                     <th class="text-center">Open</th>
                   </tr>
                   </thead>
-                  <tbody>
-                  <tr *ngFor="let user of users; let i = index">
-                    <td class="text-center">{{ ((pageNumber) * pageSize) + (i + 1) }}</td>
-                    <td>{{ user.fullName }}</td>
-                    <td>{{ user.email }}</td>
-                    <td class="text-center">{{ user.role }}</td>
-                    <td class="text-center">
-                      <button class="btn btn-sm btn-primary mx-1">Edit</button>
-                      <button class="btn btn-sm btn-danger mx-1">Delete</button>
-                    </td>
-                  </tr>
-                  </tbody>
+                  <ng-container *ngIf="totalData != 0; else noData">
+                    <tbody>
+                      <tr *ngFor="let user of users; let i = index">
+                        <td class="text-center">{{ ((pageNumber) * pageSize) + (i + 1) }}</td>
+                        <td>{{ user.fullName }}</td>
+                        <td>{{ user.email }}</td>
+                        <td class="text-center">{{ user.role }}</td>
+                        <td class="text-center">
+                          <button class="btn btn-sm btn-primary mx-1">Edit</button>
+                          <button class="btn btn-sm btn-danger mx-1">Delete</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </ng-container>
+                      <ng-template #noData>
+                        <tr>
+                          <td colspan="5" class="text-center">No Data</td>
+                        </tr>
+                      </ng-template>
                   <tfoot>
                   <tr>
                     <td colspan="2" class="text-start text-color-grey" style="font-size: 0.75rem;margin-left: 10px;"
