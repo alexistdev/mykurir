@@ -53,7 +53,13 @@
                   <p class="text-light">entries per page</p>
                 </div>
                 <div class="col-lg-6 offset-lg-3 text-end">
-                  <input type="text" class="form-control" placeholder="Search"/>
+                  <input #searchBox
+                         type="text"
+                          id="search"
+                          class="form-control"
+                          aria-label="Search"
+                          placeholder="Search"
+                          (input)="onSearchChange(searchBox.value)" />
                 </div>
               </div>
 

@@ -16,6 +16,8 @@ export class MasteruserComponent implements OnInit{
    pageNumber:number = 0;
    totalPages: number = 0;
    pageSize: number = 0;
+   keyword: string = "";
+   searchQuery: string = '';
 
   constructor(private userService: UserService) {}
 
@@ -23,25 +25,51 @@ export class MasteruserComponent implements OnInit{
     this.loadData(this.pageNumber);
   }
 
+  onSearchChange(searchTerm: string) {
+    this.searchQuery = searchTerm.toLowerCase();
+    this.loadData(this.pageNumber,this.pageSize);
+  }
+
   loadData(page: number, size: number = 10){
     this.pageNumber = page;
     this.pageSize = size;
-    this.userService.getUsers(this.pageNumber,this.pageSize ,'id','desc').subscribe({
-      next: (data) => {
-        this.payload = data.payload;
-        this.pageNumber = this.payload.pageable.pageNumber;
-        this.totalPages = this.payload.totalPages;
-        this.pageSize = this.payload.pageable.pageSize;
-        this.users = this.payload.content.map(user => ({
-          ...user,
-          fullName: this.capitalizeWords(user.fullName)
-        }))
-        this.totalData = this.payload.totalElements;
-      },
-      error: (err) => {
-        console.error('Error fetching users', err);
-      }
-    });
+    this.keyword = this.searchQuery;
+
+    if(this.keyword != ""){
+      this.userService.getUsersByFilter(this.keyword,this.pageNumber,this.pageSize ,'id','desc').subscribe({
+        next: (data) => {
+          this.payload = data.payload;
+          this.pageNumber = this.payload.pageable.pageNumber;
+          this.totalPages = this.payload.totalPages;
+          this.pageSize = this.payload.pageable.pageSize;
+          this.users = this.payload.content.map(user => ({
+            ...user,
+            fullName: this.capitalizeWords(user.fullName)
+          }))
+          this.totalData = this.payload.totalElements;
+        },
+        error: (err) => {
+          console.error('Error fetching users', err);
+        }
+      });
+    } else {
+      this.userService.getUsers(this.pageNumber,this.pageSize ,'id','desc').subscribe({
+        next: (data) => {
+          this.payload = data.payload;
+          this.pageNumber = this.payload.pageable.pageNumber;
+          this.totalPages = this.payload.totalPages;
+          this.pageSize = this.payload.pageable.pageSize;
+          this.users = this.payload.content.map(user => ({
+            ...user,
+            fullName: this.capitalizeWords(user.fullName)
+          }))
+          this.totalData = this.payload.totalElements;
+        },
+        error: (err) => {
+          console.error('Error fetching users', err);
+        }
+      });
+    }
   }
 
   capitalizeWords(input: string): string {
@@ -77,7 +105,6 @@ export class MasteruserComponent implements OnInit{
   onPageSizeChange() {
     this.loadData(0, this.pageSize);
   }
-
 
   protected readonly Number = Number;
 }
