@@ -86,8 +86,8 @@
                         <td>{{ user.fullName }}</td>
                         <td>{{ user.email }}</td>
                         <td class="text-center">{{ user.role }}</td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center">{{ user.createdDate.toString().replace('T',' ') }}</td>
+                        <td class="text-center">{{ user.modifiedDate.toString().replace('T',' ') }}</td>
                         <td class="text-center">
                           <button class="btn btn-sm btn-primary mx-1">Edit</button>
                           <button class="btn btn-sm btn-danger mx-1">Delete</button>
@@ -105,7 +105,7 @@
                     <td colspan="2" class="text-start text-color-grey" style="font-size: 0.75rem;margin-left: 10px;"
                     > Total Data : {{ totalData }} row.
                     </td>
-                    <td colspan="4" class="text-end">
+                    <td colspan="6" class="text-end">
                       <nav>
                         <ul class="pagination justify-content-end mt-3">
                           <li class="page-item" [class.disabled]="pageNumber === 0">
