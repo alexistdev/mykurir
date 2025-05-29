@@ -16,15 +16,16 @@ export class UserService {
   constructor(private http:HttpClient) { }
 
   getUsers(page:number,size:number,sortBy:string, direction:string):Observable<Apiresponse> {
+
+
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     });
-    const userName = 'alexistdev@gmail.com';
-    const userPw = '325339';
-    // @ts-ignore
-    return this.http.get<Apiresponse>(this.apiUrl1+'?page='+page+'&size='+size+'&sortBy='+sortBy+'&direction='+direction, {'email': userName , 'password' : userPw},{ headers: headers,
-      withCredentials: true });
+
+    return this.http.get<Apiresponse>(
+      `${this.apiUrl1}?page=${page}&size=${size}&sortBy=${sortBy}&direction=${direction}`
+    );
   }
 
   getUsersByFilter(keyword:string, page:number,size:number,sortBy:string, direction:string):Observable<Apiresponse> {
@@ -32,10 +33,8 @@ export class UserService {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     });
-    const userName = 'alexistdev@gmail.com';
-    const userPw = '325339';
-    // @ts-ignore
-    return this.http.get<Apiresponse>(this.apiUrl2+'?filter='+keyword+'&page='+page+'&size='+size+'&sortBy='+sortBy+'&direction='+direction, {'email': userName , 'password' : userPw},{ headers: headers,
+
+    return this.http.get<Apiresponse>(this.apiUrl2+'?filter='+keyword+'&page='+page+'&size='+size+'&sortBy='+sortBy+'&direction='+direction, { headers: headers,
       withCredentials: true });
   }
 
