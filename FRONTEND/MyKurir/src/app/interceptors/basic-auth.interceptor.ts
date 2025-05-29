@@ -9,10 +9,13 @@ export class BasicAuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
 
-    const username = this.localStorageService.getItem('email') || '';
-    const password = this.localStorageService.decode(this.localStorageService.getItem('keyPs')) || '';
+    const username: string = this.localStorageService.getItem('email') || '';
+    const password: string = this.localStorageService.getItem('keyPs') || '';
 
-    const authToken = btoa(`${username}:${password}`);
+    const decodeUsername: string = this.localStorageService.decode(username);
+    const decodePassword: string = this.localStorageService.decode(password);
+
+    const authToken: string = btoa(`${decodeUsername}:${decodePassword}`);
 
     const authReq = req.clone({
       setHeaders: {
