@@ -11,7 +11,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
 
     const username = this.localStorageService.getItem('email') || '';
     const password = this.localStorageService.decode(this.localStorageService.getItem('keyPs')) || '';
-    console.log(password);
+
     const authToken = btoa(`${username}:${password}`);
 
     const authReq = req.clone({
