@@ -12,6 +12,7 @@
 ### Backend
 #### Fitur
 - Java Springboot 3
+- JDK 21
 - MySQL
 
 #### Installasi
@@ -21,6 +22,8 @@
       spring.datasource.username=[username-db]
       spring.datasource.password=[password-db]
   </pre>
+
+- Jalankan dengan perintah mvn spring-boot:run
 - Registrasi di URL : [POST] http://localhost:8082/v1/api/auth/register
    <pre>
      
@@ -32,7 +35,9 @@
      
    </pre>
 - Cek Database dan ubah role dari akun yang dibuat menjadi ADMIN
+  <img src="https://github.com/alexistdev/mykurir/blob/main/IMAGES/gambar4.png?raw=true">
 - Setup Auth di Imnsomnia atau Postman menjadi Basic Auth, dan masukkan email dan password dari akun yang didaftarkan sebelumnya
+  <img src="https://github.com/alexistdev/mykurir/blob/main/IMAGES/gambar5.png?raw=true">
 
 <hr />
 #### LIST API:
