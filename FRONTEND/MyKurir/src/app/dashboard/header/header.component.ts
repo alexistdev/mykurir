@@ -1,4 +1,6 @@
 import {Component, Renderer2} from '@angular/core';
+import {LocalStorageService} from "../../utils/local-storage.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -7,7 +9,7 @@ import {Component, Renderer2} from '@angular/core';
 })
 export class HeaderComponent {
 
-  constructor(private renderer: Renderer2
+  constructor(private renderer: Renderer2, private localStorageService:LocalStorageService,private router: Router
   ) {}
 
   toggleSidebar() {
@@ -17,6 +19,11 @@ export class HeaderComponent {
     } else {
       this.renderer.addClass(html, 'sidebar-left-opened');
     }
+  }
+
+  doSignOut():void{
+    this.localStorageService.clearItem();
+    this.router.navigate(['/']);
   }
 
 }
