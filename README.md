@@ -39,4 +39,4 @@
 <br />
 <img src="https://github.com/alexistdev/mykurir/blob/main/IMAGES/gambar1.png?raw=true" width="1200px">
 <br />
-<img src="https://github.com/alexistdev/mykurir/blob/main/IMAGES/gambar2.png?raw=true" />
+<img src="https://github.com/alexistdev/mykurir/blob/main/IMAGES/gambar3.png?raw=true" />
