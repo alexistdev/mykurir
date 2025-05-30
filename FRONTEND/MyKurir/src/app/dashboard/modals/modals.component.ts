@@ -7,15 +7,20 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 })
 export class ModalsComponent {
 
-  @Input()
-  show = false;
+  @Input() show: boolean = false;
+  @Input() modalType: 'form' | 'confirm' = 'confirm'; // or use an enum for more options
+  @Input() formData: any;
+  @Input() confirmationText: string = '';
+  @Output() close = new EventEmitter<void>();
+  @Output() confirm = new EventEmitter<void>();
 
-  @Output()
-  close = new EventEmitter<void>();
 
   onClose() {
     this.close.emit(); // Notify parent to hide modal
   }
 
+  onConfirm() {
+    this.confirm.emit();
+  }
 
 }

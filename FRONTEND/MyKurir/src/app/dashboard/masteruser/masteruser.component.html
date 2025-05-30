@@ -41,11 +41,8 @@
             <header class="card-header">
               <div class="row align-items-center">
                 <div class="col-lg-3">
-                  <button class="btn btn-sm btn-primary" (click)="openModal()">+ ADD</button>
+                  <button class="btn btn-sm btn-primary" (click)="openModal('form')">+ ADD</button>
                 </div>
-                <!--                <div class="col-lg-2  d-flex align-items-end mt-3 ml-4">-->
-                <!--                  <p>entries per page</p>-->
-                <!--                </div>-->
                 <div class="col-lg-2 offset-lg-4  text-start">
                   <select class="form-control"
                           [(ngModel)]="pageSize"
@@ -106,7 +103,9 @@
                       <td class="text-center">{{ user.modifiedDate.toString().replace('T', ' ') }}</td>
                       <td class="text-center">
                         <button class="btn btn-sm btn-primary mx-1">Edit</button>
-                        <button class="btn btn-sm btn-danger mx-1">Delete</button>
+                        <button class="btn btn-sm btn-danger mx-1" (click)="openModal('confirm','yakinkah aku ini?')">
+                          Delete
+                        </button>
                       </td>
                     </tr>
                     </tbody>
@@ -162,7 +161,13 @@
 
       <!-- end: page -->
 
-      <app-modals [show]="showModal" (close)="closeModal()"></app-modals>
+      <app-modals
+        [show]="showModal"
+        [modalType]="currentModalType"
+        [formData]="currentFormData"
+        [confirmationText]="currentConfirmationText"
+        (close)="closeModal()"
+      ></app-modals>
     </section>
   </div>
 </section>

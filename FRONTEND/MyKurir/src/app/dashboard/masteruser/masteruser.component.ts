@@ -18,7 +18,11 @@ export class MasteruserComponent implements OnInit {
   pageSize: number = 0;
   keyword: string = "";
   searchQuery: string = '';
-  showModal = false;
+  public showModal = false;
+  public currentModalType: 'form' | 'confirm' = 'confirm';
+  public currentFormData: any = {};
+  public currentConfirmationText = '';
+
 
 
   constructor(private userService: UserService) {
@@ -111,14 +115,19 @@ export class MasteruserComponent implements OnInit {
 
   protected readonly Number = Number;
 
-  openModal() {
+  openModal(type: 'form' | 'confirm', data?: any) {
+    this.currentModalType = type;
     this.showModal = true;
-    console.log("open modal");
+    if (type === 'form') {
+      this.currentFormData = data || {}; // for new or edit form data
+    } else {
+      this.currentConfirmationText = data || 'Are you sure you want to proceed?';
+    }
   }
-
   closeModal() {
     this.showModal = false;
   }
+
 
 
 }
