@@ -7,6 +7,7 @@ import { NotificationComponent } from './notification/notification.component';
 import { HeaderComponent } from './header/header.component';
 import { MasteruserComponent } from './masteruser/masteruser.component';
 import {FormsModule} from "@angular/forms";
+import { ModalsComponent } from './modals/modals.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -19,7 +20,8 @@ const routes: Routes = [
     SidebarComponent,
     NotificationComponent,
     HeaderComponent,
-    MasteruserComponent
+    MasteruserComponent,
+    ModalsComponent
   ],
   imports: [
     CommonModule,

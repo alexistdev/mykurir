@@ -41,7 +41,7 @@
             <header class="card-header">
               <div class="row align-items-center">
                 <div class="col-lg-3">
-                  <button class="btn btn-sm btn-primary">+ ADD</button>
+                  <button class="btn btn-sm btn-primary" (click)="openModal()">+ ADD</button>
                 </div>
                 <!--                <div class="col-lg-2  d-flex align-items-end mt-3 ml-4">-->
                 <!--                  <p>entries per page</p>-->
@@ -161,6 +161,8 @@
       </div>
 
       <!-- end: page -->
+
+      <app-modals [show]="showModal" (close)="closeModal()"></app-modals>
     </section>
   </div>
 </section>

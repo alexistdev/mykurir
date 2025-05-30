@@ -8,18 +8,21 @@ import {Payload} from "../response/payload";
   templateUrl: './masteruser.component.html',
   styleUrls: ['./masteruser.component.css']
 })
-export class MasteruserComponent implements OnInit{
+export class MasteruserComponent implements OnInit {
 
-   users: User[] = [];
-   payload ?: Payload;
-   totalData: number = 0;
-   pageNumber:number = 0;
-   totalPages: number = 0;
-   pageSize: number = 0;
-   keyword: string = "";
-   searchQuery: string = '';
+  users: User[] = [];
+  payload ?: Payload;
+  totalData: number = 0;
+  pageNumber: number = 0;
+  totalPages: number = 0;
+  pageSize: number = 0;
+  keyword: string = "";
+  searchQuery: string = '';
+  showModal = false;
 
-  constructor(private userService: UserService) {}
+
+  constructor(private userService: UserService) {
+  }
 
   ngOnInit(): void {
     this.loadData(this.pageNumber);
@@ -27,16 +30,16 @@ export class MasteruserComponent implements OnInit{
 
   onSearchChange(searchTerm: string) {
     this.searchQuery = searchTerm.toLowerCase();
-    this.loadData(this.pageNumber,this.pageSize);
+    this.loadData(this.pageNumber, this.pageSize);
   }
 
-  loadData(page: number, size: number = 10){
+  loadData(page: number, size: number = 10) {
     this.pageNumber = page;
     this.pageSize = size;
     this.keyword = this.searchQuery;
 
-    if(this.keyword != ""){
-      this.userService.getUsersByFilter(this.keyword,this.pageNumber,this.pageSize ,'id','desc').subscribe({
+    if (this.keyword != "") {
+      this.userService.getUsersByFilter(this.keyword, this.pageNumber, this.pageSize, 'id', 'desc').subscribe({
         next: (data) => {
           this.payload = data.payload;
           this.pageNumber = this.payload.pageable.pageNumber;
@@ -53,7 +56,7 @@ export class MasteruserComponent implements OnInit{
         }
       });
     } else {
-      this.userService.getUsers(this.pageNumber,this.pageSize ,'id','desc').subscribe({
+      this.userService.getUsers(this.pageNumber, this.pageSize, 'id', 'desc').subscribe({
         next: (data) => {
           this.payload = data.payload;
           this.pageNumber = this.payload.pageable.pageNumber;
@@ -88,9 +91,9 @@ export class MasteruserComponent implements OnInit{
         pages.push(i);
       }
     } else if (current <= 9) {
-      pages.push(1, 2, 3, 4,5,6,7,8,9,10, '...');
+      pages.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, '...');
     } else if (current >= total - 2) {
-      pages.push('...',total - 5,total - 4 , total - 3,total - 2, total - 1, total);
+      pages.push('...', total - 5, total - 4, total - 3, total - 2, total - 1, total);
     } else {
       pages.push('...', current, current + 1, current + 2, current + 3, current + 4, '...');
     }
@@ -107,4 +110,15 @@ export class MasteruserComponent implements OnInit{
   }
 
   protected readonly Number = Number;
+
+  openModal() {
+    this.showModal = true;
+    console.log("open modal");
+  }
+
+  closeModal() {
+    this.showModal = false;
+  }
+
+
 }

@@ -1,0 +1,27 @@
+<div *ngIf="show" class="modal-backdrop">
+  <section class="card">
+    <header class="card-header">
+      <h2 class="card-title">Are you sure?</h2>
+    </header>
+
+    <div class="card-body">
+      <div class="modal-wrapper">
+        <div class="modal-text">
+          <p class="mb-0">Like other components, easily make a panel more meaningful to a particular context by adding any of the contextual state classes.</p>
+        </div>
+      </div>
+    </div>
+    <footer class="card-footer">
+      <div class="row">
+        <div class="col-md-12 text-end">
+          <button class="btn btn-primary modal-confirm">Confirm</button>
+          <button class="btn btn-secondary" (click)="onClose()">Close</button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Your Modal Content Here -->
+
+
+  </section>
+</div>
