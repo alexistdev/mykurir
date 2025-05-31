@@ -24,8 +24,12 @@ export class ModalsComponent implements OnInit,OnChanges {
   @Output()
   close = new EventEmitter<void>();
 
+  // @Output()
+  // confirm = new EventEmitter<void>();
+
   @Output()
-  confirm = new EventEmitter<void>();
+  formSubmit = new EventEmitter<any>();
+
 
   userForm !: FormGroup;
 
@@ -54,6 +58,7 @@ export class ModalsComponent implements OnInit,OnChanges {
       this.userForm.markAllAsTouched();
       return;
     }
+
     this.onConfirm();
   }
 
@@ -62,7 +67,7 @@ export class ModalsComponent implements OnInit,OnChanges {
   }
 
   onConfirm() {
-    this.confirm.emit();
+    this.formSubmit.emit(this.userForm.value);
     this.clearForm();
   }
 

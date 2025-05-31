@@ -32,6 +32,7 @@
               "src/assets/vendor/boxicons/css/boxicons.min.css",
               "src/assets/vendor/magnific-popup/magnific-popup.css",
               "src/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css",
+              "src/assets/vendor/pnotify/pnotify.custom.css",
               "src/assets/css2/theme.css",
               "src/assets/css2/skins/default.css",
               "src/assets/css2/custom.css"
@@ -47,6 +48,7 @@
               "src/assets/vendor/nanoscroller/nanoscroller.js",
               "src/assets/vendor/magnific-popup/jquery.magnific-popup.js",
               "src/assets/vendor/jquery-placeholder/jquery.placeholder.js",
+              "src/assets/vendor/pnotify/pnotify.custom.js",
               "src/assets/js2/theme.js",
               "src/assets/js2/custom.js",
               "src/assets/js2/theme.init.js"

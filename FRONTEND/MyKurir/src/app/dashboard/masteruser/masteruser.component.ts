@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {User} from "../models/user.model";
 import {UserService} from "../service/user.service";
 import {Payload} from "../response/payload";
+import {Userrequest} from "../request/userrequest.model";
+
+declare var PNotify: any;
 
 @Component({
   selector: 'app-masteruser',
@@ -126,8 +129,33 @@ export class MasteruserComponent implements OnInit {
     this.showModal = false;
   }
 
-  doSaveData(){
-    console.log("save data");
+  doSaveData(formValue: Userrequest ){
+    const request: Userrequest = {
+      fullName: formValue.fullName,
+      email: formValue.email,
+      password: formValue.password
+    };
+
+    this.userService.saveUser(request).subscribe({
+      next: (response) => {
+        this.PNotifyMessage('success','The user has been saved!');
+        this.closeModal();
+        this.loadData(this.pageNumber, this.pageSize);
+      },
+      error: (err) => {
+        this.PNotifyMessage('error','There is an error please contact Administrator!');
+        this.closeModal();
+        this.loadData(this.pageNumber, this.pageSize);
+      }
+    });
+  }
+
+  PNotifyMessage(type:string, text: string):void{
+    new PNotify({
+      title: (type === 'success')?'Success':'Error !',
+      text: text,
+      type: type
+    });
   }
 
 }

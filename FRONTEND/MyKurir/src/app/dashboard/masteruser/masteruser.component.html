@@ -167,7 +167,7 @@
         [formData]="currentFormData"
         [confirmationText]="currentConfirmationText"
         (close)="closeModal()"
-        (confirm) ="doSaveData()"
+        (formSubmit) ="doSaveData($event)"
       ></app-modals>
     </section>
   </div>
