@@ -13,6 +13,7 @@ export class UserService {
   private apiUrl1 = 'http://localhost:8082/v1/api/users/get_all_users';
   private apiUrl2 = 'http://localhost:8082/v1/api/users/get_user_by_filter';
   private apiSaveUser = 'http://localhost:8082/v1/api/auth/register';
+  private apiValidateEmail = 'http://localhost:8082/v1/api/users/validate_email';
 
 
   constructor(private http:HttpClient) { }
@@ -38,6 +39,12 @@ export class UserService {
       `${this.apiSaveUser}`,
       request,
       { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    );
+  }
+
+  validateEmail(email: string): Observable<any> {
+    return this.http.get<Apiresponse>(
+      `${this.apiValidateEmail}?email=${email}`
     );
   }
 

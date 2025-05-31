@@ -26,6 +26,7 @@ export class MasteruserComponent implements OnInit {
   public currentModalType: 'form' | 'confirm' = 'confirm';
   public currentFormData: any = {};
   public currentConfirmationText = '';
+  validateEmail:boolean = true;
 
   protected readonly Number = Number;
 
@@ -37,6 +38,10 @@ export class MasteruserComponent implements OnInit {
   }
 
   onSearchChange(searchTerm: string) {
+    if(this.pageNumber > 0){
+      this.pageNumber = 0; //force to first page
+    }
+
     this.searchQuery = searchTerm.toLowerCase();
     this.loadData(this.pageNumber, this.pageSize);
   }
@@ -110,6 +115,7 @@ export class MasteruserComponent implements OnInit {
     this.showModal = true;
     if (type === 'form') {
       this.currentFormData = data || {};
+      this.validateEmail = true;
     } else {
       this.currentConfirmationText = data || 'Are you sure you want to proceed?';
     }
@@ -145,6 +151,19 @@ export class MasteruserComponent implements OnInit {
       text: text,
       type: type
     });
+  }
+
+  doValidateEmail(email: string){
+    this.userService.validateEmail(email).subscribe({
+      next: () => {
+        this.validateEmail = true;
+      },
+      error: () => {
+        console.log("error");
+        this.validateEmail = false;
+        console.log(this.validateEmail);
+      }
+    })
   }
 
 }

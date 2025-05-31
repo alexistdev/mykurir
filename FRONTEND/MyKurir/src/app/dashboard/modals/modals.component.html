@@ -12,30 +12,46 @@
               <label>Name</label>
               <input type="text"
                      formControlName="fullName"
-                     class="form-control"
+                     [ngClass]="{
+                      'form-control': true,
+                      'is-invalid': userForm.get('fullName')?.invalid && userForm.get('fullName')?.touched
+                     }"
                      placeholder="Nama Lengkap" />
-
-
               <div *ngIf="userForm.get('fullName')?.invalid && userForm.get('fullName')?.touched" class="text-danger">
                 Name is required.
               </div>
             </div>
             <div class="mb-2">
-              <label>Email</label>
+              <label>Email
+              </label>
               <input type="email"
                      formControlName="email"
-                     class="form-control"
+                     [ngClass]="{
+                     'form-control': true,
+                     'is-invalid': validateEmail === false
+                      || (userForm.get('email')?.touched && (
+                          userForm.get('email')?.errors?.['required']
+                          || userForm.get('email')?.errors?.['email']))}"
                      placeholder="Email"/>
+
               <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-danger">
                 <span *ngIf="userForm.get('email')?.errors?.['required']">Email is required.</span>
                 <span *ngIf="userForm.get('email')?.errors?.['email']">Enter a valid email.</span>
               </div>
+              <div *ngIf="validateEmail === false" class="text-danger">
+                This email is already in use.
+              </div>
+
             </div>
             <div class="mb-2">
               <label>Password</label>
               <input type="password"
                      formControlName="password"
-                     class="form-control"
+                     [ngClass]="{
+                     'form-control': true,
+                     'is-invalid': (userForm.get('password')?.touched && (
+                                    userForm.get('password')?.errors?.['required']
+                                    || userForm.get('password')?.errors?.['minlength']))}"
                      placeholder="******"/>
               <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="text-danger">
                 <span *ngIf="userForm.get('password')?.errors?.['required']">Password is required.</span>
@@ -60,7 +76,7 @@
               <button
                 *ngIf="modalType === 'form'"
                 class="btn btn-success modal-confirm m-1"
-                (click)="validateAndConfirm()">
+                (click)="validateAndConfirm()" >
                 Save
               </button>
               <button class="btn btn-secondary m-1" (click)="onClose()">Close</button>

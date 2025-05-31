@@ -168,6 +168,8 @@
         [confirmationText]="currentConfirmationText"
         (close)="closeModal()"
         (formSubmit) ="doSaveData($event)"
+        (emailChanged)="doValidateEmail($event)"
+        [validateEmail]="validateEmail"
       ></app-modals>
     </section>
   </div>
