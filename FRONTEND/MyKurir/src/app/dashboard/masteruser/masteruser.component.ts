@@ -3,6 +3,7 @@ import {User} from "../models/user.model";
 import {UserService} from "../service/user.service";
 import {Payload} from "../response/payload";
 import {Userrequest} from "../request/userrequest.model";
+import {Apiresponse} from "../response/apiresponse";
 
 declare var PNotify: any;
 
@@ -40,46 +41,34 @@ export class MasteruserComponent implements OnInit {
     this.loadData(this.pageNumber, this.pageSize);
   }
 
-  loadData(page: number, size: number = 10) {
+  loadData(page: number, size: number = 10): void {
     this.pageNumber = page;
     this.pageSize = size;
     this.keyword = this.searchQuery;
+    const sortBy = 'id';
+    const direction = 'desc';
+    const isFiltering = this.keyword !== "";
 
-    if (this.keyword != "") {
-      this.userService.getUsersByFilter(this.keyword, this.pageNumber, this.pageSize, 'id', 'desc').subscribe({
-        next: (data) => {
-          this.payload = data.payload;
-          this.pageNumber = this.payload.pageable.pageNumber;
-          this.totalPages = this.payload.totalPages;
-          this.pageSize = this.payload.pageable.pageSize;
-          this.users = this.payload.content.map(user => ({
-            ...user,
-            fullName: this.capitalizeWords(user.fullName)
-          }))
-          this.totalData = this.payload.totalElements;
-        },
-        error: (err) => {
-          console.error('Error fetching users', err);
-        }
-      });
-    } else {
-      this.userService.getUsers(this.pageNumber, this.pageSize, 'id', 'desc').subscribe({
-        next: (data) => {
-          this.payload = data.payload;
-          this.pageNumber = this.payload.pageable.pageNumber;
-          this.totalPages = this.payload.totalPages;
-          this.pageSize = this.payload.pageable.pageSize;
-          this.users = this.payload.content.map(user => ({
-            ...user,
-            fullName: this.capitalizeWords(user.fullName)
-          }))
-          this.totalData = this.payload.totalElements;
-        },
-        error: (err) => {
-          console.error('Error fetching users', err);
-        }
-      });
-    }
+    const request$ = isFiltering
+      ? this.userService.getUsersByFilter(this.keyword, this.pageNumber, this.pageSize, sortBy, direction)
+      : this.userService.getUsers(this.pageNumber, this.pageSize, sortBy, direction);
+
+    request$.subscribe({
+      next: (data) => this.updateUserPageData(data),
+      error: (err) => console.error(err)
+    });
+  }
+
+  private updateUserPageData(data: Apiresponse): void {
+    this.payload = data.payload;
+    this.pageNumber = this.payload.pageable.pageNumber;
+    this.totalPages = this.payload.totalPages;
+    this.pageSize = this.payload.pageable.pageSize;
+    this.users = this.payload.content.map(user => ({
+      ...user,
+      fullName: this.capitalizeWords(user.fullName)
+    }));
+    this.totalData = this.payload.totalElements;
   }
 
   capitalizeWords(input: string): string {
@@ -137,12 +126,12 @@ export class MasteruserComponent implements OnInit {
     };
 
     this.userService.saveUser(request).subscribe({
-      next: (response) => {
+      next: () => {
         this.PNotifyMessage('success','The user has been saved!');
         this.closeModal();
         this.loadData(this.pageNumber, this.pageSize);
       },
-      error: (err) => {
+      error: () => {
         this.PNotifyMessage('error','There is an error please contact Administrator!');
         this.closeModal();
         this.loadData(this.pageNumber, this.pageSize);
