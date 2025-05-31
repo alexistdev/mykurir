@@ -1,41 +1,73 @@
 <div *ngIf="show" class="modal-backdrop">
-  <section class="card">
-    <header class="card-header">
-      <h2 class="card-title">Are you sure?</h2>
-    </header>
+  <section class="card col-md-4">
+    <div class="row">
+      <div class="col-lg col-sm-12 col-md-12 col-xl-12">
+        <header class="card-header">
+          <h2 class="card-title">Are you sure?</h2>
+        </header>
+        <div class="card-body">
 
-    <div class="card-body">
-      <div class="modal-wrapper">
-        <form *ngIf="modalType === 'form'">
-          <!-- Example: pass fields dynamically or hard-code them -->
-          <div class="mb-2">
-            <label>Name</label>
-            <input type="text" [(ngModel)]="formData.name" name="name" class="form-control" />
+          <form *ngIf="modalType === 'form'" [formGroup]="userForm">
+            <div class="mb-2">
+              <label>Name</label>
+              <input type="text"
+                     formControlName="fullName"
+                     class="form-control"
+                     placeholder="Nama Lengkap" />
+
+
+              <div *ngIf="userForm.get('fullName')?.invalid && userForm.get('fullName')?.touched" class="text-danger">
+                Name is required.
+              </div>
+            </div>
+            <div class="mb-2">
+              <label>Email</label>
+              <input type="email"
+                     formControlName="email"
+                     class="form-control"
+                     placeholder="Email"/>
+              <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-danger">
+                <span *ngIf="userForm.get('email')?.errors?.['required']">Email is required.</span>
+                <span *ngIf="userForm.get('email')?.errors?.['email']">Enter a valid email.</span>
+              </div>
+            </div>
+            <div class="mb-2">
+              <label>Password</label>
+              <input type="password"
+                     formControlName="password"
+                     class="form-control"
+                     placeholder="******"/>
+              <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="text-danger">
+                <span *ngIf="userForm.get('password')?.errors?.['required']">Password is required.</span>
+                <span *ngIf="userForm.get('password')?.errors?.['minlength']">
+                    Password must be at least 6 characters.
+                </span>
+              </div>
+
+
+            </div>
+            <!-- Add more form fields as needed -->
+          </form>
+          <!-- Confirmation content -->
+          <div *ngIf="modalType === 'confirm'" class="modal-text">
+            <p class="mb-0">{{ confirmationText }}</p>
           </div>
-          <div class="mb-2">
-            <label>Email</label>
-            <input type="email" [(ngModel)]="formData.email" name="email" class="form-control" />
-          </div>
-          <!-- Add more form fields as needed -->
-        </form>
-        <!-- Confirmation content -->
-        <div *ngIf="modalType === 'confirm'" class="modal-text">
-          <p class="mb-0">{{ confirmationText }}</p>
         </div>
 
+        <footer class="card-footer">
+          <div class="row">
+            <div class="col-md-12 text-end">
+              <button
+                *ngIf="modalType === 'form'"
+                class="btn btn-success modal-confirm m-1"
+                (click)="validateAndConfirm()">
+                Save
+              </button>
+              <button class="btn btn-secondary m-1" (click)="onClose()">Close</button>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
-    <footer class="card-footer">
-      <div class="row">
-        <div class="col-md-12 text-end">
-          <button *ngIf="modalType === 'confirm'" class="btn btn-primary modal-confirm" (click)="onConfirm()">Confirm</button>
-          <button class="btn btn-secondary" (click)="onClose()">Close</button>
-        </div>
-      </div>
-    </footer>
-
-    <!-- Your Modal Content Here -->
-
-
   </section>
 </div>

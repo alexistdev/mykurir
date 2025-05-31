@@ -6,7 +6,7 @@ import {RouterModule, Routes} from "@angular/router";
 import { NotificationComponent } from './notification/notification.component';
 import { HeaderComponent } from './header/header.component';
 import { MasteruserComponent } from './masteruser/masteruser.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ModalsComponent } from './modals/modals.component';
 
 const routes: Routes = [
@@ -26,6 +26,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule.forChild(routes)
   ]
 })

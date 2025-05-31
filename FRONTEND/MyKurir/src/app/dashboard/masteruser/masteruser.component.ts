@@ -23,7 +23,7 @@ export class MasteruserComponent implements OnInit {
   public currentFormData: any = {};
   public currentConfirmationText = '';
 
-
+  protected readonly Number = Number;
 
   constructor(private userService: UserService) {
   }
@@ -113,13 +113,11 @@ export class MasteruserComponent implements OnInit {
     this.loadData(0, this.pageSize);
   }
 
-  protected readonly Number = Number;
-
   openModal(type: 'form' | 'confirm', data?: any) {
     this.currentModalType = type;
     this.showModal = true;
     if (type === 'form') {
-      this.currentFormData = data || {}; // for new or edit form data
+      this.currentFormData = data || {};
     } else {
       this.currentConfirmationText = data || 'Are you sure you want to proceed?';
     }
@@ -128,6 +126,8 @@ export class MasteruserComponent implements OnInit {
     this.showModal = false;
   }
 
-
+  doSaveData(){
+    console.log("save data");
+  }
 
 }
