@@ -74,4 +74,12 @@ public class UserService implements UserDetailsService {
     public Page<User> getUserByFilter(Pageable pageable, String keyword){
         return userRepo.findByFilter(Role.ADMIN,keyword,pageable);
     }
+
+    public boolean validateEmail(String email){
+        Optional<User> result = userRepo.findByEmail(email);
+        if(result.isPresent()){
+            return false;
+        }
+        return true;
+    }
 }

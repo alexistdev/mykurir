@@ -5,6 +5,7 @@ import com.alexistdev.mykurir.v1.dto.ResponseData;
 import com.alexistdev.mykurir.v1.dto.UserDTO;
 import com.alexistdev.mykurir.v1.models.entity.User;
 import com.alexistdev.mykurir.v1.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+@Slf4j
 @RestController
 @RequestMapping("/v1/api/users")
 public class UserDataController {
@@ -30,6 +32,25 @@ public class UserDataController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @GetMapping("/validate_email")
+    public ResponseEntity<ResponseData<String>> validateEmail(
+            @RequestParam(defaultValue = "") String email
+    ){
+        ResponseData<String> responseData = new ResponseData<>();
+
+        boolean result = userService.validateEmail(email);
+        if(result){
+            responseData.setStatus(true);
+            responseData.getMessages().add("Email is available for registration");
+            return ResponseEntity.ok(responseData);
+        }
+        responseData.setStatus(false);
+        responseData.getMessages().add("Email is already registered");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(responseData);
+    }
+
+
 
     @GetMapping("/get_user_by_filter")
     public ResponseEntity<ResponseData<Page<UserDTO>>> getUserByFilter(

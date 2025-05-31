@@ -34,8 +34,10 @@ public class WebSecurityConfig {
                                 .requestMatchers("/v1/api/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,
                                         "/v1/api/auth/testing").permitAll()
-                        .requestMatchers(HttpMethod.GET,
+                                .requestMatchers(HttpMethod.GET,
                                 "/v1/api/users/get_all_users").hasAuthority(Role.ADMIN.toString())
+                                .requestMatchers(HttpMethod.GET,
+                                "/v1/api/users/validate_email").hasAuthority(Role.ADMIN.toString())
                                 .requestMatchers(HttpMethod.GET,
                                         "/v1/api/users/get_user_by_filter").permitAll()
                                 .requestMatchers(HttpMethod.POST,
