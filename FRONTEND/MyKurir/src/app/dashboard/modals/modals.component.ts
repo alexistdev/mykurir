@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {debounceTime} from "rxjs";
+import {debounceTime, Subscription} from "rxjs";
 import {filter} from "rxjs/operators";
 
 
@@ -9,7 +9,7 @@ import {filter} from "rxjs/operators";
   templateUrl: './modals.component.html',
   styleUrls: ['./modals.component.css']
 })
-export class ModalsComponent implements OnInit,OnChanges {
+export class ModalsComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   show: boolean = false;
@@ -19,6 +19,12 @@ export class ModalsComponent implements OnInit,OnChanges {
 
   @Input()
   validateEmail: boolean | null = null;
+
+  @Input()
+  isEditMode: boolean = false;
+
+  @Input()
+  originalEmail: string = '';
 
   @Input()
   formData: any;
@@ -37,25 +43,22 @@ export class ModalsComponent implements OnInit,OnChanges {
 
 
   userForm !: FormGroup;
+  private emailSub?: Subscription;
 
-  constructor(private fb: FormBuilder) {}
+
+  constructor(private fb: FormBuilder) {
+  }
 
   ngOnInit(): void {
+
     this.userForm = this.fb.group({
       fullName: [this.formData.fullName || '', Validators.required],
-      email: [this.formData.email || '', [Validators.required, Validators.email]],
+      email: [
+        this.formData.email || '',
+        [Validators.required, Validators.email]
+      ],
       password: [this.formData.password || '', [Validators.required, Validators.minLength(6)]]
     });
-
-    this.userForm.get('email')?.statusChanges
-      .pipe(
-        debounceTime(300),
-        filter(status => status === 'VALID')
-      )
-      .subscribe(() => {
-        const email = this.userForm.get('email')?.value;
-        this.emailChanged.emit(email);
-      });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -66,6 +69,34 @@ export class ModalsComponent implements OnInit,OnChanges {
         password: this.formData?.password || ''
       });
     }
+    const emailControl = this.userForm.get('email');
+
+    if (this.userForm) {
+      if (this.emailSub) {
+        this.emailSub.unsubscribe();
+      }
+      // @ts-ignore
+      this.emailSub = this.userForm.get('email')?.valueChanges
+        .pipe(debounceTime(300))
+        .subscribe((email: string) => {
+          if (this.isEditMode) {
+            if (email !== this.originalEmail) {
+              this.emailChanged.emit(email);
+            } else {
+              this.emailChanged.emit('ORIGINAL_EMAIL_NO_VALIDATION');
+            }
+          } else {
+            this.emailChanged.emit(email);
+          }
+        });
+    }
+
+  }
+
+  ngOnDestroy(): void {
+    if (this.emailSub) {
+      this.emailSub.unsubscribe();
+    }
   }
 
   validateAndConfirm() {
@@ -73,7 +104,7 @@ export class ModalsComponent implements OnInit,OnChanges {
       this.userForm.markAllAsTouched();
       return;
     }
-    if(this.validateEmail === false ){
+    if (this.validateEmail === false) {
       this.userForm.markAllAsTouched();
       return;
     }
@@ -89,11 +120,11 @@ export class ModalsComponent implements OnInit,OnChanges {
     this.clearForm();
   }
 
-  clearForm(){
+  clearForm() {
     this.userForm.reset({
-      fullName:'',
-      email:'',
-      password:''
+      fullName: '',
+      email: '',
+      password: ''
     });
   }
 

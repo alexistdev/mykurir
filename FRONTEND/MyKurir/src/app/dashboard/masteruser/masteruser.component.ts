@@ -120,8 +120,18 @@ export class MasteruserComponent implements OnInit {
       this.currentConfirmationText = data || 'Are you sure you want to proceed?';
     }
   }
+
+  openEditModal(user: any) {
+    this.showModal = true;
+    this.currentModalType = 'form';
+    this.currentFormData = { ...user };
+    this.currentConfirmationText = '';
+    this.validateEmail = true;
+  }
+
   closeModal() {
     this.showModal = false;
+    this.validateEmail = true;
   }
 
   doSaveData(formValue: Userrequest ){
@@ -154,14 +164,17 @@ export class MasteruserComponent implements OnInit {
   }
 
   doValidateEmail(email: string){
+    if (email === 'ORIGINAL_EMAIL_NO_VALIDATION') {
+      this.validateEmail = true;
+      return;
+    }
+
     this.userService.validateEmail(email).subscribe({
       next: () => {
         this.validateEmail = true;
       },
       error: () => {
-        console.log("error");
         this.validateEmail = false;
-        console.log(this.validateEmail);
       }
     })
   }
