@@ -50,32 +50,47 @@ export class ModalsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-
     this.userForm = this.fb.group({
+      id: [this.formData?.id || null],
       fullName: [this.formData.fullName || '', Validators.required],
       email: [
         this.formData.email || '',
         [Validators.required, Validators.email]
       ],
-      password: [this.formData.password || '', [Validators.required, Validators.minLength(6)]]
+      password: [
+        this.formData.password || '',
+        this.isEditMode ? [Validators.minLength(6)] : [Validators.required, Validators.minLength(6)]]
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+
     if (changes['formData'] && this.userForm) {
       this.userForm.reset({
+        id: [this.formData?.id || null],
         fullName: this.formData?.fullName || '',
         email: this.formData?.email || '',
         password: this.formData?.password || ''
       });
     }
-    const emailControl = this.userForm.get('email');
 
     if (this.userForm) {
+      const passwordCtrl = this.userForm.get('password');
+
+      if (passwordCtrl) {
+        if (this.isEditMode) {
+          passwordCtrl.setValidators([Validators.minLength(6)]);
+        } else {
+          passwordCtrl.setValidators([Validators.required, Validators.minLength(6)]);
+        }
+        passwordCtrl.updateValueAndValidity();
+      }
+
+
       if (this.emailSub) {
         this.emailSub.unsubscribe();
       }
-      // @ts-ignore
+
       this.emailSub = this.userForm.get('email')?.valueChanges
         .pipe(debounceTime(300))
         .subscribe((email: string) => {
@@ -90,7 +105,6 @@ export class ModalsComponent implements OnInit, OnChanges, OnDestroy {
           }
         });
     }
-
   }
 
   ngOnDestroy(): void {
@@ -122,6 +136,7 @@ export class ModalsComponent implements OnInit, OnChanges, OnDestroy {
 
   clearForm() {
     this.userForm.reset({
+      id:'',
       fullName: '',
       email: '',
       password: ''

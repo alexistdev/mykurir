@@ -50,8 +50,6 @@ public class UserDataController {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(responseData);
     }
 
-
-
     @GetMapping("/get_user_by_filter")
     public ResponseEntity<ResponseData<Page<UserDTO>>> getUserByFilter(
             @RequestParam(defaultValue = "") String filter,

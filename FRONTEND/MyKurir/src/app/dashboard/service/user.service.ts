@@ -12,7 +12,7 @@ export class UserService {
 
   private apiUrl1 = 'http://localhost:8082/v1/api/users/get_all_users';
   private apiUrl2 = 'http://localhost:8082/v1/api/users/get_user_by_filter';
-  private apiSaveUser = 'http://localhost:8082/v1/api/auth/register';
+  private apiRegister = 'http://localhost:8082/v1/api/auth/register';
   private apiValidateEmail = 'http://localhost:8082/v1/api/users/validate_email';
 
 
@@ -36,7 +36,15 @@ export class UserService {
 
   saveUser(request: Userrequest):Observable<Apiresponse>{
     return this.http.post<Apiresponse>(
-      `${this.apiSaveUser}`,
+      `${this.apiRegister}`,
+      request,
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    );
+  }
+
+  updateUser(request: Userrequest,userId:number):Observable<Apiresponse>{
+    return this.http.put<Apiresponse>(
+      `${this.apiRegister}`+'/'+`${userId}`,
       request,
       { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
     );

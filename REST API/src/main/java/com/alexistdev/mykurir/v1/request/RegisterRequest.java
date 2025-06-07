@@ -3,6 +3,7 @@ package com.alexistdev.mykurir.v1.request;
 import com.alexistdev.mykurir.v1.models.entity.Role;
 
 public class RegisterRequest {
+
     private String fullName;
     private String email;
     private String password;

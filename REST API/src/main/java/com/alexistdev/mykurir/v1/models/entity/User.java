@@ -1,6 +1,9 @@
 package com.alexistdev.mykurir.v1.models.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +12,9 @@ import java.util.Collections;
 
 @Entity
 @Table(name="tb_users")
+@Getter
+@Setter
+@NoArgsConstructor
 public class User extends BaseEntity<String> implements UserDetails {
 
     @Id
@@ -21,7 +27,7 @@ public class User extends BaseEntity<String> implements UserDetails {
     @Column(length=150, nullable=false , unique = true)
     private String email;
 
-    @Column(length=200, nullable=false , unique = true)
+    @Column(length=200)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -31,16 +37,6 @@ public class User extends BaseEntity<String> implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(role.name());
         return Collections.singletonList(simpleGrantedAuthority);
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
     }
 
     @Override
@@ -63,39 +59,10 @@ public class User extends BaseEntity<String> implements UserDetails {
         return true;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
+    @Override
+    public String getUsername() {
+        return "";
     }
 }

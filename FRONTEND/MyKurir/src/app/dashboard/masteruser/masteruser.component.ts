@@ -27,6 +27,8 @@ export class MasteruserComponent implements OnInit {
   public currentFormData: any = {};
   public currentConfirmationText = '';
   validateEmail:boolean = true;
+  currentEditMode:boolean = false;
+
 
   protected readonly Number = Number;
 
@@ -127,32 +129,56 @@ export class MasteruserComponent implements OnInit {
     this.currentFormData = { ...user };
     this.currentConfirmationText = '';
     this.validateEmail = true;
+    this.currentEditMode = true;
   }
 
   closeModal() {
     this.showModal = false;
     this.validateEmail = true;
+    this.currentEditMode = false;
   }
 
-  doSaveData(formValue: Userrequest ){
-    const request: Userrequest = {
+  doSaveData(formValue: Userrequest  & { id?: number }){
+    const request: Userrequest & { id?: number } = {
       fullName: formValue.fullName,
       email: formValue.email,
-      password: formValue.password
+      password: formValue.password,
+      id: formValue.id
     };
 
-    this.userService.saveUser(request).subscribe({
-      next: () => {
-        this.PNotifyMessage('success','The user has been saved!');
-        this.closeModal();
-        this.loadData(this.pageNumber, this.pageSize);
-      },
-      error: () => {
-        this.PNotifyMessage('error','There is an error please contact Administrator!');
-        this.closeModal();
-        this.loadData(this.pageNumber, this.pageSize);
+    if(!this.currentEditMode){
+      this.userService.saveUser(request).subscribe({
+        next: () => {
+          this.PNotifyMessage('success','The user has been saved!');
+          this.closeModal();
+          this.loadData(this.pageNumber, this.pageSize);
+        },
+        error: () => {
+          this.PNotifyMessage('error','There is an error please contact Administrator!');
+          this.closeModal();
+          this.loadData(this.pageNumber, this.pageSize);
+        }
+      });
+    } else {
+      if (request.id == null) {
+        this.PNotifyMessage('error', 'User ID is missing. Cannot update user.');
+        return;
       }
-    });
+
+      this.userService.updateUser(request,request.id).subscribe({
+        next: () => {
+          this.PNotifyMessage('success','The user has been updated!');
+          this.closeModal();
+          this.loadData(this.pageNumber, this.pageSize);
+        },
+        error: () => {
+          this.PNotifyMessage('error','There is an error please contact Administrator!');
+          this.closeModal();
+          this.loadData(this.pageNumber, this.pageSize);
+        }
+      });
+    }
+
   }
 
   PNotifyMessage(type:string, text: string):void{
