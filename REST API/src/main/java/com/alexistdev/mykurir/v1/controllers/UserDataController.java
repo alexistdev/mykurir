@@ -14,10 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -36,11 +33,11 @@ public class UserDataController {
     @GetMapping("/validate_email")
     public ResponseEntity<ResponseData<String>> validateEmail(
             @RequestParam(defaultValue = "") String email
-    ){
+    ) {
         ResponseData<String> responseData = new ResponseData<>();
 
         boolean result = userService.validateEmail(email);
-        if(result){
+        if (result) {
             responseData.setStatus(true);
             responseData.getMessages().add("Email is available for registration");
             return ResponseEntity.ok(responseData);
@@ -62,13 +59,13 @@ public class UserDataController {
         ResponseData<Page<UserDTO>> responseData = new ResponseData<>();
         Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ?
                 Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page,size, Sort.by(sortDirection, sortBy));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
 
-        Page<User> usersPage = userService.getUserByFilter(pageable,filter);
+        Page<User> usersPage = userService.getUserByFilter(pageable, filter);
 
         responseData.getMessages().add("No users found");
         responseData.setStatus(false);
-        if(!usersPage.isEmpty()){
+        if (!usersPage.isEmpty()) {
             responseData.setStatus(true);
             responseData.getMessages().removeFirst();
             responseData.getMessages().add("Retrieved page " + page + " of users"
@@ -94,13 +91,13 @@ public class UserDataController {
         Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ?
                 Sort.Direction.DESC : Sort.Direction.ASC;
 
-        Pageable pageable = PageRequest.of(page,size, Sort.by(sortDirection, sortBy));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
 
         Page<User> usersPage = userService.getAllUsers(pageable);
 
         responseData.getMessages().add("No users found");
         responseData.setStatus(false);
-        if(!usersPage.isEmpty()){
+        if (!usersPage.isEmpty()) {
             responseData.setStatus(true);
             responseData.getMessages().removeFirst();
             responseData.getMessages().add("Retrieved page " + page + " of users"
@@ -108,10 +105,24 @@ public class UserDataController {
         }
 
         Page<UserDTO> userDTOS = usersPage
-                        .map(user -> modelMapper.map(user, UserDTO.class));
+                .map(user -> modelMapper.map(user, UserDTO.class));
 
         responseData.setPayload(userDTOS);
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseData<String>> deleteUser(@PathVariable Long id) {
+        ResponseData<String> responseData = new ResponseData<>();
+        try {
+            userService.deleteUser(id);
+            responseData.setStatus(true);
+            responseData.getMessages().add("User successfully deleted");
+            return ResponseEntity.ok(responseData);
+        } catch (Exception e) {
+            responseData.setStatus(false);
+            responseData.getMessages().add(String.format("Failed to delete user: %S", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+    }
 }

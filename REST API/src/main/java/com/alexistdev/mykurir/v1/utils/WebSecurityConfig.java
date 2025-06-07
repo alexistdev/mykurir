@@ -30,22 +30,30 @@ public class WebSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authz) -> authz
-                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers("/v1/api/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.POST,
-                                        "/v1/api/auth/testing").permitAll()
-                                .requestMatchers(HttpMethod.GET,
-                                "/v1/api/users/get_all_users").hasAuthority(Role.ADMIN.toString())
-                                .requestMatchers(HttpMethod.GET,
-                                "/v1/api/users/validate_email").hasAuthority(Role.ADMIN.toString())
-                                .requestMatchers(HttpMethod.GET,
-                                        "/v1/api/users/get_user_by_filter").permitAll()
-                                .requestMatchers(HttpMethod.POST,
-                                        "/v1/api/region/*").hasAuthority(Role.ADMIN.toString())
-                                .requestMatchers(HttpMethod.GET,
-                                        "/v1/api/region/*").hasAnyAuthority(Role.ADMIN.toString(), Role.USER.toString())
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                                .anyRequest().authenticated()
+                        .requestMatchers("/v1/api/auth/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET,
+                                "/v1/api/users/get_all_users").hasAuthority(Role.ADMIN.toString())
+
+
+                        .requestMatchers(HttpMethod.GET,
+                                "/v1/api/users/validate_email").hasAuthority(Role.ADMIN.toString())
+
+                        .requestMatchers(HttpMethod.GET,
+                                "/v1/api/users/get_user_by_filter").permitAll()
+
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/v1/api/users").hasAuthority(Role.ADMIN.toString())
+
+                        .requestMatchers(HttpMethod.POST,
+                                "/v1/api/region/*").hasAuthority(Role.ADMIN.toString())
+
+                        .requestMatchers(HttpMethod.GET,
+                                "/v1/api/region/*").hasAnyAuthority(Role.ADMIN.toString(), Role.USER.toString())
+
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
                 .authenticationProvider(this.daoAuthenticationProvider());

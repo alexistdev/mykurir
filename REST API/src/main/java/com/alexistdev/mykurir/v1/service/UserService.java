@@ -123,5 +123,9 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    public void deleteUser(Long id) {
+        userRepo.deleteById(id);
+    }
+
 
 }
