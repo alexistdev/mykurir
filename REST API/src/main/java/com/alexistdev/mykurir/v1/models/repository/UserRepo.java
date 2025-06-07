@@ -18,6 +18,6 @@ public interface  UserRepo extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.role !=:role")
     Page<User> findByRoleNot(@Param("role") Role role, Pageable pageable);
 
-    @Query("SELECT u FROM User u WHERE u.role !=:role AND u.email LIKE %:filter% OR u.fullName LIKE %:filter%")
-    Page<User> findByFilter(@Param("role") Role role,@Param("filter")  String filter, Pageable pageable);
+    @Query("SELECT u FROM User u WHERE u.role !='ADMIN' AND (u.email LIKE %:filter% OR u.fullName LIKE %:filter%)")
+    Page<User> findByFilter(@Param("filter")  String filter, Pageable pageable);
 }

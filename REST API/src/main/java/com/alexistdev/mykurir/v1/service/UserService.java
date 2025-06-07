@@ -108,7 +108,8 @@ public class UserService implements UserDetailsService {
     }
 
     public Page<User> getUserByFilter(Pageable pageable, String keyword) {
-        return userRepo.findByFilter(Role.ADMIN, keyword, pageable);
+        Page<User> result = userRepo.findByFilter(keyword, pageable);
+        return userRepo.findByFilter(keyword, pageable);
     }
 
     public User findById(Long id) {

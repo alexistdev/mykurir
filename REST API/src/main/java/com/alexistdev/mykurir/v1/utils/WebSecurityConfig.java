@@ -42,7 +42,7 @@ public class WebSecurityConfig {
                                 "/v1/api/users/validate_email").hasAuthority(Role.ADMIN.toString())
 
                         .requestMatchers(HttpMethod.GET,
-                                "/v1/api/users/get_user_by_filter").permitAll()
+                                "/v1/api/users/get_user_by_filter").hasAuthority(Role.ADMIN.toString())
 
                         .requestMatchers(HttpMethod.DELETE,
                                 "/v1/api/users").hasAuthority(Role.ADMIN.toString())
