@@ -15,7 +15,7 @@ export class ModalsComponent implements OnInit, OnChanges, OnDestroy {
   show: boolean = false;
 
   @Input()
-  modalType: 'form' | 'confirm' = 'confirm';
+  modalType: 'form' | 'confirm' | undefined;
 
   @Input()
   validateEmail: boolean | null = null;
@@ -40,6 +40,10 @@ export class ModalsComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output()
   formSubmit = new EventEmitter<any>();
+
+  @Output()
+  confirmDelete = new EventEmitter<void>();
+
 
 
   userForm !: FormGroup;
@@ -125,6 +129,10 @@ export class ModalsComponent implements OnInit, OnChanges, OnDestroy {
     this.onConfirm();
   }
 
+  deleteConfirm():void {
+    this.confirmDelete.emit();
+  }
+
   onClose() {
     this.close.emit();
   }
@@ -141,6 +149,14 @@ export class ModalsComponent implements OnInit, OnChanges, OnDestroy {
       email: '',
       password: ''
     });
+  }
+
+  get isFormModal(): boolean {
+    return this.modalType === 'form';
+  }
+
+  get isConfirmModal(): boolean {
+    return this.modalType === 'confirm';
   }
 
 }

@@ -12,6 +12,7 @@ export class UserService {
 
   private apiUrl1 = 'http://localhost:8082/v1/api/users/get_all_users';
   private apiUrl2 = 'http://localhost:8082/v1/api/users/get_user_by_filter';
+  private apiDeleteUser =  'http://localhost:8082/v1/api/users';
   private apiRegister = 'http://localhost:8082/v1/api/auth/register';
   private apiValidateEmail = 'http://localhost:8082/v1/api/users/validate_email';
 
@@ -55,5 +56,14 @@ export class UserService {
       `${this.apiValidateEmail}?email=${email}`
     );
   }
+
+  deleteUser(userId:number):Observable<Apiresponse>{
+    return this.http.delete<Apiresponse>(
+      `${this.apiDeleteUser}`+'/'+`${userId}`,
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    );
+  }
+
+
 
 }

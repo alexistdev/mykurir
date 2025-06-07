@@ -28,6 +28,8 @@ export class MasteruserComponent implements OnInit {
   public currentConfirmationText = '';
   validateEmail:boolean = true;
   currentEditMode:boolean = false;
+  selectedUserId:number | undefined = 0;
+
 
 
   protected readonly Number = Number;
@@ -112,7 +114,8 @@ export class MasteruserComponent implements OnInit {
     this.loadData(0, this.pageSize);
   }
 
-  openModal(type: 'form' | 'confirm', data?: any) {
+  openModal(type: 'form' | 'confirm', data?: any,userId?: number) {
+    this.selectedUserId = userId;
     this.currentModalType = type;
     this.showModal = true;
     if (type === 'form') {
@@ -182,11 +185,28 @@ export class MasteruserComponent implements OnInit {
   }
 
   PNotifyMessage(type:string, text: string):void{
-    new PNotify({
-      title: (type === 'success')?'Success':'Error !',
-      text: text,
-      type: type
-    });
+    switch(type){
+      case 'success':
+        new PNotify({
+          title: 'Success',
+          text: text,
+          type: 'success'
+        });
+        break;
+      case 'warning':
+        new PNotify({
+          title: 'Success',
+          text: text,
+          type: 'warning'
+        });
+        break;
+      default:
+        new PNotify({
+          title: 'Error !',
+          text: text,
+          type: 'error'
+        });
+    }
   }
 
   doValidateEmail(email: string){
@@ -204,5 +224,25 @@ export class MasteruserComponent implements OnInit {
       }
     })
   }
+
+  onDeleteConfirm(){
+    if (this.selectedUserId) {
+      this.userService.deleteUser(this.selectedUserId).subscribe({
+        next: () => {
+          this.PNotifyMessage('warning','The user has been deleted!');
+          this.closeModal();
+          this.loadData(this.pageNumber, this.pageSize);
+        },
+        error: () => {
+          this.PNotifyMessage('error','There is an error please contact Administrator!');
+          this.closeModal();
+          this.loadData(this.pageNumber, this.pageSize);
+        }
+      })
+    }
+
+    this.closeModal();
+  }
+
 
 }
