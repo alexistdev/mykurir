@@ -3,6 +3,7 @@ package com.alexistdev.mykurir.v1.controllers;
 
 import com.alexistdev.mykurir.v1.dto.ResponseData;
 import com.alexistdev.mykurir.v1.dto.UserDTO;
+import com.alexistdev.mykurir.v1.models.entity.Role;
 import com.alexistdev.mykurir.v1.models.entity.User;
 import com.alexistdev.mykurir.v1.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -115,6 +116,16 @@ public class UserDataController {
     public ResponseEntity<ResponseData<String>> deleteUser(@PathVariable Long id) {
         ResponseData<String> responseData = new ResponseData<>();
         try {
+            User user = userService.findById(id);
+            if(user == null){
+                responseData.getMessages().add("NOT USER FOUND");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+            }
+
+            if(user.getRole().equals(Role.ADMIN)){
+                responseData.getMessages().add("NOT USER FOUND");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+            }
             userService.deleteUser(id);
             responseData.setStatus(true);
             responseData.getMessages().add("User successfully deleted");
