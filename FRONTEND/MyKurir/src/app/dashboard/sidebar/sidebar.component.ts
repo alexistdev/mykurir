@@ -19,6 +19,12 @@ export class SidebarComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     if (this.router.url.startsWith('/admin/data-user')) {
       this.isMasterDataOpen = true;
+    } else if(this.router.url.startsWith('/admin/data-province')) {
+      this.isMasterDataOpen = true;
+    } else if(this.router.url.startsWith('/admin/data-regency')) {
+      this.isMasterDataOpen = true;
+    } else if(this.router.url.startsWith('/admin/data-district')) {
+      this.isMasterDataOpen = true;
     } else {
       this.isMasterDataOpen = false;
     }
@@ -29,6 +35,12 @@ export class SidebarComponent implements AfterViewInit, OnInit {
       )
       .subscribe(event => {
         if(event.urlAfterRedirects.startsWith('/admin/data-user')) {
+          this.isMasterDataOpen = true;
+        } else if(event.urlAfterRedirects.startsWith('/admin/data-province')){
+          this.isMasterDataOpen = true;
+        } else if(this.router.url.startsWith('/admin/data-regency')) {
+          this.isMasterDataOpen = true;
+        } else if(this.router.url.startsWith('/admin/data-district')) {
           this.isMasterDataOpen = true;
         } else {
           this.isMasterDataOpen = false;

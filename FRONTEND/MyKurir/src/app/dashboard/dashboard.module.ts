@@ -8,10 +8,16 @@ import { HeaderComponent } from './header/header.component';
 import { MasteruserComponent } from './masteruser/masteruser.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ModalsComponent } from './modals/modals.component';
+import { MasterprovinceComponent } from './masterprovince/masterprovince.component';
+import { MasterregencyComponent } from './masterregency/masterregency.component';
+import { MasterdistrictComponent } from './masterdistrict/masterdistrict.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'data-user', component: MasteruserComponent },
+  { path: 'data-province', component: MasterprovinceComponent },
+  { path: 'data-regency', component: MasterregencyComponent },
+  { path: 'data-district', component: MasterdistrictComponent },
 ]
 
 @NgModule({
@@ -21,7 +27,10 @@ const routes: Routes = [
     NotificationComponent,
     HeaderComponent,
     MasteruserComponent,
-    ModalsComponent
+    ModalsComponent,
+    MasterprovinceComponent,
+    MasterregencyComponent,
+    MasterdistrictComponent
   ],
   imports: [
     CommonModule,
