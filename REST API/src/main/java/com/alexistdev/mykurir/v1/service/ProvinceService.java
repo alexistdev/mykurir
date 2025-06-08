@@ -1,8 +1,10 @@
 package com.alexistdev.mykurir.v1.service;
 
 import com.alexistdev.mykurir.v1.models.entity.Province;
+import com.alexistdev.mykurir.v1.models.entity.User;
 import com.alexistdev.mykurir.v1.models.repository.ProvinceRepo;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional
 public class ProvinceService {
@@ -60,5 +63,9 @@ public class ProvinceService {
         }
         province.setDeleted(true);
         provinceRepo.save(province);
+    }
+
+    public Page<Province> getProvinceByFilter(Pageable pageable, String keyword) {
+        return provinceRepo.findByFilter(keyword.toLowerCase(), pageable);
     }
 }

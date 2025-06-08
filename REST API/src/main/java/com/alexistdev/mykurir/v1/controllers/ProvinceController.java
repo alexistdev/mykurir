@@ -2,11 +2,14 @@ package com.alexistdev.mykurir.v1.controllers;
 
 import com.alexistdev.mykurir.v1.dto.ProvinceDTO;
 import com.alexistdev.mykurir.v1.dto.ResponseData;
+import com.alexistdev.mykurir.v1.dto.UserDTO;
 import com.alexistdev.mykurir.v1.masterconstant.Validation;
 import com.alexistdev.mykurir.v1.models.entity.Province;
+import com.alexistdev.mykurir.v1.models.entity.User;
 import com.alexistdev.mykurir.v1.request.ProvinceRequest;
 import com.alexistdev.mykurir.v1.service.ProvinceService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,8 +22,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/v1/api/region/province")
 public class ProvinceController {
@@ -64,6 +66,34 @@ public class ProvinceController {
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<ResponseData<Page<ProvinceDTO>>> getUserByFilter(
+            @RequestParam(defaultValue = "") String filter,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+        ResponseData<Page<ProvinceDTO>> responseData = new ResponseData<>();
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ?
+                Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+
+        Page<Province> provincesPage = provinceService.getProvinceByFilter(pageable, filter);
+
+        responseData.getMessages().add("No province found");
+        responseData.setStatus(false);
+        if (!provincesPage.isEmpty()) {
+            responseData.setStatus(true);
+            responseData.getMessages().removeFirst();
+            responseData.getMessages().add("Retrieved page " + page + " of provinces"
+            );
+        }
+        Page<ProvinceDTO> provinceDTOS = provincesPage
+                .map(province -> modelMapper.map(province, ProvinceDTO.class));
+        responseData.setPayload(provinceDTOS);
+        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+    }
 
     @PostMapping
     public ResponseEntity<ResponseData<Province>> addProvince(@Valid @RequestBody ProvinceRequest request, Errors errors) {
@@ -137,4 +167,6 @@ public class ProvinceController {
             responseData.getMessages().add(error.getDefaultMessage());
         }
     }
+
+
 }

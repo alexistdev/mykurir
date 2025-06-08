@@ -64,7 +64,7 @@ public class UserDataController {
 
         Page<User> usersPage = userService.getUserByFilter(pageable, filter);
 
-        responseData.getMessages().add("No users found");
+        responseData.getMessages().add("No user found");
         responseData.setStatus(false);
         if (!usersPage.isEmpty()) {
             responseData.setStatus(true);
