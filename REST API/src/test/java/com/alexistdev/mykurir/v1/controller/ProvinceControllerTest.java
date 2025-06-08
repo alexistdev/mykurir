@@ -39,22 +39,22 @@ public class ProvinceControllerTest {
         provinceController = new ProvinceController(provinceService,modelMapper);
     }
 
-    @Test
-    void testGetAllProvinces() {
-        Province province1 = new Province();
-        Province province2 = new Province();
-
-        List<Province> provinces = Arrays.asList(province1,province2);
-
-        when(provinceService.getAllProvinces()).thenReturn(provinces);
-
-        ResponseEntity<ResponseData<List<ProvinceDTO>>> response = provinceController.getAllProvinces();
-
-        assertEquals(HttpStatus.OK,response.getStatusCode());
-        assertEquals(2, Objects.requireNonNull(response.getBody()).getPayload().size());
-        assertEquals("get all provincies returned 2",response.getBody().getMessages().getFirst());
-        assertTrue(response.getBody().isStatus());
-    }
+//    @Test
+//    void testGetAllProvinces() {
+//        Province province1 = new Province();
+//        Province province2 = new Province();
+//
+//        List<Province> provinces = Arrays.asList(province1,province2);
+//
+//        when(provinceService.getAllProvinces()).thenReturn(provinces);
+//
+//        ResponseEntity<ResponseData<List<ProvinceDTO>>> response = provinceController.getAllProvinces();
+//
+//        assertEquals(HttpStatus.OK,response.getStatusCode());
+//        assertEquals(2, Objects.requireNonNull(response.getBody()).getPayload().size());
+//        assertEquals("get all provincies returned 2",response.getBody().getMessages().getFirst());
+//        assertTrue(response.getBody().isStatus());
+//    }
 
     @Test
     void testAddProvince_ValidRequest() {

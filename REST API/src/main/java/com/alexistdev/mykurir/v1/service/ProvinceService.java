@@ -4,6 +4,8 @@ import com.alexistdev.mykurir.v1.models.entity.Province;
 import com.alexistdev.mykurir.v1.models.repository.ProvinceRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +18,8 @@ public class ProvinceService {
     @Autowired
     private ProvinceRepo provinceRepo;
 
-    public List<Province> getAllProvinces() {
-        return provinceRepo.findAll().stream().filter(p -> !p.getDeleted()).toList();
+    public Page<Province> getAllProvinces(Pageable pageable) {
+        return provinceRepo.findAll(pageable);
     };
 
     public Province saveProvince(Province province) {

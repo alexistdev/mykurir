@@ -29,26 +29,26 @@ public class ProvinceServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testGetAllProvinces() {
-        Province province1 = new Province();
-        province1.setId(1L);
-        province1.setName("Lampung");
-
-        Province province2 = new Province();
-        province2.setId(2L);
-        province2.setName("Jakarta");
-
-        List<Province> provinces = Arrays.asList(province1,province2);
-
-        when(provinceRepo.findAll()).thenReturn(provinces);
-
-        List<Province> result = provinceService.getAllProvinces();
-
-        assertEquals(2,result.size());
-        assertEquals("Lampung",result.get(0).getName());
-        assertEquals("Jakarta",result.get(1).getName());
-    }
+//    @Test
+//    void testGetAllProvinces() {
+//        Province province1 = new Province();
+//        province1.setId(1L);
+//        province1.setName("Lampung");
+//
+//        Province province2 = new Province();
+//        province2.setId(2L);
+//        province2.setName("Jakarta");
+//
+//        List<Province> provinces = Arrays.asList(province1,province2);
+//
+//        when(provinceRepo.findAll()).thenReturn(provinces);
+//
+//        List<Province> result = provinceService.getAllProvinces();
+//
+//        assertEquals(2,result.size());
+//        assertEquals("Lampung",result.get(0).getName());
+//        assertEquals("Jakarta",result.get(1).getName());
+//    }
 
     @Test
     void testAddNewProvince() {

@@ -9,6 +9,10 @@ import com.alexistdev.mykurir.v1.service.ProvinceService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -31,20 +35,32 @@ public class ProvinceController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseData<List<ProvinceDTO>>> getAllProvinces() {
-        ResponseData<List<ProvinceDTO>> responseData = new ResponseData<>();
-        List<Province> provinces = provinceService.getAllProvinces();
+    public ResponseEntity<ResponseData<Page<ProvinceDTO>>> getAllProvinces(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+        ResponseData<Page<ProvinceDTO>> responseData = new ResponseData<>();
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ?
+                Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+
+
+        Page<Province> provincesPage = provinceService.getAllProvinces(pageable);
+
         responseData.getMessages().add("No province found");
+        responseData.setStatus(false);
 
-        if (provinces != null && !provinces.isEmpty()) {
+        if (!provincesPage.isEmpty()) {
+            responseData.setStatus(true);
             responseData.getMessages().removeFirst();
-            responseData.getMessages().add("get all provincies returned " + provinces.size());
-            List<ProvinceDTO> provinceDTOS = provinces.stream()
-                    .map(province-> modelMapper.map(province,ProvinceDTO.class)).toList();
-            responseData.setPayload(provinceDTOS);
+            responseData.getMessages().add("Retrieved page " + page + " of users");
         }
-
-        responseData.setStatus(true);
+        Page<ProvinceDTO> provinceDTOS = provincesPage
+                .map(province -> modelMapper.map(province,ProvinceDTO.class));
+        responseData.setPayload(provinceDTOS);
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
     }
 
