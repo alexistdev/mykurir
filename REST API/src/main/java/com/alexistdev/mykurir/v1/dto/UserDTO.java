@@ -1,7 +1,6 @@
 package com.alexistdev.mykurir.v1.dto;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class UserDTO {
     private int id;

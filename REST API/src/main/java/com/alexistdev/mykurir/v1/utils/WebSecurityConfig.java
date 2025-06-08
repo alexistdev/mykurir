@@ -52,6 +52,9 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/v1/api/region/*").hasAnyAuthority(Role.ADMIN.toString(), Role.USER.toString())
 
+                        .requestMatchers(HttpMethod.GET,
+                                "/v1/api/import/data/*").hasAnyAuthority(Role.ADMIN.toString(), Role.USER.toString())
+
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
