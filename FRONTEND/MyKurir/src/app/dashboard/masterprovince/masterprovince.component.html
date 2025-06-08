@@ -120,36 +120,13 @@
                     > Total Data : {{ totalData }} row.
                     </td>
                     <td colspan="6" class="text-end">
-                      <nav>
-                        <ul class="pagination justify-content-end mt-3">
-                          <li class="page-item" [class.disabled]="pageNumber === 0">
-                            <a class="page-link" (click)="pageNumber > 0 && loadData(pageNumber-1,pageSize)"
-                               style="cursor:pointer">Previous</a>
-                          </li>
-                          <li *ngFor="let p of getDisplayedPages(); let i = index"
-                              class="page-item"
-                              [class.active]="(isNumber(p) ? Number(p)-1 : null) === pageNumber">
-                            <a class="page-link"
-                               *ngIf="p !== '...'; else ellipsisTpl"
-                               href="#"
-                               (click)="isNumber(p) ? loadData(Number(p)-1,pageSize) : null; $event.preventDefault()"
-                               style="cursor:pointer">{{ p }}</a>
-                            <ng-template #ellipsisTpl>
-                              <span class="page-link">…</span>
-                            </ng-template>
-                          </li>
+                      <app-pagination [pageNumber]="pageNumber"
+                                      [totalPages]="totalPages"
+                                      [pageSize]="pageSize"
+                                      (pageChange)="onPageChanged($event)"></app-pagination>
 
-                          <li class="page-item" [class.disabled]="pageNumber === totalPages - 1">
-                            <a class="page-link"
-                               (click)="pageNumber < totalPages - 1 && loadData(pageNumber + 1,pageSize)"
-                               style="cursor:pointer">Next</a>
-                          </li>
-                        </ul>
-                      </nav>
                     </td>
                   </tr>
-
-
                   </tfoot>
                 </table>
               </div>

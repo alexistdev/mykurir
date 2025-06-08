@@ -1,0 +1,26 @@
+<nav>
+  <ul class="pagination justify-content-end mt-3">
+    <li class="page-item" [class.disabled]="pageNumber === 0">
+      <a class="page-link" (click)="pageNumber > 0 && onPageClick(pageNumber-1)"
+         style="cursor:pointer">Previous</a>
+    </li>
+    <li *ngFor="let p of getDisplayedPages(); let i = index"
+        class="page-item"
+        [class.active]="(isNumber(p) ? Number(p)-1 : null) === pageNumber">
+      <a class="page-link"
+         *ngIf="p !== '...'; else ellipsisTpl"
+         href="#"
+         (click)="isNumber(p) ? onPageClick(Number(p)-1) : null; $event.preventDefault()"
+         style="cursor:pointer">{{ p }}</a>
+      <ng-template #ellipsisTpl>
+        <span class="page-link">…</span>
+      </ng-template>
+    </li>
+
+    <li class="page-item" [class.disabled]="pageNumber === totalPages - 1">
+      <a class="page-link"
+         (click)="pageNumber < totalPages - 1 && onPageClick(pageNumber + 1)"
+         style="cursor:pointer">Next</a>
+    </li>
+  </ul>
+</nav>

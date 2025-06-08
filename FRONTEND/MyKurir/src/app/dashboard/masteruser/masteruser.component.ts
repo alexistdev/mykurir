@@ -86,26 +86,6 @@ export class MasteruserComponent implements OnInit {
     }).join(' ');
   }
 
-  getDisplayedPages(): (number | string)[] {
-    const pages: (number | string)[] = [];
-    const total = this.totalPages;
-    const current = this.pageNumber;
-
-    if (total <= 10) {
-      for (let i = 1; i <= total; i++) {
-        pages.push(i);
-      }
-    } else if (current <= 9) {
-      pages.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, '...');
-    } else if (current >= total - 2) {
-      pages.push('...', total - 5, total - 4, total - 3, total - 2, total - 1, total);
-    } else {
-      pages.push('...', current, current + 1, current + 2, current + 3, current + 4, '...');
-    }
-
-    return pages;
-  }
-
   isNumber(value: any): boolean {
     return typeof value === 'number';
   }
@@ -244,5 +224,8 @@ export class MasteruserComponent implements OnInit {
     this.closeModal();
   }
 
-
+  onPageChanged(page: number) {
+    this.pageNumber = page;
+    this.loadData(this.pageNumber, this.pageSize);
+  }
 }
