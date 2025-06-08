@@ -42,7 +42,7 @@ public class ProvinceExcelService {
                     String provinceName = getCellValueAsString(nameCell);
                     if(provinceName != null && !provinceName.trim().isEmpty()){
                         Province province = new Province();
-                        province.setName(provinceName);
+                        province.setName(provinceName.toLowerCase());
                         provinces.add(province);
                     }
                 }
