@@ -151,12 +151,4 @@ export class ModalsComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  get isFormModal(): boolean {
-    return this.modalType === 'form';
-  }
-
-  get isConfirmModal(): boolean {
-    return this.modalType === 'confirm';
-  }
-
 }
