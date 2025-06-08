@@ -15,7 +15,7 @@ declare var PNotify: any;
 export class MasteruserComponent implements OnInit {
 
   users: User[] = [];
-  payload ?: Payload;
+  payload ?: Payload<User>;
   totalData: number = 0;
   pageNumber: number = 0;
   totalPages: number = 0;
@@ -68,7 +68,7 @@ export class MasteruserComponent implements OnInit {
     });
   }
 
-  private updateUserPageData(data: Apiresponse): void {
+  private updateUserPageData(data: Apiresponse<User>): void {
     this.payload = data.payload;
     this.pageNumber = this.payload.pageable.pageNumber;
     this.totalPages = this.payload.totalPages;

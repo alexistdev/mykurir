@@ -2,8 +2,8 @@ import {User} from "../models/user.model";
 import {Pageable} from "./pageable";
 import {SortData} from "./sort-data";
 
-export interface Payload {
-  content: User[];
+export interface Payload<T> {
+  content: T[];
   pageable: Pageable;
   last: boolean;
   totalElements: number;

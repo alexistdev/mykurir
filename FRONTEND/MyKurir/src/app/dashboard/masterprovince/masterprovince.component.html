@@ -91,7 +91,28 @@
                     <th class="text-center">Action</th>
                   </tr>
                   </thead>
-
+                  <ng-container *ngIf="totalData != 0; else noData">
+                    <tbody>
+                    <tr *ngFor="let province of provinces; let i = index">
+                      <td class="text-center">{{ ((pageNumber) * pageSize) + (i + 1) }}</td>
+                      <td>{{ province.name }}</td>
+                      <td></td>
+                      <td class="text-center">{{ province.createdDate.toString().replace('T', ' ') }}</td>
+                      <td class="text-center">{{ province.modifiedDate.toString().replace('T', ' ') }}</td>
+                      <td class="text-center">
+                        <button class="btn btn-sm btn-primary mx-1" >Edit</button>
+                        <button class="btn btn-sm btn-danger mx-1">
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </ng-container>
+                  <ng-template #noData>
+                    <tr>
+                      <td colspan="5" class="text-center">No Data</td>
+                    </tr>
+                  </ng-template>
 
                   <tfoot>
                   <tr>
