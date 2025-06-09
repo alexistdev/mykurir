@@ -2,6 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LoginService} from "../login.service";
 import {Router} from "@angular/router";
+import {LocalStorageService} from "../../utils/local-storage.service";
 
 
 @Component({
@@ -13,11 +14,13 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup = this.formBuilder.group({});
 
   loginError:boolean = false;
+  isAdmin:string = '';
 
   constructor(
               private router: Router,
               private formBuilder: FormBuilder,
-              private loginService: LoginService) {
+              private loginService: LoginService,
+              private localStorage: LocalStorageService) {
   }
 
  ngOnInit() {
@@ -32,10 +35,15 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.valid){
       this.loginForm.disable();
       this.loginService.AuthLogin(this.loginForm.controls['emailUsername'].value,this.loginForm.controls['password'].value).subscribe({
-        next: (res) => {
-          if(res){
+        next: (res:any) => {
+          if(res.success){
             this.loginError = false;
-            this.router.navigate(['/admin']);
+            this.isAdmin = this.localStorage.decode(this.localStorage.getItem('role'));
+            if(this.isAdmin == 'ADMIN'){
+              this.router.navigate(['/admin']);
+            } else {
+              this.router.navigate(['/user']);
+            }
           }
           this.loginError = true;
         },

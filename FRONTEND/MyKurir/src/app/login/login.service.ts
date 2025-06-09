@@ -23,8 +23,9 @@ export class LoginService {
         withCredentials: true })
         .subscribe({
           next: (res) => {
-            if(!res){
-              observer.next(false);
+            if(!res || !res.payload){
+              observer.next({ success: false });
+              return;
             }
             let stringifiedData = JSON.stringify(res);
             let parsedJson = JSON.parse(stringifiedData);
@@ -33,10 +34,10 @@ export class LoginService {
             this.localStorageService.setItem("role",data.role);
             this.localStorageService.setItem("email",data.email);
             this.localStorageService.setItem("keyPs", userPw);
-            observer.next(true);
+            observer.next({ success: true, role: data.role });
           },
           error: (e) => {
-            observer.next(false);
+            observer.next({ success: false });
             console.log(e)
           },
         });
