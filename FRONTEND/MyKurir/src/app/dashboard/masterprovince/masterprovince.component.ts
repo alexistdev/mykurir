@@ -3,7 +3,9 @@ import {Payload} from "../response/payload";
 import {Province} from "../models/province.model";
 import {ProvinceService} from "../service/province.service";
 import {Apiresponse} from "../response/apiresponse";
-
+import {Userrequest} from "../request/userrequest.model";
+import {Provincerequest} from "../request/provincerequest.model";
+declare var PNotify: any;
 @Component({
   selector: 'app-masterprovince',
   templateUrl: './masterprovince.component.html',
@@ -18,6 +20,14 @@ export class MasterprovinceComponent implements OnInit {
   pageSize: number = 0;
   keyword: string = "";
   searchQuery: string = '';
+
+  public showModal = false;
+  public currentModalType: 'form' | 'confirm' = 'confirm';
+  public currentFormData: any = {};
+  public currentConfirmationText = '';
+
+  currentEditMode:boolean = false;
+
 
   protected readonly Number = Number;
 
@@ -84,6 +94,73 @@ export class MasterprovinceComponent implements OnInit {
   onPageChanged(page: number) {
     this.pageNumber = page;
     this.loadData(this.pageNumber, this.pageSize);
+  }
+
+  openModal(type: 'form' | 'confirm', data?: any,userId?: number) {
+    // this.selectedUserId = userId;
+    this.currentModalType = type;
+    this.showModal = true;
+    if (type === 'form') {
+      this.currentFormData = data || {};
+      // this.validateEmail = true;
+    } else {
+      this.currentConfirmationText = data || 'Are you sure you want to proceed?';
+    }
+  }
+
+  closeModal() {
+    this.showModal = false;
+  }
+
+  doSaveData(formValue: Provincerequest  & { id?: number }){
+    const request: Provincerequest & { id?: number } = {
+      name: formValue.name,
+      id: formValue.id
+    };
+
+    if(!this.currentEditMode){
+      this.provinceService.saveProvince(request).subscribe({
+        next: () => {
+          this.PNotifyMessage('success','The province has been saved!');
+          this.closeModal();
+          this.loadData(this.pageNumber, this.pageSize);
+        },
+        error: (err) => {
+          let errorMsg = 'There is an error please contact Administrator!';
+          if (err && err.error && err.error.messages && Array.isArray(err.error.messages)) {
+            errorMsg = err.error.messages[0];
+          }
+          this.PNotifyMessage('error',errorMsg);
+          this.closeModal();
+          this.loadData(this.pageNumber, this.pageSize);
+        }
+      });
+    }
+  }
+
+  PNotifyMessage(type:string, text: string):void{
+    switch(type){
+      case 'success':
+        new PNotify({
+          title: 'Success',
+          text: text,
+          type: 'success'
+        });
+        break;
+      case 'warning':
+        new PNotify({
+          title: 'Success',
+          text: text,
+          type: 'warning'
+        });
+        break;
+      default:
+        new PNotify({
+          title: 'Error !',
+          text: text,
+          type: 'error'
+        });
+    }
   }
 
 }

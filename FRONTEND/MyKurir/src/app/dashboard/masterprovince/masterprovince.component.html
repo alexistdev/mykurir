@@ -41,7 +41,7 @@
             <header class="card-header">
               <div class="row align-items-center">
                 <div class="col-lg-3">
-                  <button class="btn btn-sm btn-primary" >+ ADD</button>
+                  <button class="btn btn-sm btn-primary" (click)="openModal('form')" >+ ADD</button>
                 </div>
                 <div class="col-lg-2 offset-lg-4  text-start mt-1">
                   <select class="form-control"
@@ -134,7 +134,14 @@
       </div>
 
       <!-- end: page -->
-
+      <app-modalprovince
+        [show]="showModal"
+        [modalType]="currentModalType"
+        [formData]="currentFormData"
+        [confirmationText]="currentConfirmationText"
+        (formSubmit)="doSaveData($event)"
+        (close)="closeModal()"
+      ></app-modalprovince>
 
     </section>
   </div>
