@@ -49,6 +49,9 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST,
                                 "/v1/api/region/*").hasAuthority(Role.ADMIN.toString())
 
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/v1/api/region/*").hasAuthority(Role.ADMIN.toString())
+
                         .requestMatchers(HttpMethod.GET,
                                 "/v1/api/region/*").hasAnyAuthority(Role.ADMIN.toString(), Role.USER.toString())
 
