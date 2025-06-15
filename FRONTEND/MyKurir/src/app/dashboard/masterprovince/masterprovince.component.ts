@@ -118,7 +118,7 @@ export class MasterprovinceComponent implements OnInit {
       id: formValue.id
     };
 
-    if(!this.currentEditMode){
+
       this.provinceService.saveProvince(request).subscribe({
         next: () => {
           this.PNotifyMessage('success','The province has been saved!');
@@ -135,7 +135,15 @@ export class MasterprovinceComponent implements OnInit {
           this.loadData(this.pageNumber, this.pageSize);
         }
       });
-    }
+
+  }
+
+  openEditModal(province: any) {
+    this.showModal = true;
+    this.currentModalType = 'form';
+    this.currentFormData = { ...province };
+    this.currentConfirmationText = '';
+    this.currentEditMode = true;
   }
 
   PNotifyMessage(type:string, text: string):void{

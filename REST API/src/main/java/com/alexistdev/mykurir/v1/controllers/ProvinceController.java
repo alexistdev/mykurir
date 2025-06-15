@@ -2,10 +2,8 @@ package com.alexistdev.mykurir.v1.controllers;
 
 import com.alexistdev.mykurir.v1.dto.ProvinceDTO;
 import com.alexistdev.mykurir.v1.dto.ResponseData;
-import com.alexistdev.mykurir.v1.dto.UserDTO;
 import com.alexistdev.mykurir.v1.masterconstant.Validation;
 import com.alexistdev.mykurir.v1.models.entity.Province;
-import com.alexistdev.mykurir.v1.models.entity.User;
 import com.alexistdev.mykurir.v1.request.ProvinceRequest;
 import com.alexistdev.mykurir.v1.service.ProvinceService;
 import jakarta.validation.Valid;
