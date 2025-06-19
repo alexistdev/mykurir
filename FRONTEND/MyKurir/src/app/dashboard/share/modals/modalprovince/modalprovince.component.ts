@@ -86,4 +86,8 @@ export class ModalprovinceComponent implements OnInit, OnChanges{
     });
   }
 
+  deleteConfirm():void {
+    this.confirmDelete.emit();
+  }
+
 }

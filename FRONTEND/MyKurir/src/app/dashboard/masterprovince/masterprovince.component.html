@@ -99,7 +99,8 @@
                       <td class="text-center">{{ province.modifiedDate.toString().replace('T', ' ') }}</td>
                       <td class="text-center">
                         <button class="btn btn-sm btn-primary mx-1" (click)="openEditModal(province)">Edit</button>
-                        <button class="btn btn-sm btn-danger mx-1">
+                        <button class="btn btn-sm btn-danger mx-1"
+                                (click)="openModal('confirm','Apakah anda yakin ingin menghapus data ini?', province.id)">
                           Delete
                         </button>
                       </td>
@@ -139,6 +140,7 @@
         [modalType]="currentModalType"
         [formData]="currentFormData"
         [confirmationText]="currentConfirmationText"
+        (confirmDelete)="onDeleteConfirm()"
         (formSubmit)="doSaveData($event)"
         (close)="closeModal()"
       ></app-modalprovince>

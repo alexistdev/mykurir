@@ -35,4 +35,11 @@ export class ProvinceService {
       { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
     );
   }
+
+  deleteProvince(provinceId:number):Observable<Apiresponse<Province>>{
+    return this.http.delete<Apiresponse<Province>>(
+      `${this.apiProvince}`+'/'+`${provinceId}`,
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    );
+  }
 }

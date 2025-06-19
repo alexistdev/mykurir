@@ -150,7 +150,7 @@ public class ProvinceController {
         ResponseData<Void> responseData = new ResponseData<>();
         try{
             provinceService.deleteProvinceById(id);
-            responseData.getMessages().add(Validation.success("province"));
+            responseData.getMessages().add(String.format("Province successfully deleted!"));
             responseData.setStatus(true);
             return ResponseEntity.status(HttpStatus.OK).body(responseData);
         } catch (Exception e){

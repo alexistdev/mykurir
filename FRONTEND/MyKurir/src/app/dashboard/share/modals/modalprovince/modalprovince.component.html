@@ -43,12 +43,12 @@
                 (click)="validateAndConfirm()">
                 SAVE
               </button>
-<!--              <button-->
-<!--                *ngIf="modalType === 'confirm'"-->
-<!--                class="btn btn-sm btn-danger m-1"-->
-<!--                (click)="deleteConfirm()">-->
-<!--                DELETE-->
-<!--              </button>-->
+              <button
+                *ngIf="modalType === 'confirm'"
+                class="btn btn-sm btn-danger m-1"
+                (click)="deleteConfirm()">
+                DELETE
+              </button>
               <button
                 *ngIf="modalType === 'form'"
                 class="btn btn-sm btn-danger"

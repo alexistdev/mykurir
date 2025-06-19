@@ -27,6 +27,7 @@ export class MasterprovinceComponent implements OnInit {
   public currentConfirmationText = '';
 
   currentEditMode:boolean = false;
+  selectedProvinceId:number | undefined = 0;
 
 
   protected readonly Number = Number;
@@ -96,13 +97,12 @@ export class MasterprovinceComponent implements OnInit {
     this.loadData(this.pageNumber, this.pageSize);
   }
 
-  openModal(type: 'form' | 'confirm', data?: any,userId?: number) {
-    // this.selectedUserId = userId;
+  openModal(type: 'form' | 'confirm', data?: any,provinceId?: number) {
+    this.selectedProvinceId = provinceId;
     this.currentModalType = type;
     this.showModal = true;
     if (type === 'form') {
       this.currentFormData = data || {};
-      // this.validateEmail = true;
     } else {
       this.currentConfirmationText = data || 'Are you sure you want to proceed?';
     }
@@ -169,6 +169,24 @@ export class MasterprovinceComponent implements OnInit {
           type: 'error'
         });
     }
+  }
+
+  onDeleteConfirm(){
+    if (this.selectedProvinceId) {
+      this.provinceService.deleteProvince(this.selectedProvinceId).subscribe({
+        next: () => {
+          this.PNotifyMessage('warning','The province has been deleted!');
+          this.closeModal();
+          this.loadData(this.pageNumber, this.pageSize);
+        },
+        error: () => {
+          this.PNotifyMessage('error','There is an error please contact Administrator!');
+          this.closeModal();
+          this.loadData(this.pageNumber, this.pageSize);
+        }
+      })
+    }
+    this.closeModal();
   }
 
 }
