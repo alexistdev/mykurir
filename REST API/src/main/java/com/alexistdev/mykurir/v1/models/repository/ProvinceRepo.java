@@ -11,6 +11,8 @@ import org.springframework.data.repository.query.Param;
 public interface ProvinceRepo  extends JpaRepository<Province, Long> {
     Province findByName(String name);
 
+    Page<Province> findByIsDeletedFalse(Pageable pageable);
+
     @Query("SELECT u FROM Province u WHERE u.name LIKE %:filter%")
     Page<Province> findByFilter(@Param("filter")  String filter, Pageable pageable);
 

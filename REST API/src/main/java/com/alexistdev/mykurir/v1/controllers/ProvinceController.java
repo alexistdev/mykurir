@@ -56,7 +56,7 @@ public class ProvinceController {
         if (!provincesPage.isEmpty()) {
             responseData.setStatus(true);
             responseData.getMessages().removeFirst();
-            responseData.getMessages().add("Retrieved page " + page + " of users");
+            responseData.getMessages().add("Retrieved page " + page + " of provincies");
         }
         Page<ProvinceDTO> provinceDTOS = provincesPage
                 .map(province -> modelMapper.map(province,ProvinceDTO.class));

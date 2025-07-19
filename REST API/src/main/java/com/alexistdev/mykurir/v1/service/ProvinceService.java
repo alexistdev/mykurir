@@ -22,7 +22,7 @@ public class ProvinceService {
     private ProvinceRepo provinceRepo;
 
     public Page<Province> getAllProvinces(Pageable pageable) {
-        return provinceRepo.findAll(pageable);
+        return provinceRepo.findByIsDeletedFalse(pageable);
     };
 
     public Province saveProvince(Province province) {
@@ -30,11 +30,8 @@ public class ProvinceService {
 
         if(existProvince != null){
             if(existProvince.getDeleted()){
-                Province currentProvince = new Province();
-                currentProvince.setDeleted(false);
-                currentProvince.setId(existProvince.getId());
-                currentProvince.setName(existProvince.getName());
-                return provinceRepo.save(currentProvince);
+                existProvince.setDeleted(false);
+                return provinceRepo.save(existProvince);
             }
             throw new RuntimeException("Province name already exist");
         }
