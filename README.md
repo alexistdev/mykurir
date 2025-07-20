@@ -13,7 +13,6 @@ A modern shipping management system with integrated tracking capabilities.
 ### Frontend
 - Angular 15
 - Porto Admin Template
-- Node.js & npm
 
 ### Backend
 - Spring Boot 3
