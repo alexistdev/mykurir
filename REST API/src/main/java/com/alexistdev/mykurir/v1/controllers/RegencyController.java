@@ -2,8 +2,12 @@ package com.alexistdev.mykurir.v1.controllers;
 
 import com.alexistdev.mykurir.v1.dto.RegencyDTO;
 import com.alexistdev.mykurir.v1.dto.ResponseData;
+import com.alexistdev.mykurir.v1.masterconstant.Validation;
+import com.alexistdev.mykurir.v1.models.entity.Province;
 import com.alexistdev.mykurir.v1.models.entity.Regency;
+import com.alexistdev.mykurir.v1.request.RegencyRequest;
 import com.alexistdev.mykurir.v1.service.RegencyService;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,10 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -61,5 +64,32 @@ public class RegencyController {
 
         responseData.setPayload(regencyDTOS);
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
+    }
+
+    @PostMapping
+    public ResponseEntity<ResponseData<Regency>> addRegency(@Valid @RequestBody RegencyRequest request, Errors errors) {
+        ResponseData<Regency> responseData = new ResponseData<>();
+        responseData.setStatus(false);
+        if (errors.hasErrors()) {
+            processErrors(errors, responseData);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+
+        try {
+            Regency result = regencyService.saveRegency(request);
+            responseData.setPayload(result);
+            responseData.getMessages().add(Validation.success("regency"));
+            responseData.setStatus(true);
+            return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        } catch (Exception e){
+            responseData.getMessages().add(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+    }
+
+    private void processErrors(Errors errors, ResponseData<?> responseData) {
+        for (ObjectError error : errors.getAllErrors()) {
+            responseData.getMessages().add(error.getDefaultMessage());
+        }
     }
 }
