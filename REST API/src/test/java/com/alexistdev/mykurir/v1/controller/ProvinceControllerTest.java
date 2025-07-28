@@ -7,6 +7,7 @@ import com.alexistdev.mykurir.v1.request.ProvinceRequest;
 import com.alexistdev.mykurir.v1.service.ProvinceService;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -39,22 +40,35 @@ public class ProvinceControllerTest {
         provinceController = new ProvinceController(provinceService,modelMapper);
     }
 
-//    @Test
-//    void testGetAllProvinces() {
-//        Province province1 = new Province();
-//        Province province2 = new Province();
-//
-//        List<Province> provinces = Arrays.asList(province1,province2);
-//
-//        when(provinceService.getAllProvinces()).thenReturn(provinces);
-//
-//        ResponseEntity<ResponseData<List<ProvinceDTO>>> response = provinceController.getAllProvinces();
-//
-//        assertEquals(HttpStatus.OK,response.getStatusCode());
-//        assertEquals(2, Objects.requireNonNull(response.getBody()).getPayload().size());
-//        assertEquals("get all provincies returned 2",response.getBody().getMessages().getFirst());
-//        assertTrue(response.getBody().isStatus());
-//    }
+    @Test
+    void testGetAllProvinces() {
+        Province province1 = new Province();
+        Province province2 = new Province();
+        List<Province> provinces = Arrays.asList(province1, province2);
+        Page<Province> provincePage = new PageImpl<>(provinces);
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));
+        when(provinceService.getAllProvinces(pageable)).thenReturn(provincePage);
+
+        ProvinceDTO dto1 = new ProvinceDTO();
+        ProvinceDTO dto2 = new ProvinceDTO();
+        when(modelMapper.map(province1, ProvinceDTO.class)).thenReturn(dto1);
+        when(modelMapper.map(province2, ProvinceDTO.class)).thenReturn(dto2);
+
+        ResponseEntity<ResponseData<Page<ProvinceDTO>>> response =
+                provinceController.getAllProvinces(0, 10, "id", "asc");
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().isStatus());
+        assertEquals("Retrieved page 0 of provincies", response.getBody().getMessages().getFirst());
+        assertEquals(2, response.getBody().getPayload().getContent().size());
+
+        verify(provinceService).getAllProvinces(pageable);
+        verify(modelMapper, times(2)).map(any(Province.class), eq(ProvinceDTO.class));
+
+    }
 
     @Test
     void testAddProvince_ValidRequest() {
