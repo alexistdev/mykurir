@@ -13,6 +13,7 @@ import { MasterregencyComponent } from './masterregency/masterregency.component'
 import { MasterdistrictComponent } from './masterdistrict/masterdistrict.component';
 import { PaginationComponent } from './share/pagination/pagination.component';
 import { ModalprovinceComponent } from './share/modals/modalprovince/modalprovince.component';
+import { ModalregencyComponent } from './share/modals/modalregency/modalregency.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -34,7 +35,8 @@ const routes: Routes = [
     MasterregencyComponent,
     MasterdistrictComponent,
     PaginationComponent,
-    ModalprovinceComponent
+    ModalprovinceComponent,
+    ModalregencyComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,74 @@
+<div *ngIf="show" class="modal-backdrop">
+  <section class="card col-md-4">
+    <div class="row">
+
+
+      <div class="col-lg col-sm-12 col-md-12 col-xl-12">
+        <header class="card-header">
+          <h2 class="card-title"  *ngIf="modalType === 'form'">FORM KABUPATEN</h2>
+          <h2 class="card-title"  *ngIf="modalType === 'confirm'">DELETE KABUPATEN</h2>
+        </header>
+        <div class="card-body">
+
+          <form *ngIf="modalType === 'form'" [formGroup]="userForm">
+            <div class="mb-2">
+              <label>Provinsi</label>
+              <select formControlName="provinceId"
+                      class="form-control">
+                <option value="">PILIH</option>
+                <option *ngFor="let p of provinces" [value]="p.id">{{ p.name }}</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label>Name</label>
+              <input type="text"
+                     formControlName="name"
+                     [ngClass]="{
+                      'form-control': true,
+                      'is-invalid': userForm.get('name')?.invalid && userForm.get('name')?.touched
+                     }"
+                     placeholder="Nama Province"/>
+              <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched" class="text-danger">
+                Name is required.
+              </div>
+            </div>
+            <div>
+              <input type="hidden" formControlName="id"/>
+            </div>
+          </form>
+          <!-- Confirmation content -->
+          <div *ngIf="modalType === 'confirm'" class="modal-text">
+            <p class="mb-0">{{ confirmationText }}</p>
+          </div>
+        </div>
+
+        <footer class="card-footer">
+          <div class="row">
+            <div class="col-md-12 text-end">
+              <button
+                *ngIf="modalType === 'form'"
+                class="btn btn-sm btn-success modal-confirm m-1"
+                (click)="validateAndConfirm()">
+                SAVE
+              </button>
+              <button
+                *ngIf="modalType === 'confirm'"
+                class="btn btn-sm btn-danger m-1"
+                (click)="deleteConfirm()">
+                DELETE
+              </button>
+              <button
+                *ngIf="modalType === 'form'"
+                class="btn btn-sm btn-danger"
+                (click)="onClose()">CLOSE </button>
+              <button
+                *ngIf="modalType === 'confirm'"
+                class="btn btn-sm btn-default"
+                (click)="onClose()">CANCEL </button>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </section>
+</div>
