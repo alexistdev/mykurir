@@ -45,8 +45,10 @@ public class ProvinceController {
         Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ?
                 Sort.Direction.DESC : Sort.Direction.ASC;
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        int maxSize = 1000;
+        int effectiveSize = (size == 0) ? maxSize : Math.min(size, maxSize);
 
+        Pageable pageable = PageRequest.of(page, effectiveSize, Sort.by(sortDirection, sortBy));
 
         Page<Province> provincesPage = provinceService.getAllProvinces(pageable);
 
