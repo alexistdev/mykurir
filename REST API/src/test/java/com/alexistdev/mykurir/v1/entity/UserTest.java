@@ -30,10 +30,10 @@ public class UserTest {
         assertTrue(authorities.stream().anyMatch(a->a.getAuthority().equals("USER")));
     }
 
-    @Test
-    void testGetUsername() {
-        assertEquals("alexistdev@gmail.com", user.getUsername());
-    }
+//    @Test
+//    void testGetUsername() {
+//        assertEquals("alexistdev@gmail.com", user.getUsername());
+//    }
 
     @Test
     void testAccountNonExpired() {

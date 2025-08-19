@@ -1,32 +1,19 @@
 package com.alexistdev.mykurir.v1.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
 public class RegencyDTO {
     private Long id;
     private String name;
+    @JsonIgnoreProperties({"createdDate", "modifiedDate"})
     private ProvinceDTO province;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public ProvinceDTO getProvince() {
-        return province;
-    }
-
-    public void setProvince(ProvinceDTO province) {
-        this.province = province;
-    }
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
 }
 

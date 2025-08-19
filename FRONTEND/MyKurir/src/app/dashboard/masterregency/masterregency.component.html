@@ -123,7 +123,7 @@
         [formData]="currentFormData"
         [confirmationText]="currentConfirmationText"
         (confirmDelete)="onDeleteConfirm()"
-        (formSubmit)="doSaveData()"
+        (formSubmit)="doSaveData($event)"
         [provinces]="provinces"
         (close)="closeModal()"
       ></app-modalregency>

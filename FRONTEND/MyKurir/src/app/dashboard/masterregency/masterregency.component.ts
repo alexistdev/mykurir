@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Province} from "../models/province.model";
 import {Payload} from "../response/payload";
 import {ProvinceService} from "../service/province.service";
+import {Regencyrequest} from "../request/regencyrequest.model";
+import {RegencyService} from "../service/regency.service";
+declare var PNotify: any;
 
 @Component({
   selector: 'app-masterregency',
@@ -18,7 +21,7 @@ export class MasterregencyComponent implements OnInit {
   public currentConfirmationText = '';
 
 
-  constructor(private provinceService: ProvinceService) {
+  constructor(private provinceService: ProvinceService, private regencyService: RegencyService) {
   }
 
   ngOnInit(): void {
@@ -51,11 +54,59 @@ export class MasterregencyComponent implements OnInit {
     this.currentModalType = type;
   }
 
-  doSaveData(){
+  doSaveData(formValue : Regencyrequest & { id?: number } ){
+    const request: Regencyrequest &  { id?: number } = {
+      name: formValue.name,
+      provinceId : formValue.provinceId,
+      id: formValue.id
+    };
 
+    this.regencyService.saveRegency(request).subscribe({
+      next: () => {
+        this.PNotifyMessage('success','The regency has been saved!');
+        this.closeModal();
+        // this.loadData(this.pageNumber, this.pageSize);
+      },
+      error: (err) => {
+        let errorMsg = 'There is an error please contact Administrator!';
+        if (err && err.error && err.error.messages && Array.isArray(err.error.messages)) {
+          errorMsg = err.error.messages[0];
+        }
+        this.PNotifyMessage('error',errorMsg);
+        this.closeModal();
+        // this.loadData(this.pageNumber, this.pageSize);
+      }
+    });
+
+    this.closeModal();
   }
 
   closeModal() {
     this.showModal = false;
+  }
+
+  PNotifyMessage(type:string, text: string):void{
+    switch(type){
+      case 'success':
+        new PNotify({
+          title: 'Success',
+          text: text,
+          type: 'success'
+        });
+        break;
+      case 'warning':
+        new PNotify({
+          title: 'Success',
+          text: text,
+          type: 'warning'
+        });
+        break;
+      default:
+        new PNotify({
+          title: 'Error !',
+          text: text,
+          type: 'error'
+        });
+    }
   }
 }
