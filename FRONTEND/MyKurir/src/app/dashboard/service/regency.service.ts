@@ -21,4 +21,10 @@ export class RegencyService {
       { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
     );
   }
+
+  getRegency(page:number,size:number,sortBy:string, direction:string):Observable<Apiresponse<Regency>>{
+    return this.http.get<Apiresponse<Regency>>(
+      `${this.apiRegency}?page=${page}&size=${size}&sortBy=${sortBy}&direction=${direction}`
+    );
+  }
 }

@@ -4,6 +4,8 @@ import {Payload} from "../response/payload";
 import {ProvinceService} from "../service/province.service";
 import {Regencyrequest} from "../request/regencyrequest.model";
 import {RegencyService} from "../service/regency.service";
+import {Regency} from "../models/regency.model";
+import {Apiresponse} from "../response/apiresponse";
 declare var PNotify: any;
 
 @Component({
@@ -13,7 +15,14 @@ declare var PNotify: any;
 })
 export class MasterregencyComponent implements OnInit {
   provinces: Province[] = [];
-  payload ?: Payload<Province>;
+  regencies: Regency[] = [];
+  // payload ?: Payload<any>;
+  totalData: number = 0;
+  pageNumber: number = 0;
+  totalPages: number = 0;
+  pageSize: number = 0;
+  keyword: string = "";
+  searchQuery: string = '';
 
   public showModal = false;
   public currentModalType: 'form' | 'confirm' = 'confirm';
@@ -26,17 +35,48 @@ export class MasterregencyComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProvince();
+    this.loadData(this.pageNumber);
   }
 
   loadProvince(){
     const sortBy = 'id';
     const direction = 'desc';
-    this.provinceService.getProvince(0, 0, sortBy, direction).subscribe((payload) => {
-      this.provinces = payload.payload.content.map(province =>({
+    this.provinceService.getProvince(0, 0, sortBy, direction).subscribe((data) => {
+      this.provinces = data.payload.content.map(province =>({
         ...province,
         name:this.capitalizeWords(province.name)
       }));
     });
+  }
+
+  loadData(page: number, size: number = 10): void {
+    this.pageNumber = page;
+    this.pageSize = size;
+    this.keyword = this.searchQuery;
+    const sortBy = 'id';
+    const direction = 'desc';
+    const isFiltering = this.keyword !== "";
+    const request$ = this.regencyService.getRegency(this.pageNumber,this.pageSize, sortBy,direction);
+
+    request$.subscribe({
+      next:(data)=> this.updateRegencyPageData(data),
+      error:(err) =>console.error(err)
+    })
+  }
+
+  private updateRegencyPageData(data: Apiresponse<Regency>):void {
+    this.pageNumber = data.payload.pageable.pageNumber;
+    this.totalPages = data.payload.totalPages;
+    this.pageSize =  data.payload.pageable.pageSize;
+    this.regencies = data.payload.content.map(regency => ({
+      ...regency,
+        name:this.capitalizeWords(regency.name),
+        province: {
+            ...regency.province,
+          name:this.capitalizeWords(regency.province.name)
+        }
+    }))
+    this.totalData = data.payload.totalElements;
   }
 
   capitalizeWords(input: string): string {
@@ -44,6 +84,8 @@ export class MasterregencyComponent implements OnInit {
       return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
     }).join(' ');
   }
+
+
 
   onDeleteConfirm(){
 

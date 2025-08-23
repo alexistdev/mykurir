@@ -41,7 +41,7 @@
             <header class="card-header">
               <div class="row align-items-center">
                 <div class="col-lg-3">
-                                    <button class="btn btn-sm btn-primary" (click)="openModal('form')">+ ADD2</button>
+                                    <button class="btn btn-sm btn-primary" (click)="openModal('form')">+ ADD</button>
                 </div>
                 <div class="col-lg-2 offset-lg-4  text-start mt-1">
                   <!--                  <select class="form-control"-->
@@ -85,15 +85,31 @@
                   <tr>
                     <th class="text-center" width="5%">No.</th>
                     <th class="text-center">Name</th>
-                    <th class="text-center">Email</th>
-                    <th class="text-center">Role</th>
+                    <th class="text-center">Province</th>
                     <th class="text-center">Created Date</th>
                     <th class="text-center">Modified Date</th>
                     <th class="text-center">Open</th>
                   </tr>
                   </thead>
+                  <ng-container *ngIf="totalData != 0; else noData">
+                    <tbody>
+                    <tr *ngFor="let regency of regencies; let i = index">
+                      <td class="text-center">{{ ((pageNumber) * pageSize) + (i + 1) }}</td>
+                      <td>{{ regency.name }}</td>
+                      <td>{{ regency.province.name }}</td>
+                      <td class="text-center">{{ regency.createdDate.toString().replace('T', ' ') }}</td>
+                      <td class="text-center">{{ regency.modifiedDate.toString().replace('T', ' ') }}</td>
+                      <td class="text-center">
 
-
+                      </td>
+                    </tr>
+                    </tbody>
+                  </ng-container>
+                  <ng-template #noData>
+                    <tr>
+                      <td colspan="5" class="text-center">No Data</td>
+                    </tr>
+                  </ng-template>
                   <tfoot>
                   <tr>
                     <td colspan="2" class="text-start text-color-grey" style="font-size: 0.75rem;margin-left: 10px;"

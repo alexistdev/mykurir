@@ -1,9 +1,10 @@
-import {Province} from "./province.model";
-
 export interface Regency {
   id: number;
   name: string;
-  province: Province;
+  province: {
+    id: number,
+    name: string,
+  }
   createdDate: Date;
   modifiedDate: Date;
 }
