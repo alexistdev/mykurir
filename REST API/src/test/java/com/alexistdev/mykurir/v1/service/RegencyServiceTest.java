@@ -162,10 +162,11 @@ public class RegencyServiceTest {
     }
 
     @Nested
-    @DisplayName("Should return the expected regency when requested with a specific filter")
+    @DisplayName("Get Regency Test")
     class GetRegencyTests {
 
         @Test
+        @DisplayName("Should return the expected regency when requested with a specific filter")
         void testGetRegencyByFilter() {
             Page<Regency> regencyPage = new PageImpl<>(Collections.singletonList(existingRegency));
 
