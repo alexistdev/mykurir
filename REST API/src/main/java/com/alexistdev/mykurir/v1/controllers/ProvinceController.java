@@ -67,7 +67,7 @@ public class ProvinceController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<ResponseData<Page<ProvinceDTO>>> getUserByFilter(
+    public ResponseEntity<ResponseData<Page<ProvinceDTO>>> getProvinceByFilter(
             @RequestParam(defaultValue = "") String filter,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
