@@ -1,5 +1,6 @@
 package com.alexistdev.mykurir.v1.controllers;
 
+import com.alexistdev.mykurir.v1.dto.ProvinceDTO;
 import com.alexistdev.mykurir.v1.dto.RegencyDTO;
 import com.alexistdev.mykurir.v1.dto.ResponseData;
 import com.alexistdev.mykurir.v1.masterconstant.Validation;
@@ -62,6 +63,35 @@ public class RegencyController {
         Page<RegencyDTO> regencyDTOS = regenciesPage
                 .map( regency -> modelMapper.map(regency,RegencyDTO.class));
 
+        responseData.setPayload(regencyDTOS);
+        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<ResponseData<Page<RegencyDTO>>> getRegencyByFilter(
+            @RequestParam(defaultValue = "") String filter,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+        ResponseData<Page<RegencyDTO>> responseData = new ResponseData<>();
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ?
+                Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+
+        Page<Regency> regenciesPage = regencyService.getRegencyByFilter(pageable, filter);
+
+        responseData.getMessages().add("No regency found");
+        responseData.setStatus(false);
+        if (!regenciesPage.isEmpty()) {
+            responseData.setStatus(true);
+            responseData.getMessages().removeFirst();
+            responseData.getMessages().add("Retrieved page " + page + " of regencies"
+            );
+        }
+        Page<RegencyDTO> regencyDTOS = regenciesPage
+                .map(regency-> modelMapper.map(regency, RegencyDTO.class));
         responseData.setPayload(regencyDTOS);
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
     }

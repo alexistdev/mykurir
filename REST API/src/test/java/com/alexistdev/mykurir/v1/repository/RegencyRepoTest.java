@@ -3,6 +3,7 @@ package com.alexistdev.mykurir.v1.repository;
 import com.alexistdev.mykurir.v1.models.entity.Province;
 import com.alexistdev.mykurir.v1.models.entity.Regency;
 import com.alexistdev.mykurir.v1.models.entity.User;
+import com.alexistdev.mykurir.v1.models.repository.ProvinceRepo;
 import com.alexistdev.mykurir.v1.models.repository.RegencyRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
@@ -17,6 +20,8 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -27,6 +32,9 @@ public class RegencyRepoTest {
 
     @Autowired
     private RegencyRepo regencyRepo;
+
+    @Autowired
+    private ProvinceRepo provinceRepo;
 
     private Province province;
 
@@ -114,5 +122,33 @@ public class RegencyRepoTest {
     void testFindByNameNotFound(){
         Regency foundRegency = regencyRepo.findByName("Non-existent regency");
         Assertions.assertNull(foundRegency);
+    }
+
+    @Test
+    void testFindByFilter() {
+        // Prepare some test data
+        Province province = new Province();
+        province.setName("Province1");
+        provinceRepo.save(province);
+
+        Regency regency1 = new Regency();
+        regency1.setName("North Region");
+        regency1.setProvince(province);
+        regencyRepo.save(regency1);
+
+        Regency regency2 = new Regency();
+        regency2.setName("South Region");
+        regency2.setProvince(province);
+        regencyRepo.save(regency2);
+
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // Search for a regency with "North" in the name
+        var result = regencyRepo.findByFilter("North", pageable);
+
+        // Assertions
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        assertThat(result.getContent().get(0).getName()).isEqualTo("North Region");
+
     }
 }

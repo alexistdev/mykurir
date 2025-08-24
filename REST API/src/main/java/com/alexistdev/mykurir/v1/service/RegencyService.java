@@ -64,4 +64,8 @@ public class RegencyService {
         return regencyRepo.save(saveRegency);
     }
 
+    public Page<Regency> getRegencyByFilter(Pageable pageable, String keyword) {
+        return regencyRepo.findByFilter(keyword.toLowerCase(), pageable);
+    }
+
 }

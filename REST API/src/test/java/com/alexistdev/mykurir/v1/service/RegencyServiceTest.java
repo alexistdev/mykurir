@@ -4,6 +4,7 @@ import com.alexistdev.mykurir.v1.models.entity.Province;
 import com.alexistdev.mykurir.v1.models.entity.Regency;
 import com.alexistdev.mykurir.v1.models.repository.RegencyRepo;
 import com.alexistdev.mykurir.v1.request.RegencyRequest;
+import org.springframework.data.domain.Page;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,9 +13,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Collections;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -37,6 +45,7 @@ public class RegencyServiceTest {
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
         // Initialize RegencyRequest
         regencyRequest = new RegencyRequest();
         regencyRequest.setName(TEST_REGENCY_NAME);
@@ -152,4 +161,22 @@ public class RegencyServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("Should return the expected regency when requested with a specific filter")
+    class GetRegencyTests {
+
+        @Test
+        void testGetRegencyByFilter() {
+            Page<Regency> regencyPage = new PageImpl<>(Collections.singletonList(existingRegency));
+
+            Pageable pageable = PageRequest.of(0, 10);
+            when(regencyRepo.findByFilter(TEST_REGENCY_NAME.toLowerCase(), pageable)).thenReturn(regencyPage);
+
+            Page<Regency> result = regencyService.getRegencyByFilter(pageable, TEST_REGENCY_NAME);
+
+            assertThat(result).isNotNull();
+            assertThat(result.getTotalElements()).isEqualTo(1);
+            assertThat(result.getContent().get(0).getName()).isEqualTo(TEST_REGENCY_NAME);
+        }
+    }
 }
