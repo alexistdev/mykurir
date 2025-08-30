@@ -14,11 +14,21 @@
             <div class="mb-2">
               <label>Provinsi</label>
               <select formControlName="provinceId"
-                      class="form-control">
+                      [ngClass]="{
+                        'form-control' : true,
+                         'is-invalid': userForm.get('provinceId')?.invalid && userForm.get('provinceId')?.touched
+                      }"
+                      [required]="true">
                 <option value="">PILIH</option>
                 <option *ngFor="let p of provinces" [value]="p.id">{{ p.name }}</option>
               </select>
             </div>
+            <div
+              *ngIf="userForm.get('provinceId')?.invalid && userForm.get('provinceId')?.touched"
+              class="text-danger">
+              Provinsi is required.
+            </div>
+
             <div class="mb-2">
               <label>Name</label>
               <input type="text"

@@ -65,6 +65,14 @@ export class ModalregencyComponent implements OnInit, OnChanges {
         provinceId: this.formData?.provinceId || ''
       });
     }
+    //reset default
+    if(changes['show'] && this.userForm) {
+      this.userForm.patchValue({ provinceId: '' })
+    }
+
+    if(!this.show) {
+      this.clearForm();
+    }
   }
 
   onClose() {
@@ -85,10 +93,13 @@ export class ModalregencyComponent implements OnInit, OnChanges {
   }
 
   clearForm() {
-    this.userForm.reset({
-      id:'',
-      name: ''
-    });
+    if(this.userForm){
+      this.userForm.reset({
+        id:'',
+        name: '',
+        provinceId: ''
+      });
+    }
   }
 
   deleteConfirm():void {

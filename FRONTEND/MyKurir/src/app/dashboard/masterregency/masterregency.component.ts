@@ -106,8 +106,8 @@ export class MasterregencyComponent implements OnInit {
     this.regencyService.saveRegency(request).subscribe({
       next: () => {
         this.PNotifyMessage('success','The regency has been saved!');
+        this.loadData(this.pageNumber, this.pageSize);
         this.closeModal();
-        // this.loadData(this.pageNumber, this.pageSize);
       },
       error: (err) => {
         let errorMsg = 'There is an error please contact Administrator!';
@@ -116,10 +116,9 @@ export class MasterregencyComponent implements OnInit {
         }
         this.PNotifyMessage('error',errorMsg);
         this.closeModal();
-        // this.loadData(this.pageNumber, this.pageSize);
+        this.loadData(this.pageNumber, this.pageSize);
       }
     });
-
     this.closeModal();
   }
 
@@ -150,5 +149,23 @@ export class MasterregencyComponent implements OnInit {
           type: 'error'
         });
     }
+  }
+
+  onPageSizeChange() {
+    this.loadData(0, this.pageSize);
+  }
+
+  onSearchChange(searchTerm: string) {
+    if(this.pageNumber > 0){
+      this.pageNumber = 0;
+    }
+
+    this.searchQuery = searchTerm.toLowerCase();
+    this.loadData(this.pageNumber, this.pageSize);
+  }
+
+  onPageChanged(page: number) {
+    this.pageNumber = page;
+    this.loadData(this.pageNumber, this.pageSize);
   }
 }

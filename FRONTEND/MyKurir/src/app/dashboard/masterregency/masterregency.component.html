@@ -44,24 +44,24 @@
                                     <button class="btn btn-sm btn-primary" (click)="openModal('form')">+ ADD</button>
                 </div>
                 <div class="col-lg-2 offset-lg-4  text-start mt-1">
-                  <!--                  <select class="form-control"-->
-                  <!--                          [(ngModel)]="pageSize"-->
-                  <!--                          (change)="onPageSizeChange()">-->
-                  <!--                    <option value="10">10</option>-->
-                  <!--                    <option value="50">50</option>-->
-                  <!--                    <option value="100">100</option>-->
-                  <!--                  </select>-->
+                                    <select class="form-control"
+                                            [(ngModel)]="pageSize"
+                                            (change)="onPageSizeChange()">
+                                      <option value="10">10</option>
+                                      <option value="50">50</option>
+                                      <option value="100">100</option>
+                                    </select>
                 </div>
 
                 <div class="col-lg-3 text-end position-relative mt-1" style="padding-right: 12px;">
-                  <!--                  <input #searchBox-->
-                  <!--                         type="text"-->
-                  <!--                         id="search"-->
-                  <!--                         class="form-control"-->
-                  <!--                         aria-label="Search"-->
-                  <!--                         placeholder="Search"-->
-                  <!--                         (input)="onSearchChange(searchBox.value)"-->
-                  <!--                         style="padding-right: 12px;"/>-->
+                                    <input #searchBox
+                                           type="text"
+                                           id="search"
+                                           class="form-control"
+                                           aria-label="Search"
+                                           placeholder="Search"
+                                           (input)="onSearchChange(searchBox.value)"
+                                           style="padding-right: 12px;"/>
                   <span
                     class="position-absolute top-50 translate-middle-y"
                     style="right: 16px; left: auto; color: #aaa; pointer-events: none;">
@@ -113,16 +113,15 @@
                   <tfoot>
                   <tr>
                     <td colspan="2" class="text-start text-color-grey" style="font-size: 0.75rem;margin-left: 10px;"
-                    > Total Data : row.
+                    > Total Data : {{ totalData }} row.
                     </td>
                     <td colspan="6" class="text-end">
-                      <nav>
-
-                      </nav>
+                      <app-pagination [pageNumber]="pageNumber"
+                                      [totalPages]="totalPages"
+                                      [pageSize]="pageSize"
+                                      (pageChange)="onPageChanged($event)"></app-pagination>
                     </td>
                   </tr>
-
-
                   </tfoot>
                 </table>
               </div>
