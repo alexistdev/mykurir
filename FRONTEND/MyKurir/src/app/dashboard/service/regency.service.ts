@@ -4,6 +4,7 @@ import {Regencyrequest} from "../request/regencyrequest.model";
 import {Observable} from "rxjs";
 import {Apiresponse} from "../response/apiresponse";
 import {Regency} from "../models/regency.model";
+import {Province} from "../models/province.model";
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,12 @@ export class RegencyService {
   getRegency(page:number,size:number,sortBy:string, direction:string):Observable<Apiresponse<Regency>>{
     return this.http.get<Apiresponse<Regency>>(
       `${this.apiRegency}?page=${page}&size=${size}&sortBy=${sortBy}&direction=${direction}`
+    );
+  }
+
+  getRegencyByFilter(keyword:string, page:number,size:number,sortBy:string, direction:string):Observable<Apiresponse<Regency>> {
+    return this.http.get<Apiresponse<Regency>>(
+      `${this.apiRegency}/filter?filter=${keyword}&page=${page}&size=${size}&sortBy=${sortBy}&direction=${direction}`
     );
   }
 }

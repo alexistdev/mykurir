@@ -56,7 +56,9 @@ export class MasterregencyComponent implements OnInit {
     const sortBy = 'id';
     const direction = 'desc';
     const isFiltering = this.keyword !== "";
-    const request$ = this.regencyService.getRegency(this.pageNumber,this.pageSize, sortBy,direction);
+    const request$ = isFiltering
+      ? this.regencyService.getRegencyByFilter(this.keyword,this.pageNumber,this.pageSize, sortBy,direction)
+      : this.regencyService.getRegency(this.pageNumber,this.pageSize, sortBy,direction);
 
     request$.subscribe({
       next:(data)=> this.updateRegencyPageData(data),
