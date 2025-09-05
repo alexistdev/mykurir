@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -67,5 +68,21 @@ public class RegencyService {
     public Page<Regency> getRegencyByFilter(Pageable pageable, String keyword) {
         return regencyRepo.findByFilter(keyword.toLowerCase(), pageable);
     }
+
+    public void deleteRegencyById(Long id){
+        Regency regency = findRegencyById(id);
+        if(regency == null){
+            throw new RuntimeException("Regency not found " + id);
+        }
+        regency.setDeleted(true);
+        regencyRepo.save(regency);
+    }
+
+    public Regency findRegencyById(Long id) {
+        Optional<Regency> result = regencyRepo.findById(id);
+        return result.orElse(null);
+    }
+
+
 
 }

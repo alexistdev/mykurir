@@ -117,6 +117,21 @@ public class RegencyController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseData<Void>> deleteRegency(@PathVariable("id") Long id) {
+        ResponseData<Void> responseData = new ResponseData<>();
+        try{
+            regencyService.deleteRegencyById(id);
+            responseData.getMessages().add(String.format("Regency successfully deleted!"));
+            responseData.setStatus(true);
+            return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        } catch (Exception e){
+            responseData.getMessages().add(e.getMessage());
+            responseData.setStatus(false);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+    }
+
     private void processErrors(Errors errors, ResponseData<?> responseData) {
         for (ObjectError error : errors.getAllErrors()) {
             responseData.getMessages().add(error.getDefaultMessage());

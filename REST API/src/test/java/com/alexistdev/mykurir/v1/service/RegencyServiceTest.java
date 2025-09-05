@@ -180,4 +180,39 @@ public class RegencyServiceTest {
             assertThat(result.getContent().get(0).getName()).isEqualTo(TEST_REGENCY_NAME);
         }
     }
+
+    @Test
+    void testDeleteRegencyId_NonExistingId() {
+        Long nonExistingId = 2L;
+        when(regencyRepo.findById(nonExistingId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class,()->{
+            regencyService.deleteRegencyById(nonExistingId);
+        });
+
+        String expected = "Regency not found " + nonExistingId;
+        String actualMessage =  exception.getMessage();
+
+        assertTrue(actualMessage.contains(expected));
+    }
+
+    @Test
+    void testDeleteRegencyId_ExistingId() {
+        Long existingId = 1L;
+        Regency regency = new Regency();
+        regency.setId(existingId);
+        regency.setDeleted(false);
+
+        when(regencyRepo.findById(existingId)).thenReturn(Optional.of(regency));
+        when(regencyRepo.save(any(Regency.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        assertDoesNotThrow(() -> regencyService.deleteRegencyById(existingId));
+
+        ArgumentCaptor<Regency> captor = ArgumentCaptor.forClass(Regency.class);
+        verify(regencyRepo, times(1)).save(captor.capture());
+        Regency saved = captor.getValue();
+
+        assertEquals(existingId, saved.getId());
+        assertTrue(saved.getDeleted(), "Regency should be marked as Deleted");
+    }
 }
