@@ -53,8 +53,11 @@ export class ModalregencyComponent implements OnInit, OnChanges {
     this.userForm = this.fb.group({
       id: this.formData?.id || null,
       name: [this.formData.name || '', [Validators.required,Validators.maxLength(100)]],
-      provinceId: [this.formData?.provinceId || '', Validators.required]
+      provinceId: [this.formData?.provinceId !== undefined && this.formData?.provinceId !== null
+        ? Number(this.formData.provinceId)
+        : null, Validators.required]
     });
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -62,13 +65,15 @@ export class ModalregencyComponent implements OnInit, OnChanges {
       this.userForm.reset({
         id: this.formData?.id || null,
         name: this.formData?.name || '',
-        provinceId: this.formData?.provinceId || ''
+        provinceId: this.formData?.provinceId !== undefined && this.formData?.provinceId !== null
+          ? Number(this.formData.provinceId)
+          : null
       });
     }
-    //reset default
-    if(changes['show'] && this.userForm) {
-      this.userForm.patchValue({ provinceId: '' })
-    }
+    // //reset default
+    // if(changes['show'] && this.userForm) {
+    //   this.userForm.patchValue({ provinceId: null })
+    // }
 
     if(!this.show) {
       this.clearForm();
@@ -97,7 +102,7 @@ export class ModalregencyComponent implements OnInit, OnChanges {
       this.userForm.reset({
         id:'',
         name: '',
-        provinceId: ''
+        provinceId: null
       });
     }
   }

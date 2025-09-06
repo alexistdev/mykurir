@@ -20,7 +20,7 @@
                       }"
                       [required]="true">
                 <option value="">PILIH</option>
-                <option *ngFor="let p of provinces" [value]="p.id">{{ p.name }}</option>
+                <option *ngFor="let p of provinces" [ngValue]="p.id">{{ p.name }}</option>
               </select>
             </div>
             <div
