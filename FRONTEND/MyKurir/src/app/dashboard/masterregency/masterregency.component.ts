@@ -121,6 +121,18 @@ export class MasterregencyComponent implements OnInit {
     }
   }
 
+  openEditModal(regency: Regency) {
+    this.showModal = true;
+    this.currentModalType = 'form';
+    this.currentFormData = {
+      id: regency.id,
+      name: regency.name,
+      provinceId: regency.province?.id ?? null
+    };
+    this.currentConfirmationText = '';
+    this.currentEditMode = true;
+  }
+
   doSaveData(formValue : Regencyrequest & { id?: number } ){
     const request: Regencyrequest &  { id?: number } = {
       name: formValue.name,
@@ -128,22 +140,31 @@ export class MasterregencyComponent implements OnInit {
       id: formValue.id
     };
 
-    this.regencyService.saveRegency(request).subscribe({
+    const action$ = request.id
+      ? this.regencyService.updateRegency(request)
+      : this.regencyService.saveRegency(request);
+
+    console.log(request);
+
+    action$.subscribe({
       next: () => {
-        this.PNotifyMessage('success','The regency has been saved!');
+        this.PNotifyMessage(
+          'success',
+          `The regency has been ${request.id ? 'updated' : 'saved'}!`
+        );
         this.loadData(this.pageNumber, this.pageSize);
         this.closeModal();
       },
       error: (err) => {
-        let errorMsg = 'There is an error please contact Administrator!';
-        if (err && err.error && err.error.messages && Array.isArray(err.error.messages)) {
-          errorMsg = err.error.messages[0];
-        }
-        this.PNotifyMessage('error',errorMsg);
+        let errorMessage = 'There is an error please contact Administrator!';
+        // if(err && err.error && err.error.messages && Array.isArray(err.error.messages)){
+        //   errorMessage = err.error.messages[0];
+        // }
+        this.PNotifyMessage('error', errorMessage);
         this.closeModal();
-        this.loadData(this.pageNumber, this.pageSize);
+        this.loadData(this.pageNumber,this.pageSize);
       }
-    });
+    })
     this.closeModal();
   }
 

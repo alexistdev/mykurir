@@ -117,6 +117,39 @@ public class RegencyController {
         }
     }
 
+    @PatchMapping
+    public ResponseEntity<ResponseData<Regency>> updateRegency(@Valid @RequestBody RegencyRequest request, Errors errors) {
+        ResponseData<Regency> responseData = new ResponseData<>();
+        responseData.setStatus(false);
+
+        if(request.getId() == null){
+            responseData.getMessages().add("Id cannot be null");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+
+        if (errors.hasErrors()) {
+            processErrors(errors, responseData);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+
+        Regency regencyFound = regencyService.findRegencyById(request.getId());
+        if(regencyFound == null){
+            responseData.getMessages().add("Regency Not Found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+
+        try{
+            Regency updatedRegency = regencyService.saveRegency(request);
+            responseData.setPayload(updatedRegency);
+            responseData.getMessages().add(Validation.success("regency"));
+            responseData.setStatus(true);
+            return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        } catch (Exception e){
+            responseData.getMessages().add(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseData<Void>> deleteRegency(@PathVariable("id") Long id) {
         ResponseData<Void> responseData = new ResponseData<>();

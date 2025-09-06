@@ -100,6 +100,7 @@
                       <td class="text-center">{{ regency.createdDate.toString().replace('T', ' ') }}</td>
                       <td class="text-center">{{ regency.modifiedDate.toString().replace('T', ' ') }}</td>
                       <td class="text-center">
+                        <button class="btn btn-sm btn-primary mx-1" (click)="openEditModal(regency)">Edit</button>
                         <button class="btn btn-sm btn-danger mx-1"
                                 (click)="openModal('confirm','Apakah anda yakin ingin menghapus data ini?', regency.id)">
                           Delete

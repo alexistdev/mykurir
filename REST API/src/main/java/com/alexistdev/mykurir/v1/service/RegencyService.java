@@ -32,11 +32,16 @@ public class RegencyService {
     }
 
     public Regency saveRegency(RegencyRequest request) {
-        Province existProvince = provinceService.findProvinceById(request.getProvinceId());
 
         Regency saveRegency = new Regency();
 
+        Province existProvince = provinceService.findProvinceById(request.getProvinceId());
+
         if(existProvince == null){
+            throw new RuntimeException("Province Not Found");
+        }
+
+        if(existProvince.getDeleted()){
             throw new RuntimeException("Province Not Found");
         }
 
@@ -49,7 +54,6 @@ public class RegencyService {
                 existRegency.setProvince(existProvince);
                 return regencyRepo.save(existRegency);
             }
-            throw new RuntimeException("Regency name already exist");
         }
 
         if(request.getId() != null){

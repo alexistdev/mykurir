@@ -138,6 +138,26 @@ public class RegencyServiceTest {
         }
 
         @Test
+        @DisplayName("Should throw error when province not found")
+        void testSaveRegency_WhenProvince_NotFound() {
+            regencyRequest.setProvinceId(1L);
+            regencyRequest.setName("Jawa Barat");
+
+            Province deletedProvince = new Province();
+            deletedProvince.setDeleted(true);
+
+            when(provinceService.findProvinceById(1L)).thenReturn(deletedProvince);
+
+            RuntimeException thrown = assertThrows(RuntimeException.class, ()->{
+                regencyService.saveRegency(regencyRequest);
+            });
+
+            assert "Province Not Found".equals(thrown.getMessage());
+
+            verify(regencyRepo, never()).save(any(Regency.class));
+        }
+
+        @Test
         @DisplayName("Should update existing regency when ID is provided")
         void testSaveRegency_WhenIdProvided() {
             regencyRequest.setId(1L);

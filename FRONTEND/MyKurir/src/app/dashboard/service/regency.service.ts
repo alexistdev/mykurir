@@ -4,7 +4,6 @@ import {Regencyrequest} from "../request/regencyrequest.model";
 import {Observable} from "rxjs";
 import {Apiresponse} from "../response/apiresponse";
 import {Regency} from "../models/regency.model";
-import {Province} from "../models/province.model";
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +21,15 @@ export class RegencyService {
       { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
     );
   }
+
+  updateRegency(request: Regencyrequest):Observable<Apiresponse<Regency>>{
+    return this.http.patch<Apiresponse<Regency>>(
+      `${this.apiRegency}`,
+      request,
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    );
+  }
+
 
   getRegency(page:number,size:number,sortBy:string, direction:string):Observable<Apiresponse<Regency>>{
     return this.http.get<Apiresponse<Regency>>(
