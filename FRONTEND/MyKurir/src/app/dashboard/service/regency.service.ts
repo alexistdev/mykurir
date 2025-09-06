@@ -34,4 +34,11 @@ export class RegencyService {
       `${this.apiRegency}/filter?filter=${keyword}&page=${page}&size=${size}&sortBy=${sortBy}&direction=${direction}`
     );
   }
+
+  deleteRegency(regencyId:number):Observable<Apiresponse<Regency>>{
+    return this.http.delete<Apiresponse<Regency>>(
+      `${this.apiRegency}`+'/'+`${regencyId}`,
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    );
+  }
 }

@@ -29,6 +29,9 @@ export class MasterregencyComponent implements OnInit {
   public currentFormData: any = {};
   public currentConfirmationText = '';
 
+  currentEditMode:boolean = false;
+  selectedRegencyId: number | undefined = 0;
+
 
   constructor(private provinceService: ProvinceService, private regencyService: RegencyService) {
   }
@@ -90,12 +93,32 @@ export class MasterregencyComponent implements OnInit {
 
 
   onDeleteConfirm(){
-
+    if(this.selectedRegencyId){
+     this.regencyService.deleteRegency(this.selectedRegencyId).subscribe({
+       next: () => {
+         this.PNotifyMessage('warning','The regency has been deleted!');
+         this.closeModal();
+         this.loadData(this.pageNumber, this.pageSize);
+       },
+       error: () => {
+         this.PNotifyMessage('error','There is an error please contact Administrator!');
+         this.closeModal();
+         this.loadData(this.pageNumber, this.pageSize);
+       }
+     })
+    }
+    this.closeModal();
   }
 
-  openModal(type: 'form' | 'confirm') {
-    this.showModal = true;
+  openModal(type: 'form' | 'confirm', data?: any, regencyId? :number) {
+    this.selectedRegencyId = regencyId;
     this.currentModalType = type;
+    this.showModal = true;
+    if(type === 'form') {
+      this.currentFormData = data || {};
+    } else {
+      this.currentConfirmationText = data || 'Are you sure you want to proceed?';
+    }
   }
 
   doSaveData(formValue : Regencyrequest & { id?: number } ){
