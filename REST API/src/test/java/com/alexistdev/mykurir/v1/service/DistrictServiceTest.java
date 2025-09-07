@@ -4,7 +4,10 @@ import com.alexistdev.mykurir.v1.models.entity.District;
 import com.alexistdev.mykurir.v1.models.entity.Province;
 import com.alexistdev.mykurir.v1.models.entity.Regency;
 import com.alexistdev.mykurir.v1.models.repository.DistrictRepo;
+import com.alexistdev.mykurir.v1.request.DistrictRequest;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,67 +22,64 @@ public class DistrictServiceTest {
     @Mock
     private DistrictRepo districtRepo;
 
+    @Mock
+    private RegencyService regencyService;
+
     @InjectMocks
     private DistrictService districtService;
+
+    private DistrictRequest districtRequest;
+    private Province province;
+    private Regency regency;
+    private District existingDistrict;
+    private static final String TEST_DISTRICT_NAME = "Test District";
+    private static final Long TEST_REGENCY_ID = 1L;
+    private static final Long TEST_PROVINCE_ID = 1L;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        districtRequest = new DistrictRequest();
+        districtRequest.setName(TEST_DISTRICT_NAME);
+        districtRequest.setRegencyId(TEST_REGENCY_ID);
+
+        // Initialize Province
+        province = new Province();
+        province.setId(TEST_PROVINCE_ID);
+        province.setName("Test Province");
+        province.setDeleted(false);
+
+        // Initialize existing Regency
+        regency = new Regency();
+        regency.setId(TEST_REGENCY_ID);
+        regency.setProvince(province);
+        regency.setName("Test Regency");
+
+        // Initialize existing District
+
+        existingDistrict = new District();
+        existingDistrict.setName(TEST_DISTRICT_NAME);
+        existingDistrict.setRegency(regency);
+        existingDistrict.setDeleted(false);
+
     }
 
-    @Test
-    void testGetAllDistricts() {
-        Province province1 = new Province();
-        province1.setId(1L);
-        province1.setName("Jakarta");
+    @Nested
+    @DisplayName("Save District Tests")
+    class SaveDistrictTest {
 
-        Province province2 = new Province();
-        province2.setId(2L);
-        province2.setName("Lampung");
+        @Test
+        @DisplayName("Should throw exception when regency not found")
+        void testSaveDistrict_WhenRegencyNotFound() {
+            when(regencyService.findRegencyById(TEST_REGENCY_ID)).thenReturn(null);
 
-        Regency regency1 = new Regency();
-        regency1.setId(1L);
-        regency1.setName("Jakarta Selatan");
-        regency1.setProvince(province1);
+            RuntimeException exception = assertThrows(RuntimeException.class,
+                    () -> districtService.saveDistrict(districtRequest));
 
-        Regency regency2 = new Regency();
-        regency2.setId(2L);
-        regency2.setName("Pringsewu");
-        regency2.setProvince(province2);
-
-        District district1 = new District();
-        district1.setId(1L);
-        district1.setRegency(regency1);
-        district1.setName("Setiabudi");
-
-        District district2 = new District();
-        district2.setId(2L);
-        district2.setRegency(regency2);
-        district2.setName("Pagelaran");
-
-        List<District> districts = List.of(district1, district2);
-
-        when(districtRepo.findAll()).thenReturn(districts);
-
-        List<District> result = districtService.getAllDistricts();
-
-        assertEquals(2,districts.size());
-        assertEquals("Setiabudi",result.get(0).getName());
-        assertEquals("Jakarta Selatan", result.get(0).getRegency().getName());
-        assertEquals("Jakarta", result.get(0).getRegency().getProvince().getName());
-
-        assertEquals("Pagelaran",result.get(1).getName());
-        assertEquals("Pringsewu", result.get(1).getRegency().getName());
-        assertEquals("Lampung", result.get(1).getRegency().getProvince().getName());
-
-        verify(districtRepo,times(1)).findAll();
-    }
-
-    @Test
-    void testGetAllDistrictsEmptyList() {
-        when(districtRepo.findAll()).thenReturn(List.of());
-        List<District> result = districtService.getAllDistricts();
-        assertTrue(result.isEmpty());
-        verify(districtRepo,times(1)).findAll();
+            assertEquals("Regency Not Found", exception.getMessage());
+            verify(regencyService).findRegencyById(TEST_REGENCY_ID);
+            verifyNoInteractions(districtRepo);
+        }
     }
 }
