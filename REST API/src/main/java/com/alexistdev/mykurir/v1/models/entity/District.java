@@ -7,17 +7,21 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name="tb_districts")
-@NoArgsConstructor
-public class District {
+@Getter
+@Setter
+public class District extends BaseEntity<String> implements Serializable {
 
-    @Setter
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
+
     @Column(length=150, nullable=false)
     private String name;
 
@@ -25,23 +29,4 @@ public class District {
     @JoinColumn(name = "regency_id", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Regency regency;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Regency getRegency() {
-        return regency;
-    }
-
-    public void setRegency(Regency regency) {
-        if(regency == null){
-            throw new NullPointerException("Regency cannot be null");
-        }
-        this.regency = regency;
-    }
 }
