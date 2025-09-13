@@ -9,6 +9,7 @@ import com.alexistdev.mykurir.v1.models.entity.Regency;
 import com.alexistdev.mykurir.v1.request.RegencyRequest;
 import com.alexistdev.mykurir.v1.service.RegencyService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,8 +39,8 @@ public class RegencyController {
 
     @GetMapping
     public ResponseEntity<ResponseData<Page<RegencyDTO>>> getAllRegencies(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+            @RequestParam(defaultValue = "10") @PositiveOrZero int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String direction
     ) {
@@ -49,7 +50,14 @@ public class RegencyController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
 
-        Page<Regency> regenciesPage = regencyService.getAllRegencies(pageable);
+        Page<Regency> regenciesPage;
+
+        try{
+            regenciesPage = regencyService.getAllRegencies(pageable);
+        } catch (RuntimeException e){
+            Pageable fallbackPageable = PageRequest.of(page, size, Sort.by(sortDirection, "id"));
+            regenciesPage = regencyService.getAllRegencies(fallbackPageable);
+        }
 
         responseData.getMessages().add("No Regency found");
         responseData.setStatus(false);
@@ -70,8 +78,8 @@ public class RegencyController {
     @GetMapping("/filter")
     public ResponseEntity<ResponseData<Page<RegencyDTO>>> getRegencyByFilter(
             @RequestParam(defaultValue = "") String filter,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+            @RequestParam(defaultValue = "10") @PositiveOrZero int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String direction
     ) {
@@ -80,7 +88,14 @@ public class RegencyController {
                 Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
 
-        Page<Regency> regenciesPage = regencyService.getRegencyByFilter(pageable, filter);
+        Page<Regency> regenciesPage;
+
+        try{
+            regenciesPage = regencyService.getRegencyByFilter(pageable, filter);
+        } catch (RuntimeException e){
+            Pageable fallbackPageable = PageRequest.of(page, size, Sort.by(sortDirection, "id"));
+            regenciesPage = regencyService.getAllRegencies(fallbackPageable);
+        }
 
         responseData.getMessages().add("No regency found");
         responseData.setStatus(false);
