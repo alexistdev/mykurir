@@ -11,8 +11,6 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="tb_districts")
-@Getter
-@Setter
 public class District extends BaseEntity<String> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,4 +27,28 @@ public class District extends BaseEntity<String> implements Serializable {
     @JoinColumn(name = "regency_id", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Regency regency;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Regency getRegency() {
+        return regency;
+    }
+
+    public void setRegency(Regency regency) {
+        this.regency = regency;
+    }
 }

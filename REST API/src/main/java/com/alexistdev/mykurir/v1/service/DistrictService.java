@@ -43,9 +43,14 @@ public class DistrictService {
         District existDistrict = districtRepo.findByName(request.getName());
 
         if(existDistrict != null){
+            if(!existDistrict.getDeleted() && request.getId() == null){
+                throw new RuntimeException("District name already exist");
+            }
+
             if(existDistrict.getDeleted()){
                 existDistrict.setDeleted(false);
             }
+
             existDistrict.setName(request.getName());
             existDistrict.setRegency(existRegency);
             saveDistrict = existDistrict;
