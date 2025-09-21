@@ -41,7 +41,7 @@ public class RegencyControllerTest {
     private ModelMapper modelMapper;
 
     @Test
-    @DisplayName("Test Get All Regencies - No Data Available")
+    @DisplayName("Should return empty list when no data")
     void testGetAllRegencies_whenNoData() throws Exception {
         Page<Regency> emptyPage = new PageImpl<>(Collections.emptyList());
         Mockito.when(regencyService.getAllRegencies(any(Pageable.class))).thenReturn(emptyPage);
@@ -141,7 +141,7 @@ public class RegencyControllerTest {
     }
 
     @Test
-    @DisplayName("Should return no data regencies for non existent keyword")
+    @DisplayName("Should return no data regency for non existent keyword")
     void testGetRegencyByFilter_whenNoData() throws Exception {
         Page<Regency> emptyPage = new PageImpl<>(Collections.emptyList());
         Mockito.when(regencyService.getRegencyByFilter(any(Pageable.class), any(String.class))).thenReturn(emptyPage);
@@ -289,7 +289,7 @@ public class RegencyControllerTest {
     @Test
     @DisplayName("Should return bad request when invalid request on update regency")
     void testUpdateRegency_whenInvalidRequest() throws Exception {
-        mockMvc.perform(post("/v1/api/region/regency")
+        mockMvc.perform(patch("/v1/api/region/regency")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\":1, \"name\":\"\"}")
                         .with(httpBasic("user", "password")))

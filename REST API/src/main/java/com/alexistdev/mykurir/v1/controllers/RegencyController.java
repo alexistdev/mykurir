@@ -1,10 +1,9 @@
 package com.alexistdev.mykurir.v1.controllers;
 
-import com.alexistdev.mykurir.v1.dto.ProvinceDTO;
+
 import com.alexistdev.mykurir.v1.dto.RegencyDTO;
 import com.alexistdev.mykurir.v1.dto.ResponseData;
 import com.alexistdev.mykurir.v1.masterconstant.Validation;
-import com.alexistdev.mykurir.v1.models.entity.Province;
 import com.alexistdev.mykurir.v1.models.entity.Regency;
 import com.alexistdev.mykurir.v1.request.RegencyRequest;
 import com.alexistdev.mykurir.v1.service.RegencyService;
@@ -22,10 +21,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/api/region/regency")
@@ -156,7 +151,7 @@ public class RegencyController {
         try{
             Regency updatedRegency = regencyService.saveRegency(request);
             responseData.setPayload(updatedRegency);
-            responseData.getMessages().add(Validation.success("regency"));
+            responseData.getMessages().add(Validation.success("Regency Saved"));
             responseData.setStatus(true);
             return ResponseEntity.status(HttpStatus.OK).body(responseData);
         } catch (Exception e){
