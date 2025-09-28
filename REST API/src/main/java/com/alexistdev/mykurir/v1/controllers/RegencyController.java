@@ -43,14 +43,17 @@ public class RegencyController {
         Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ?
                 Sort.Direction.DESC : Sort.Direction.ASC;
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        int maxSize = 1000;
+        int effectiveSize = (size == 0) ? maxSize : Math.min(size, maxSize);
+
+        Pageable pageable = PageRequest.of(page, effectiveSize, Sort.by(sortDirection, sortBy));
 
         Page<Regency> regenciesPage;
 
         try{
             regenciesPage = regencyService.getAllRegencies(pageable);
         } catch (RuntimeException e){
-            Pageable fallbackPageable = PageRequest.of(page, size, Sort.by(sortDirection, "id"));
+            Pageable fallbackPageable = PageRequest.of(page, effectiveSize, Sort.by(sortDirection, "id"));
             regenciesPage = regencyService.getAllRegencies(fallbackPageable);
         }
 
@@ -84,6 +87,8 @@ public class RegencyController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
 
         Page<Regency> regenciesPage;
+
+        if(size == 0) size = 10;
 
         try{
             regenciesPage = regencyService.getRegencyByFilter(pageable, filter);

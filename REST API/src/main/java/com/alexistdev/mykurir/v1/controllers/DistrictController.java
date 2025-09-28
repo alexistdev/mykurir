@@ -148,7 +148,7 @@ public class DistrictController {
         }
 
         try{
-            District savedDistrict = districtService.saveDistrict(request);
+            District savedDistrict = districtService.updatedDistrict(request);
             responseData.setStatus(true);
             responseData.getMessages().add(DISTRICT_SAVED_MESSAGE);
             responseData.setPayload(savedDistrict);

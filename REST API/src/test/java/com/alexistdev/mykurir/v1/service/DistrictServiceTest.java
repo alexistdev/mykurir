@@ -41,6 +41,7 @@ public class DistrictServiceTest {
     private Regency regency;
     private District existingDistrict;
     private static final String TEST_DISTRICT_NAME = "Test District";
+    private static final Long TEST_DISTRICT_ID = 1L;
     private static final Long TEST_REGENCY_ID = 1L;
     private static final Long TEST_PROVINCE_ID = 1L;
 
@@ -67,6 +68,7 @@ public class DistrictServiceTest {
         // Initialize existing District
 
         existingDistrict = new District();
+        existingDistrict.setId(TEST_DISTRICT_ID);
         existingDistrict.setName(TEST_DISTRICT_NAME);
         existingDistrict.setRegency(regency);
         existingDistrict.setDeleted(false);
@@ -91,7 +93,7 @@ public class DistrictServiceTest {
         }
 
         @Test
-        @DisplayName("Should restore district when it exists but is deleted")
+        @DisplayName("Should restore district when it exists but is deleted and updated content")
         void testSaveDistric_WhenDistrictExistsAndIsDeleted() {
             existingDistrict.setDeleted(true);
             when(regencyService.findRegencyById(TEST_REGENCY_ID)).thenReturn(regency);
@@ -146,47 +148,87 @@ public class DistrictServiceTest {
             );
         }
 
+
+    }
+
+    @Nested
+    @DisplayName("Updated District Tests")
+    class UpdatedDistrictTest {
+
         @Test
-        @DisplayName("Should throw error when regency not found")
-        void testSaveDistrict_WhenRegency_NotFound() {
-            districtRequest.setRegencyId(1L);
-            districtRequest.setName("Bandung");
+        void testUpdatedDistrict_WhenRegencyNotFound() {
+            when(regencyService.findRegencyById(TEST_REGENCY_ID)).thenReturn(null);
 
-            Regency deletedRegency = new Regency();
-            deletedRegency.setDeleted(true);
+            RuntimeException exception = assertThrows(RuntimeException.class,
+                    () -> districtService.updatedDistrict(districtRequest));
 
-            when(regencyService.findRegencyById(1L)).thenReturn(deletedRegency);
-
-            RuntimeException thrown = assertThrows(RuntimeException.class, ()->{
-               districtService.saveDistrict(districtRequest);
-            });
-
-            assert "Regency Not Found".equals(thrown.getMessage());
-
-            verify(districtRepo, never()).save(any(District.class));
+            assertEquals("Regency Not Found", exception.getMessage());
+            verify(regencyService).findRegencyById(TEST_REGENCY_ID);
+            verifyNoInteractions(districtRepo);
         }
 
         @Test
-        @DisplayName("Should update existing district when ID is provided")
-        void testSaveDistrict_WhenIdProvided() {
-            districtRequest.setId(1L);
-            District currentDistrict = new District();
-            currentDistrict.setId(1L);
-            currentDistrict.setDeleted(true);
+        @DisplayName("Should throw error when District Not Found")
+        void testUpdatedDistrict_WhenDistrictNotFound() {
+            when(regencyService.findRegencyById(TEST_REGENCY_ID)).thenReturn(regency);
+            districtRequest.setId(TEST_DISTRICT_ID);
+
+            when(districtRepo.findById(TEST_DISTRICT_ID)).thenReturn(Optional.empty());
+
+            RuntimeException exception = assertThrows(RuntimeException.class,
+                    () -> districtService.updatedDistrict(districtRequest));
+
+            assertEquals("District Not Found", exception.getMessage());
+            verify(regencyService).findRegencyById(TEST_REGENCY_ID);
+            verify(districtRepo).findById(TEST_DISTRICT_ID);
+            verify(districtRepo, never()).save(any());
+        }
+
+        @Test
+        @DisplayName("Should restore district when it exists but is deleted and updated content")
+        void testUpdatedDistrict_WhenDistrictExistsAndIsDeleted() {
+            districtRequest.setId(TEST_DISTRICT_ID);
+            districtRequest.setName("Updated Name");
+
+            existingDistrict.setDeleted(true);
+            when(regencyService.findRegencyById(TEST_REGENCY_ID)).thenReturn(regency);
+            when(districtRepo.findById(TEST_DISTRICT_ID)).thenReturn(Optional.ofNullable(existingDistrict));
+
+            when(districtRepo.save(any(District.class))).thenAnswer(i -> i.getArgument(0));
+
+            District result = districtService.updatedDistrict(districtRequest);
+            assertAll(
+                    () -> assertNotNull(result),
+                    () -> assertFalse(result.getDeleted()),
+                    () -> assertEquals("Updated Name", result.getName()),
+                    () -> assertEquals(regency, result.getRegency()),
+                    () -> assertEquals(existingDistrict.getId(), result.getId())
+            );
+
+            verify(districtRepo).save(existingDistrict);
+        }
+
+        @Test
+        @DisplayName("Should updated the district")
+        void testUpdatedDistrict_WhenDistrictExists() {
+            districtRequest.setId(TEST_DISTRICT_ID);
+            districtRequest.setName("Updated Name");
 
             when(regencyService.findRegencyById(TEST_REGENCY_ID)).thenReturn(regency);
-            when(districtRepo.findByName(TEST_DISTRICT_NAME)).thenReturn(null);
-            when(districtRepo.findById(1L)).thenReturn(Optional.of(currentDistrict));
-            when(districtRepo.save(any(District.class))).thenAnswer(i->i.getArgument(0));
+            when(districtRepo.findById(TEST_DISTRICT_ID)).thenReturn(Optional.ofNullable(existingDistrict));
 
-            District result = districtService.saveDistrict(districtRequest);
+            when(districtRepo.save(any(District.class))).thenAnswer(i -> i.getArgument(0));
 
+            District result = districtService.updatedDistrict(districtRequest);
             assertAll(
-                    ()-> assertNotNull(result),
-                    ()-> assertEquals(TEST_DISTRICT_NAME, result.getName()),
-                    ()-> assertEquals(regency,result.getRegency()),
-                    ()-> assertFalse(result.getDeleted())
+                    () -> assertNotNull(result),
+                    () -> assertFalse(result.getDeleted()),
+                    () -> assertEquals("Updated Name", result.getName()),
+                    () -> assertEquals(regency, result.getRegency()),
+                    () -> assertEquals(existingDistrict.getId(), result.getId())
             );
+
+            verify(districtRepo).save(existingDistrict);
         }
     }
 

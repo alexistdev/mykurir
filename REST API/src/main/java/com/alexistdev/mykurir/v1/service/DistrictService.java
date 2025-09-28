@@ -43,29 +43,48 @@ public class DistrictService {
         District existDistrict = districtRepo.findByName(request.getName());
 
         if(existDistrict != null){
-            if(!existDistrict.getDeleted() && request.getId() == null){
+            if(!existDistrict.getDeleted()){
                 throw new RuntimeException("District name already exist");
             }
-
-            if(existDistrict.getDeleted()){
-                existDistrict.setDeleted(false);
-            }
-
-            existDistrict.setName(request.getName());
-            existDistrict.setRegency(existRegency);
+            existDistrict.setDeleted(false);
             saveDistrict = existDistrict;
-        }
-
-        if(request.getId() != null){
-            District currentDistrict = districtRepo.findById(request.getId()).orElse(null);
-            if(currentDistrict != null){
-                currentDistrict.setDeleted(false);
-            }
         }
 
         saveDistrict.setRegency(existRegency);
         saveDistrict.setName(request.getName());
         return districtRepo.save(saveDistrict);
+    }
+
+    public District updatedDistrict(DistrictRequest request) {
+        Regency existRegency = regencyService.findRegencyById(request.getRegencyId());
+        if(existRegency == null || Boolean.TRUE.equals(existRegency.getDeleted())){
+            throw new RuntimeException("Regency Not Found");
+        }
+
+        assert request.getId() != null;
+        Optional<District> optionalDistrict = districtRepo.findById(request.getId());
+        if(optionalDistrict.isEmpty()){
+            throw new RuntimeException("District Not Found");
+        }
+
+        District existDistrict = optionalDistrict.get();
+
+        //validate if district name is already exists with the different's id
+        if(!existDistrict.getName().equals(request.getName().trim())){
+            District anotherDistrict = districtRepo.findByName(request.getName());
+            if(anotherDistrict != null && !anotherDistrict.getId().equals(existDistrict.getId())
+                && !Boolean.TRUE.equals(anotherDistrict.getDeleted())){
+                throw new RuntimeException("District already exists");
+            }
+        }
+
+        if(Boolean.TRUE.equals(existDistrict.getDeleted())){
+            existDistrict.setDeleted(false);
+        }
+
+        existDistrict.setName(request.getName());
+        existDistrict.setRegency(existRegency);
+        return districtRepo.save(existDistrict);
     }
 
     public Page<District> getDistrictByFilter(Pageable pageable, String keyword) {
