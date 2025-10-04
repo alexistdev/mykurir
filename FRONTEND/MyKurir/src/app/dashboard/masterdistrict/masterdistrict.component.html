@@ -41,27 +41,27 @@
             <header class="card-header">
               <div class="row align-items-center">
                 <div class="col-lg-3">
-                  <!--                  <button class="btn btn-sm btn-primary" (click)="openModal('form')">+ ADD</button>-->
+                                    <button class="btn btn-sm btn-primary" (click)="openModal('form')">+ ADD</button>
                 </div>
                 <div class="col-lg-2 offset-lg-4  text-start mt-1">
-                  <!--                  <select class="form-control"-->
-                  <!--                          [(ngModel)]="pageSize"-->
-                  <!--                          (change)="onPageSizeChange()">-->
-                  <!--                    <option value="10">10</option>-->
-                  <!--                    <option value="50">50</option>-->
-                  <!--                    <option value="100">100</option>-->
-                  <!--                  </select>-->
+                                    <select class="form-control"
+                                            [(ngModel)]="pageSize"
+                                            (change)="onPageSizeChange()">
+                                      <option value="10">10</option>
+                                      <option value="50">50</option>
+                                      <option value="100">100</option>
+                                    </select>
                 </div>
 
                 <div class="col-lg-3 text-end position-relative mt-1" style="padding-right: 12px;">
-                  <!--                  <input #searchBox-->
-                  <!--                         type="text"-->
-                  <!--                         id="search"-->
-                  <!--                         class="form-control"-->
-                  <!--                         aria-label="Search"-->
-                  <!--                         placeholder="Search"-->
-                  <!--                         (input)="onSearchChange(searchBox.value)"-->
-                  <!--                         style="padding-right: 12px;"/>-->
+                                    <input #searchBox
+                                           type="text"
+                                           id="search"
+                                           class="form-control"
+                                           aria-label="Search"
+                                           placeholder="Search"
+                                           (input)="onSearchChange(searchBox.value)"
+                                           style="padding-right: 12px;"/>
                   <span
                     class="position-absolute top-50 translate-middle-y"
                     style="right: 16px; left: auto; color: #aaa; pointer-events: none;">
@@ -85,24 +85,46 @@
                   <tr>
                     <th class="text-center" width="5%">No.</th>
                     <th class="text-center">Name</th>
-                    <th class="text-center">Email</th>
-                    <th class="text-center">Role</th>
+                    <th class="text-center">Regency</th>
                     <th class="text-center">Created Date</th>
                     <th class="text-center">Modified Date</th>
                     <th class="text-center">Open</th>
                   </tr>
                   </thead>
 
-
+                  <ng-container *ngIf="totalData != 0; else noData">
+                    <tbody>
+                    <tr *ngFor="let district of districts; let i = index">
+                      <td class="text-center">{{ ((pageNumber) * pageSize) + (i + 1) }}</td>
+                      <td>{{ district.name }}</td>
+                      <td>{{ district.regency.name }}</td>
+                      <td class="text-center">{{ district.createdDate.toString().replace('T', ' ') }}</td>
+                      <td class="text-center">{{ district.modifiedDate.toString().replace('T', ' ') }}</td>
+                      <td class="text-center">
+                        <button class="btn btn-sm btn-primary mx-1" (click)="openEditModal(district)">Edit</button>
+                        <button class="btn btn-sm btn-danger mx-1"
+                                (click)="openModal('confirm','Apakah anda yakin ingin menghapus data ini?', district.id)">
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </ng-container>
+                  <ng-template #noData>
+                    <tr>
+                      <td colspan="5" class="text-center">No Data</td>
+                    </tr>
+                  </ng-template>
                   <tfoot>
                   <tr>
                     <td colspan="2" class="text-start text-color-grey" style="font-size: 0.75rem;margin-left: 10px;"
                     > Total Data : row.
                     </td>
                     <td colspan="6" class="text-end">
-                      <nav>
-
-                      </nav>
+                      <app-pagination [pageNumber]="pageNumber"
+                                      [totalPages]="totalPages"
+                                      [pageSize]="pageSize"
+                                      (pageChange)="onPageChanged($event)"></app-pagination>
                     </td>
                   </tr>
 
@@ -116,7 +138,16 @@
       </div>
 
       <!-- end: page -->
-
+      <app-modaldistrict
+        [show]="showModal"
+        [modalType]="currentModalType"
+        [formData]="currentFormData"
+        [confirmationText]="currentConfirmationText"
+        (confirmDelete)="onDeleteConfirm()"
+        (formSubmit)="doSaveData($event)"
+        [regencies]="regencies"
+        (close)="closeModal()"
+      ></app-modaldistrict>
 
     </section>
   </div>

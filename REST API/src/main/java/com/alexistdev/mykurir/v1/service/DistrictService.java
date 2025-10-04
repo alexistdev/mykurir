@@ -71,11 +71,12 @@ public class DistrictService {
 
         //validate if district name is already exists with the different's id
         if(!existDistrict.getName().equals(request.getName().trim())){
-            District anotherDistrict = districtRepo.findByName(request.getName());
-            if(anotherDistrict != null && !anotherDistrict.getId().equals(existDistrict.getId())
-                && !Boolean.TRUE.equals(anotherDistrict.getDeleted())){
-                throw new RuntimeException("District already exists");
-            }
+            findDistrictByName(request.getName()).ifPresent(anotherDistrict -> {
+                if(!anotherDistrict.getId().equals(existDistrict.getId()) &&
+                        !Boolean.TRUE.equals(anotherDistrict.getDeleted())) {
+                    throw new RuntimeException("District already exists");
+                }
+            });
         }
 
         if(Boolean.TRUE.equals(existDistrict.getDeleted())){
@@ -85,6 +86,10 @@ public class DistrictService {
         existDistrict.setName(request.getName());
         existDistrict.setRegency(existRegency);
         return districtRepo.save(existDistrict);
+    }
+
+    private Optional<District> findDistrictByName(String name){
+        return Optional.ofNullable(districtRepo.findByName(name));
     }
 
     public Page<District> getDistrictByFilter(Pageable pageable, String keyword) {

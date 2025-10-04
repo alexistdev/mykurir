@@ -17,6 +17,6 @@ public interface DistrictRepo extends JpaRepository<District, Long> {
 
     List<District> findAllByRegencyId(Long regencyId);
 
-    @Query("SELECT u FROM District u WHERE u.name LIKE %:filter%")
+    @Query("SELECT u FROM District u WHERE u.name LIKE %:filter% and u.isDeleted=false")
     Page<District> findByFilter(@Param("filter") String filter, Pageable pageable);
 }
