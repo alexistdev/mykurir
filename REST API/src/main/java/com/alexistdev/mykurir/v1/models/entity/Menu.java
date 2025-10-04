@@ -16,6 +16,12 @@ public class Menu extends BaseEntity<String> implements Serializable  {
     @Column(length = 150, nullable = false)
     private String name;
 
+    @Column(length = 150, nullable = false)
+    private String urlink;
+
+    @Column(length = 150, nullable = false)
+    private String classlink;
+
     public Long getId() {
         return id;
     }
@@ -30,5 +36,21 @@ public class Menu extends BaseEntity<String> implements Serializable  {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUrlink() {
+        return urlink;
+    }
+
+    public void setUrlink(String urlink) {
+        this.urlink = urlink;
+    }
+
+    public String getClasslink() {
+        return classlink;
+    }
+
+    public void setClasslink(String classlink) {
+        this.classlink = classlink;
     }
 }

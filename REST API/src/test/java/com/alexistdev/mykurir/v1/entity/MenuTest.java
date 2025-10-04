@@ -21,6 +21,8 @@ public class MenuTest {
         menu = new Menu();
         menu.setId(1L);
         menu.setName("Dashboard");
+        menu.setUrlink("/dashboard");
+        menu.setClasslink("DashboardController");
         menu.setCreatedDate(new java.util.Date());
         menu.setModifiedDate(new java.util.Date());
         menu.setDeleted(false);
@@ -42,6 +44,14 @@ public class MenuTest {
         String name = "Dashboard";
         menu.setName(name);
         Assertions.assertEquals(name, menu.getName());
+    }
+
+    @Test
+    @DisplayName("Should return classlink of saved menu")
+    void testGetAndSetClasslink() {
+        String classlink = "SettingsController";
+        menu.setClasslink(classlink);
+        Assertions.assertEquals(classlink, menu.getClasslink());
     }
 
     @Test
@@ -81,5 +91,19 @@ public class MenuTest {
     void testSetNameWithNullValue() {
         menu.setName(null);
         Assertions.assertNull(menu.getName());
+    }
+
+    @Test
+    @DisplayName("Should handle setting urlink to null")
+    void testSetUrlinkWithNullValue() {
+        menu.setUrlink(null);
+        Assertions.assertNull(menu.getUrlink());
+    }
+
+    @Test
+    @DisplayName("Should handle setting classlink to null")
+    void testSetClasslinkWithNullValue() {
+        menu.setClasslink(null);
+        Assertions.assertNull(menu.getClasslink());
     }
 }
